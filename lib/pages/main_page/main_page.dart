@@ -11,7 +11,7 @@ class MainPage extends StatelessWidget {
     var localisation = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: MainPageBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
