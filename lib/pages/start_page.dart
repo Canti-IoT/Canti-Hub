@@ -7,24 +7,30 @@ class StartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      child: Center(
+      body: Container(
+        child: Center(
           child: Transform.rotate(
-              angle: -math.pi / 2,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                      style: TextStyle(fontFamily: "Robot", fontSize: 40),
-                      "Canti "),
-                  Text(
-                      style: TextStyle(
-                          fontFamily: "Robot",
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold),
-                      "Hub"),
-                ],
-              ))),
-    ));
+            angle: -math.pi / 2,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  style: TextStyle(fontFamily: "Robot", fontSize: 40),
+                  "Canti ",
+                ),
+                Text(
+                  style: TextStyle(
+                    fontFamily: "Robot",
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  "Hub",
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
