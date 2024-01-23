@@ -1,7 +1,6 @@
 import 'package:canti_hub/pages/start_page.dart';
 import 'package:flutter/material.dart';
-// localisations imports
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // for seting localization deletages, and suported locales
 
 void main() {
   runApp(const MyApp());
