@@ -1,4 +1,4 @@
-import 'package:canti_hub/pages/main_page/main_page_bar.dart';
+import 'package:canti_hub/pages/common/custom_app_bar.dart';
 import 'package:canti_hub/pages/main_page/devices_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,7 +11,8 @@ class MainPage extends StatelessWidget {
     var localisation = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: MainPageBar(),
+      appBar: CustomAppBar(
+          leftIcon: Icons.settings, rightIcon: Icons.notifications_none),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
