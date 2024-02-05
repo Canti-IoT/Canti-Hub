@@ -10,7 +10,10 @@
   "settings_default_recurrence": "Configure default recurrences",
   "settings_wifi" : "Wi-Fi Settings",
   "settings_mqtt" : "MQTT Settings",
-  
+
+  "@_ALARMS": {},
+  "alarms_config": "Alarms Configuration",
+  "alarms_add_parameter": "Add Parameter",
   "alarms": "Alarms"
   
 }
