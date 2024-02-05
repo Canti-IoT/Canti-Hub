@@ -19,6 +19,7 @@ class NestedSetting extends StatelessWidget {
               MaterialPageRoute(builder: (context) => page),
             );
           },
+          trailing: Icon(Icons.navigate_next),
         ),
         Divider(height: 0)
       ],
