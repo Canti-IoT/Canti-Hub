@@ -1,6 +1,5 @@
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
 import 'package:canti_hub/pages/settings_page/settings_widgets/nested_setting.dart';
-import 'package:canti_hub/pages/settings_page/settings_widgets/selection_setting.dart';
 import 'package:canti_hub/pages/settings_page/settings_widgets/toggle_setting.dart';
 import 'package:canti_hub/pages/settings_page/settings_widgets/web_link_setting.dart';
 import 'package:flutter/material.dart';
