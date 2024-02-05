@@ -1,4 +1,5 @@
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
+import 'package:canti_hub/pages/nested_settings_page/nested_settings_page.dart';
 import 'package:canti_hub/pages/settings_page/settings_widgets/nested_setting.dart';
 import 'package:canti_hub/pages/settings_page/settings_widgets/toggle_setting.dart';
 import 'package:canti_hub/pages/settings_page/settings_widgets/web_link_setting.dart';
@@ -31,9 +32,9 @@ class SettingsPage extends StatelessWidget {
           ToggleSetting(label: localisation.settings_app_update, initialValue: true),
           ToggleSetting(label: localisation.settings_firmware_update, initialValue: true),
           NestedSetting(
-              label: localisation.settings_default_recurrence, page: SettingsPage()),
-          NestedSetting(label: localisation.settings_wifi, page: SettingsPage()),
-          NestedSetting(label: localisation.settings_mqtt, page: SettingsPage()),
+              label: localisation.settings_default_recurrence, page: NestedSettingsPage(pageTitle: localisation.settings_default_recurrence, pageType: "recurrence")),
+          NestedSetting(label: localisation.settings_wifi, page: NestedSettingsPage(pageTitle: localisation.settings_wifi, pageType: "wifi")),
+          NestedSetting(label: localisation.settings_mqtt, page: NestedSettingsPage(pageTitle: localisation.settings_mqtt, pageType: "mqtt")),
         ],
       ),
     );
