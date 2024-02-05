@@ -18,17 +18,22 @@ class SettingsPage extends StatelessWidget {
         leftIcon: Icons.arrow_back,
         title: localisation!.settings,
         onLeftIconPressed: () {
+          Navigator.popUntil(context, (route) => route.isFirst);
           print('here');
         },
       ),
       body: ListView(
         children: [
-          WebLinkSetting(icon: OctIcons.mark_github_16, label: 'GitHub Page', url: 'https://github.com/CatalinPlesu'),
-          ToggleSetting(label: 'Check for app update', initialValue: true),
-          ToggleSetting(label: 'Check for firmware update', initialValue: true),
-          NestedSetting(label: 'Configure default recurrences', page: SettingsPage()),
-          NestedSetting(label: 'Wi-Fi Settings', page: SettingsPage()),
-          NestedSetting(label: 'MQTT Settings', page: SettingsPage()),
+          WebLinkSetting(
+              icon: OctIcons.mark_github_16,
+              label: localisation.settings_github,
+              url: localisation.settings_github_url),
+          ToggleSetting(label: localisation.settings_app_update, initialValue: true),
+          ToggleSetting(label: localisation.settings_firmware_update, initialValue: true),
+          NestedSetting(
+              label: localisation.settings_default_recurrence, page: SettingsPage()),
+          NestedSetting(label: localisation.settings_wifi, page: SettingsPage()),
+          NestedSetting(label: localisation.settings_mqtt, page: SettingsPage()),
         ],
       ),
     );
