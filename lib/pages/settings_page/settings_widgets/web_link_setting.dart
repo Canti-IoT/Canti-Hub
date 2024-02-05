@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_octicons/flutter_octicons.dart';
 
 class WebLinkSetting extends StatelessWidget {
   final String label;
