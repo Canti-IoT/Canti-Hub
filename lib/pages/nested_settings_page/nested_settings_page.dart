@@ -2,11 +2,12 @@ import 'package:canti_hub/pages/nested_settings_page/detail_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
-import 'package:flutter_octicons/flutter_octicons.dart';
+import 'package:canti_hub/pages/common/settings_type.dart';
+import 'package:canti_hub/pages/alarm_config_page/alarm_config_page.dart';
 
 class NestedSettingsPage extends StatelessWidget {
   final String pageTitle;
-  final String pageType; // Add this variable to identify page type
+  final SettingsType pageType; // Add this variable to identify page type
 
   const NestedSettingsPage({
     Key? key,
@@ -23,7 +24,8 @@ class NestedSettingsPage extends StatelessWidget {
         leftIcon: Icons.arrow_back,
         title: pageTitle, // Use the provided pageTitle for the app bar title
         onLeftIconPressed: () {
-          Navigator.popUntil(context, (route) => route.isFirst);
+          Navigator.of(context).pop();
+          // Navigator.popUntil(context, (route) => route.isFirst);
           print('here');
         },
       ),
@@ -50,7 +52,10 @@ class NestedSettingsPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Handle the "+" button press
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AlarmConfigPage()),
+          );
         },
         child: Icon(Icons.add),
       ),

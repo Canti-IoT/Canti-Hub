@@ -15,7 +15,7 @@ class AlarmConfigPage extends StatelessWidget {
         leftIcon: Icons.arrow_back,
         title: localisation!.alarms_config,
         onLeftIconPressed: () {
-          Navigator.popUntil(context, (route) => route.isFirst);
+          Navigator.of(context).pop();
         },
       ),
       body: ListView(
@@ -37,7 +37,6 @@ class AlarmConfigPage extends StatelessWidget {
                   TextEditingController(text: "Alarm 1"), // Default value
             ),
           ),
-
 
           // Parameter Configuration Widget
           ParameterWidget(),
