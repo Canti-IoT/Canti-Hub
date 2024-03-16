@@ -1,3 +1,4 @@
+import 'package:canti_hub/common/files.dart';
 import 'package:canti_hub/pages/detail_page/detail_page.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,7 @@ class DeviceIcon extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Image.asset(
-                      'assets/devices/bme680.jpg',
+                      Files.bme680,
                       fit: BoxFit.cover,
                     ),
                   ),
