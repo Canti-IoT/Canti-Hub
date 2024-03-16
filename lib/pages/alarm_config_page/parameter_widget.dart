@@ -13,9 +13,6 @@ class _ParameterWidgetState extends State<ParameterWidget> {
   int _configurationValue = 0;
   SfRangeValues _sliderValues = SfRangeValues(4.0, 7.0);
 
-TextEditingController startValueController = TextEditingController();
-TextEditingController endValueController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     Color activeTrackColor;
@@ -159,96 +156,10 @@ TextEditingController endValueController = TextEditingController();
                   // Handle removal of this widget
                 },
               ),
-              IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () {
-                  _showValuePopup(context);
-                },
-              ),
             ],
           ),
         ],
       ),
     );
   }
-
- Future<void> _showValuePopup(BuildContext context) async {
-  SfRangeValues newValues = _sliderValues;
-
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text("Edit Values"),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextFormField(
-              keyboardType: TextInputType.number,
-              controller: startValueController,
-              decoration: InputDecoration(labelText: "Min Value"),
-              validator: (value) {
-                if (value != null && value.isNotEmpty) {
-                  double? newStartValue = double.tryParse(value);
-                  if (newStartValue != null && newStartValue >= 2.0 && newStartValue <= 10.0) {
-                    newValues = SfRangeValues(newStartValue, newValues.end);
-                    // Update the slider position immediately
-                    setState(() {
-                      _sliderValues = newValues;
-                    });
-                    return null;
-                  } else {
-                    return "Invalid value";
-                  }
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: 8.0),
-            TextFormField(
-              keyboardType: TextInputType.number,
-              controller: endValueController,
-              decoration: InputDecoration(labelText: "Max Value"),
-              validator: (value) {
-                if (value != null && value.isNotEmpty) {
-                  double? newEndValue = double.tryParse(value);
-                  if (newEndValue != null && newEndValue >= 2.0 && newEndValue <= 10.0) {
-                    newValues = SfRangeValues(newValues.start, newEndValue);
-                    // Update the slider position immediately
-                    setState(() {
-                      _sliderValues = newValues;
-                    });
-                    return null;
-                  } else {
-                    return "Invalid value";
-                  }
-                }
-                return null;
-              },
-            ),
-          ],
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _sliderValues = newValues;
-              });
-              Navigator.of(context).pop();
-            },
-            child: Text('OK'),
-          ),
-        ],
-      );
-    },
-  );
-}
-
 }
