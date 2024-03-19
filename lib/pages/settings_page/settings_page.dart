@@ -35,9 +35,9 @@ class SettingsPage extends StatelessWidget {
           ToggleSetting(
               label: localisation.settings_firmware_update, initialValue: true),
           NestedSetting(
-              label: localisation.settings_default_recurrence,
+              label: localisation.parameters_configuration,
               page: NestedSettingsPage(
-                  pageTitle: localisation.settings_default_recurrence,
+                  pageTitle: localisation.parameters_configuration,
                   pageType: SettingsType.recurrence)),
           NestedSetting(
               label: localisation.settings_wifi,
