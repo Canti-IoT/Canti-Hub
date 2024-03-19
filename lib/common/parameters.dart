@@ -4,6 +4,7 @@ import 'dart:io';
 class Parameter {
   final String name;
   final int index;
+  final int recurrence;
   final int normal;
   final int max;
   final int min;
@@ -11,6 +12,7 @@ class Parameter {
   Parameter(
       {required this.name,
       required this.index,
+      required this.recurrence,
       required this.normal,
       required this.max,
       required this.min});
@@ -19,6 +21,7 @@ class Parameter {
     return Parameter(
       name: json['name'],
       index: json['index'],
+      recurrence: json['recurrence'],
       normal: json['normal'],
       max: json['max'],
       min: json['min'],

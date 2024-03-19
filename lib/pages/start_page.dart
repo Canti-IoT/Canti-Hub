@@ -1,19 +1,17 @@
-import 'package:canti_hub/pages/main_page/main_page.dart';
+import 'package:canti_hub/providers/parameters_provicer.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'dart:async';
+
+import 'package:provider/provider.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    // Wait for 2 seconds (adjust the duration as needed)
-    Future.delayed(Duration(seconds: 5), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => MainPage()),
-      );
+    Future.delayed(Duration(seconds: 1), () {
+      context.read<ParametersProvider>().loadParameters(context);
     });
 
     return Scaffold(
