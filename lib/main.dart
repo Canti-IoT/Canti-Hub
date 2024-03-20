@@ -1,4 +1,5 @@
 import 'package:canti_hub/pages/start_page.dart';
+import 'package:canti_hub/providers/database_provider.dart';
 import 'package:canti_hub/providers/parameters_provicer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,9 +17,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ParametersProvider())
+        ChangeNotifierProvider(create: (context) => ParametersProvider()),
+        ChangeNotifierProvider(create: (context) => DatabaseProvider())
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Canti Hub',
         localizationsDelegates: AppLocalizations.localizationsDelegates,
