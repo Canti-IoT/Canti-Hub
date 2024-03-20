@@ -1,3 +1,4 @@
+import 'package:canti_hub/providers/database_provider.dart';
 import 'package:canti_hub/providers/parameters_provicer.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -11,6 +12,7 @@ class StartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(Duration(seconds: 1), () {
+      context.read<DatabaseProvider>().initDatabase();
       context.read<ParametersProvider>().loadParameters(context);
     });
 
