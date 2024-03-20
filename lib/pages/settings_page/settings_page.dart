@@ -1,6 +1,8 @@
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
+import 'package:canti_hub/pages/parameters_page/parameters_page.dart';
 import 'package:canti_hub/pages/common/settings_type.dart';
 import 'package:canti_hub/pages/nested_settings_page/nested_settings_page.dart';
+import 'package:canti_hub/pages/parameters_page/parameters_page.dart';
 import 'package:canti_hub/pages/settings_page/settings_widgets/nested_setting.dart';
 import 'package:canti_hub/pages/settings_page/settings_widgets/toggle_setting.dart';
 import 'package:canti_hub/pages/settings_page/settings_widgets/web_link_setting.dart';
@@ -36,9 +38,7 @@ class SettingsPage extends StatelessWidget {
               label: localisation.settings_firmware_update, initialValue: true),
           NestedSetting(
               label: localisation.parameters_configuration,
-              page: NestedSettingsPage(
-                  pageTitle: localisation.parameters_configuration,
-                  pageType: SettingsType.recurrence)),
+              page: ParametersPage()),
           NestedSetting(
               label: localisation.settings_wifi,
               page: NestedSettingsPage(

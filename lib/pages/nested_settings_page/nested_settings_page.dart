@@ -1,4 +1,5 @@
 import 'package:canti_hub/pages/nested_settings_page/detail_widget.dart';
+import 'package:canti_hub/pages/parameters_page/parameters_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
@@ -19,6 +20,21 @@ class NestedSettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var localisation = AppLocalizations.of(context);
 
+    switch (pageType) {
+      case SettingsType.recurrence:
+        return ParametersPage();
+        break;
+      case SettingsType.wifi:
+        _showWifiPopup(context);
+        break;
+      case SettingsType.mqtt:
+        _showMqttPopup(context);
+        break;
+      case SettingsType.alarms:
+        break;
+      default:
+        break;
+    }
     return Scaffold(
       appBar: CustomAppBar(
         leftIcon: Icons.arrow_back,
