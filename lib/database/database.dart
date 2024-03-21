@@ -10,7 +10,7 @@ part 'database.g.dart';
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'database.sqlite'));
+    final file = File(p.join(dbFolder.path, 'db.sqlite'));
 
     return NativeDatabase(file, logStatements: true);
   });

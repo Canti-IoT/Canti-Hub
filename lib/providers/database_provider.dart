@@ -4,6 +4,16 @@ import 'package:flutter/material.dart';
 
 class DatabaseProvider extends ChangeNotifier {
   late Database _database;
+  late List<DevicesTableData> devices;
+  late List<ParametersTableData> parameters;
+  late List<ColectedDataTableData> collectedData;
+  late List<DeviceWifiTableData> deviceWifi;
+  late List<WifiTableData> wifi;
+  late List<MqttTableData> mqtt;
+  late List<MqttParameterTableData> mqttParameters;
+  late List<AlarmsTableData> alarms;
+  late List<DeviceAlarmsTableData> deviceAlarms;
+  late List<AlarmsParameterTableData> alarmParameter;
 
   Database get database => _database;
 
@@ -19,8 +29,9 @@ class DatabaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<DevicesTableData>> getAllDevices() async {
-    return await _database.select(_database.devicesTable).get();
+  Future<void> getAllDevices() async {
+    devices = await _database.select(_database.devicesTable).get();
+    notifyListeners();
   }
 
   Future<void> updateDevice(DevicesTableData device) async {
@@ -34,8 +45,9 @@ class DatabaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<ParametersTableData>> getAllParameters() async {
-    return await _database.select(_database.parametersTable).get();
+  Future<void> getAllParameters() async {
+    parameters = await _database.select(_database.parametersTable).get();
+    notifyListeners();
   }
 
   Future<void> updateParameter(ParametersTableData parameter) async {
@@ -49,8 +61,9 @@ class DatabaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<ColectedDataTableData>> getAllCollectedData() async {
-    return await _database.select(_database.colectedDataTable).get();
+  Future<void> getAllCollectedData() async {
+    collectedData = await _database.select(_database.colectedDataTable).get();
+    notifyListeners();
   }
 
   Future<void> updateCollectedData(ColectedDataTableData data) async {
@@ -64,8 +77,9 @@ class DatabaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<DeviceWifiTableData>> getAllDeviceWifi() async {
-    return await _database.select(_database.deviceWifiTable).get();
+  Future<void> getAllDeviceWifi() async {
+    deviceWifi = await _database.select(_database.deviceWifiTable).get();
+    notifyListeners();
   }
 
   Future<void> updateDeviceWifi(DeviceWifiTableData deviceWifi) async {
@@ -79,8 +93,9 @@ class DatabaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<WifiTableData>> getAllWifi() async {
-    return await _database.select(_database.wifiTable).get();
+  Future<void> getAllWifi() async {
+    wifi = await _database.select(_database.wifiTable).get();
+    notifyListeners();
   }
 
   Future<void> updateWifi(WifiTableData wifi) async {
@@ -94,8 +109,9 @@ class DatabaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<MqttTableData>> getAllMqtt() async {
-    return await _database.select(_database.mqttTable).get();
+  Future<void> getAllMqtt() async {
+    mqtt = await _database.select(_database.mqttTable).get();
+    notifyListeners();
   }
 
   Future<void> updateMqtt(MqttTableData mqtt) async {
@@ -109,8 +125,9 @@ class DatabaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<MqttParameterTableData>> getAllMqttParameters() async {
-    return await _database.select(_database.mqttParameterTable).get();
+  Future<void> getAllMqttParameters() async {
+    mqttParameters = await _database.select(_database.mqttParameterTable).get();
+    notifyListeners();
   }
 
   Future<void> updateMqttParameter(MqttParameterTableData parameter) async {
@@ -124,8 +141,9 @@ class DatabaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<AlarmsTableData>> getAllAlarms() async {
-    return await _database.select(_database.alarmsTable).get();
+  Future<void> getAllAlarms() async {
+    alarms = await _database.select(_database.alarmsTable).get();
+    notifyListeners();
   }
 
   Future<void> updateAlarm(AlarmsTableData alarm) async {
@@ -139,8 +157,9 @@ class DatabaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<DeviceAlarmsTableData>> getAllDeviceAlarms() async {
-    return await _database.select(_database.deviceAlarmsTable).get();
+  Future<void> getAllDeviceAlarms() async {
+    deviceAlarms = await _database.select(_database.deviceAlarmsTable).get();
+    notifyListeners();
   }
 
   Future<void> updateDeviceAlarm(DeviceAlarmsTableData deviceAlarm) async {
@@ -154,8 +173,10 @@ class DatabaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<AlarmsParameterTableData>> getAllAlarmParameters() async {
-    return await _database.select(_database.alarmsParameterTable).get();
+  Future<void> getAllAlarmParameters() async {
+    alarmParameter =
+        await _database.select(_database.alarmsParameterTable).get();
+    notifyListeners();
   }
 
   Future<void> updateAlarmParameter(AlarmsParameterTableData parameter) async {
