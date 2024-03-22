@@ -126,9 +126,10 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   // MqttTable
-  Future<void> insertMqtt(MqttTableData mqtt) async {
+  Future<void> insertMqtt(MqttTableCompanion mqtt) async {
     await _database.into(_database.mqttTable).insert(mqtt);
     notifyListeners();
+    await getAllMqtt();
   }
 
   Future<void> getAllMqtt() async {
@@ -139,6 +140,13 @@ class DatabaseProvider extends ChangeNotifier {
   Future<void> updateMqtt(MqttTableData mqtt) async {
     await _database.update(_database.mqttTable).replace(mqtt);
     notifyListeners();
+    await getAllMqtt();
+  }
+
+  Future<void> deleteMqtt(MqttTableData mqtt) async {
+    await _database.delete(_database.mqttTable).delete(mqtt);
+    notifyListeners();
+    await getAllMqtt();
   }
 
   // MqttParameterTable

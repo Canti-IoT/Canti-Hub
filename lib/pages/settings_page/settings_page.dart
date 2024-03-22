@@ -3,6 +3,8 @@ import 'package:canti_hub/pages/parameters_page/parameters_page.dart';
 import 'package:canti_hub/pages/common/settings_type.dart';
 import 'package:canti_hub/pages/nested_settings_page/nested_settings_page.dart';
 import 'package:canti_hub/pages/parameters_page/parameters_page.dart';
+import 'package:canti_hub/pages/settings_page/pages/mqtt_page/mqtt_page.dart';
+import 'package:canti_hub/pages/settings_page/pages/wifi_page/wifi_page.dart';
 import 'package:canti_hub/pages/settings_page/settings_widgets/nested_setting.dart';
 import 'package:canti_hub/pages/settings_page/settings_widgets/toggle_setting.dart';
 import 'package:canti_hub/pages/settings_page/settings_widgets/web_link_setting.dart';
@@ -67,15 +69,9 @@ class SettingsPage extends StatelessWidget {
               label: localisation.parameters_configuration,
               page: ParametersPage()),
           NestedSetting(
-              label: localisation.settings_wifi,
-              page: NestedSettingsPage(
-                  pageTitle: localisation.settings_wifi,
-                  pageType: SettingsType.wifi)),
+              label: localisation.settings_wifi, page: WifiSettingsPage()),
           NestedSetting(
-              label: localisation.settings_mqtt,
-              page: NestedSettingsPage(
-                  pageTitle: localisation.settings_mqtt,
-                  pageType: SettingsType.mqtt)),
+              label: localisation.settings_mqtt, page: MqttSettingsPage()),
         ],
       ),
     );
