@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:canti_hub/common/files.dart';
 import 'package:canti_hub/database/tables.dart';
 import 'package:canti_hub/database/custom_types.dart';
 import 'package:drift/native.dart';
@@ -10,7 +11,7 @@ part 'database.g.dart';
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'db.sqlite'));
+    final file = File(p.join(dbFolder.path, Files.database));
 
     return NativeDatabase(file, logStatements: true);
   });
@@ -23,6 +24,7 @@ LazyDatabase _openConnection() {
   DeviceWifiTable,
   WifiTable,
   MqttTable,
+  DeviceMqttTable,
   MqttParameterTable,
   AlarmsTable,
   DeviceAlarmsTable,

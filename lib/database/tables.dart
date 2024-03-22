@@ -53,6 +53,14 @@ class MqttTable extends Table {
   TextColumn get password => text().nullable()();
 }
 
+class DeviceMqttTable extends Table {
+  IntColumn get deviceId => integer().references(DevicesTable, #id)();
+  IntColumn get mqttId => integer().references(MqttTable, #id)();
+
+  @override
+  Set<Column<Object>>? get primaryKey => {deviceId, mqttId};
+}
+
 class MqttParameterTable extends Table {
   IntColumn get parameterId => integer().references(ParametersTable, #index)();
   IntColumn get deviceId => integer().references(DevicesTable, #id)();
