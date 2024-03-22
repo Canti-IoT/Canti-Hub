@@ -1,6 +1,7 @@
 import 'package:canti_hub/pages/start_page.dart';
 import 'package:canti_hub/providers/database_provider.dart';
 import 'package:canti_hub/providers/parameters_provicer.dart';
+import 'package:canti_hub/providers/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart'; // for seting localization deletages, and suported locales
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ParametersProvider()),
-        ChangeNotifierProvider(create: (context) => DatabaseProvider())
+        ChangeNotifierProvider(create: (context) => DatabaseProvider()),
+        ChangeNotifierProvider(create: (context) => SettingsProvider()),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
