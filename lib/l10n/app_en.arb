@@ -7,6 +7,8 @@
   "settings_github_url": "https://github.com/CatalinPlesu",
   "settings_app_update": "Check for app update",
   "settings_firmware_update": "Check for firmware update",
+  "settings_system_theme": "Use system theme",
+  "settings_dark_theme": "Use dark theme",
   "settings_default_recurrence": "Configure default recurrences",
   "settings_wifi" : "Wi-Fi Settings",
   "settings_mqtt" : "MQTT Settings",

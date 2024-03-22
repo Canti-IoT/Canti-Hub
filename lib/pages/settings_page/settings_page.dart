@@ -6,9 +6,11 @@ import 'package:canti_hub/pages/parameters_page/parameters_page.dart';
 import 'package:canti_hub/pages/settings_page/settings_widgets/nested_setting.dart';
 import 'package:canti_hub/pages/settings_page/settings_widgets/toggle_setting.dart';
 import 'package:canti_hub/pages/settings_page/settings_widgets/web_link_setting.dart';
+import 'package:canti_hub/providers/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_octicons/flutter_octicons.dart';
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -33,9 +35,34 @@ class SettingsPage extends StatelessWidget {
               label: localisation.settings_github,
               url: localisation.settings_github_url),
           ToggleSetting(
-              label: localisation.settings_app_update, initialValue: true),
+            label: localisation.settings_app_update,
+            initialValue: context.watch<SettingsProvider>().checkAppUpdate,
+            updateValue: (newValue) {
+              context.read<SettingsProvider>().checkAppUpdate = newValue;
+            },
+          ),
           ToggleSetting(
-              label: localisation.settings_firmware_update, initialValue: true),
+            label: localisation.settings_firmware_update,
+            initialValue: context.watch<SettingsProvider>().checkFirmwareUpdate,
+            updateValue: (newValue) {
+              context.read<SettingsProvider>().checkFirmwareUpdate = newValue;
+            },
+          ),
+          ToggleSetting(
+            label: localisation.settings_system_theme,
+            initialValue: context.watch<SettingsProvider>().systemTheme,
+            updateValue: (newValue) {
+              context.read<SettingsProvider>().systemTheme = newValue;
+            },
+          ),
+          if (!context.watch<SettingsProvider>().systemTheme)
+            ToggleSetting(
+              label: localisation.settings_dark_theme,
+              initialValue: context.watch<SettingsProvider>().darkTheme,
+              updateValue: (newValue) {
+                context.read<SettingsProvider>().darkTheme = newValue;
+              },
+            ),
           NestedSetting(
               label: localisation.parameters_configuration,
               page: ParametersPage()),
