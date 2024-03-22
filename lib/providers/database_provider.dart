@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:canti_hub/common/files.dart';
 import 'package:canti_hub/database/database.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,18 @@ class DatabaseProvider extends ChangeNotifier {
   Future<void> initDatabase() async {
     _database = Database();
     await _database.customStatement('PRAGMA foreign_keys = ON');
+
+    await getAllDevices();
+    await getAllParameters();
+    await getAllCollectedData();
+    await getAllDeviceWifi();
+    await getAllWifi();
+    await getAllMqtt();
+    await getAllMqttParameters();
+    await getAllAlarms();
+    await getAllDeviceAlarms();
+    await getAllAlarmParameters();
+
     notifyListeners();
   }
 
@@ -88,9 +102,10 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   // WifiTable
-  Future<void> insertWifi(WifiTableData wifi) async {
+  Future<void> insertWifi(WifiTableCompanion wifi) async {
     await _database.into(_database.wifiTable).insert(wifi);
     notifyListeners();
+    await getAllWifi();
   }
 
   Future<void> getAllWifi() async {
@@ -101,6 +116,13 @@ class DatabaseProvider extends ChangeNotifier {
   Future<void> updateWifi(WifiTableData wifi) async {
     await _database.update(_database.wifiTable).replace(wifi);
     notifyListeners();
+    await getAllWifi();
+  }
+
+  Future<void> deleteWifi(WifiTableData wifi) async {
+    await _database.delete(_database.wifiTable).delete(wifi);
+    notifyListeners();
+    await getAllWifi();
   }
 
   // MqttTable

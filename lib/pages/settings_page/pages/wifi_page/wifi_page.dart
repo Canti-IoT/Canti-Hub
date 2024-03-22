@@ -1,7 +1,10 @@
+import 'package:canti_hub/database/database.dart';
 import 'package:canti_hub/pages/settings_page/pages/wifi_page/detail_widget.dart';
+import 'package:canti_hub/providers/database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
+import 'package:provider/provider.dart';
 
 class WifiSettingsPage extends StatelessWidget {
   const WifiSettingsPage({
@@ -12,6 +15,8 @@ class WifiSettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var localisation = AppLocalizations.of(context);
 
+    context.read<DatabaseProvider>().getAllWifi();
+
     return Scaffold(
       appBar: CustomAppBar(
         leftIcon: Icons.arrow_back,
@@ -19,24 +24,25 @@ class WifiSettingsPage extends StatelessWidget {
             .settings_wifi, // Use the provided pageTitle for the app bar title
         onLeftIconPressed: () {
           Navigator.of(context).pop();
-          // Navigator.popUntil(context, (route) => route.isFirst);
-          print('here');
         },
       ),
-      body: ListView(
-        children: [
-          DetailWidget(
-            title: 'Title 1',
-          ),
-          DetailWidget(
-            title: 'Title 2',
-          ),
-          DetailWidget(
-            title: 'Title 3',
-            onEditPressed: () {},
-            onRemovePressed: () {},
-          ),
-        ],
+      body: ListView.builder(
+        itemCount: context.watch<DatabaseProvider>().wifi.length,
+        itemBuilder: (context, index) {
+          final wifiItem = context
+              .watch<DatabaseProvider>()
+              .wifi[index]; // Assuming wifi is your list of objects
+
+          return DetailWidget(
+            title: wifiItem.ssid,
+            onEditPressed: () {
+              _showWifiPopup(context, wifi: wifiItem);
+            },
+            onRemovePressed: () {
+              context.read<DatabaseProvider>().deleteWifi(wifiItem);
+            },
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -47,9 +53,14 @@ class WifiSettingsPage extends StatelessWidget {
     );
   }
 
-  Future<void> _showWifiPopup(BuildContext context) async {
-    String ssid = "Initial SSID";
-    String password = "Initial Password";
+  Future<void> _showWifiPopup(BuildContext context,
+      {WifiTableData? wifi}) async {
+    String ssid = "";
+    String password = "";
+    if (wifi != null) {
+      ssid = wifi.ssid;
+      password = wifi.password;
+    }
 
     await showDialog(
       context: context,
@@ -74,7 +85,6 @@ class WifiSettingsPage extends StatelessWidget {
                 keyboardType: TextInputType.text,
                 initialValue: password,
                 onChanged: (value) {
-                  // Update password when input changes
                   password = value;
                 },
                 decoration: InputDecoration(labelText: "Password"),
@@ -90,6 +100,15 @@ class WifiSettingsPage extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
+                if (wifi != null) {
+                  context.read<DatabaseProvider>().updateWifi(
+                      wifi.copyWith(ssid: ssid, password: password));
+                } else {
+                  context.read<DatabaseProvider>().insertWifi(
+                      WifiTableCompanion.insert(
+                          ssid: ssid, password: password));
+                }
+
                 Navigator.of(context).pop();
               },
               child: Text('OK'),
