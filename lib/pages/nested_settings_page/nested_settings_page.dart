@@ -1,5 +1,6 @@
 import 'package:canti_hub/pages/nested_settings_page/detail_widget.dart';
 import 'package:canti_hub/pages/parameters_page/parameters_page.dart';
+import 'package:canti_hub/pages/settings_page/pages/wifi_page/wifi_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
@@ -25,10 +26,10 @@ class NestedSettingsPage extends StatelessWidget {
         return ParametersPage();
         break;
       case SettingsType.wifi:
-        _showWifiPopup(context);
+        return WifiSettingsPage();
         break;
       case SettingsType.mqtt:
-        _showMqttPopup(context);
+        // _showMqttPopup(context);
         break;
       case SettingsType.alarms:
         break;
