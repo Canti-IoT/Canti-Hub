@@ -54,9 +54,18 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   // ParametersTable
-  Future<void> insertParameter(ParametersTableData parameter) async {
+  Future<void> upsertParameter(ParametersTableCompanion parameter) async {
+    await _database
+        .into(_database.parametersTable)
+        .insertOnConflictUpdate(parameter);
+    notifyListeners();
+    await getAllParameters();
+  }
+
+  Future<void> insertParameter(ParametersTableCompanion parameter) async {
     await _database.into(_database.parametersTable).insert(parameter);
     notifyListeners();
+    await getAllParameters();
   }
 
   Future<void> getAllParameters() async {
@@ -67,6 +76,7 @@ class DatabaseProvider extends ChangeNotifier {
   Future<void> updateParameter(ParametersTableData parameter) async {
     await _database.update(_database.parametersTable).replace(parameter);
     notifyListeners();
+    await getAllParameters();
   }
 
   // ColectedDataTable

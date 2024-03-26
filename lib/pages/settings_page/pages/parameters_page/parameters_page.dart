@@ -1,4 +1,5 @@
-import 'package:canti_hub/pages/parameters_page/detail_widget.dart';
+import 'package:canti_hub/pages/settings_page/pages/parameters_page/detail_widget.dart';
+import 'package:canti_hub/providers/database_provider.dart';
 import 'package:canti_hub/providers/parameters_provicer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -15,8 +16,6 @@ class ParametersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var localisation = AppLocalizations.of(context);
 
-    var parametersProvider = context.watch<ParametersProvider>();
-
     return Scaffold(
       appBar: CustomAppBar(
         leftIcon: Icons.arrow_back,
@@ -26,7 +25,7 @@ class ParametersPage extends StatelessWidget {
         },
       ),
       body: ListView(
-        children: parametersProvider.parameters.map((parameter) {
+        children: context.watch<DatabaseProvider>().parameters.map((parameter) {
           return DetailWidget(
             parameter: parameter,
           );

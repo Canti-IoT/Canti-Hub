@@ -1,8 +1,13 @@
 import 'package:canti_hub/common/parameters.dart';
+import 'package:canti_hub/database/database.dart';
+import 'package:canti_hub/providers/database_provider.dart';
+import 'package:canti_hub/providers/parameters_provicer.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DetailWidget extends StatelessWidget {
-  final Parameter parameter;
+  final ParametersTableData parameter;
 
   const DetailWidget({
     required this.parameter,
@@ -102,19 +107,35 @@ class DetailWidget extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
+                var defaultParameter = context
+                    .read<ParametersProvider>()
+                    .parameters
+                    .firstWhere((d) => d.index == parameter.index,
+                        orElse: () =>
+                            context.read<ParametersProvider>().parameters[0]);
+                context
+                    .read<DatabaseProvider>()
+                    .updateParameter(parameter.copyWith(
+                      recurrence: defaultParameter.recurrence,
+                      normal: defaultParameter.normal,
+                      min: defaultParameter.min,
+                      max: defaultParameter.max,
+                    ));
+
                 Navigator.of(context).pop();
               },
               child: Text('Default'),
             ),
             TextButton(
               onPressed: () {
-                // Perform actions with the updated parameter here
-                print("Updated Parameter:");
-                print("Recurrence: $recurrence");
-                print("Normal: $normal");
-                print("Max: $max");
-                print("Min: $min");
-
+                context
+                    .read<DatabaseProvider>()
+                    .updateParameter(parameter.copyWith(
+                      recurrence: int.parse(recurrence),
+                      normal: int.parse(normal),
+                      min: int.parse(min),
+                      max: int.parse(max),
+                    ));
                 // Close the dialog
                 Navigator.of(context).pop();
               },
