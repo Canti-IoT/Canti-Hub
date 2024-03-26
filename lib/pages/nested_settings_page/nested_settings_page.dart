@@ -1,5 +1,5 @@
 import 'package:canti_hub/pages/nested_settings_page/detail_widget.dart';
-import 'package:canti_hub/pages/parameters_page/parameters_page.dart';
+import 'package:canti_hub/pages/settings_page/pages/parameters_page/parameters_page.dart';
 import 'package:canti_hub/pages/settings_page/pages/wifi_page/wifi_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
