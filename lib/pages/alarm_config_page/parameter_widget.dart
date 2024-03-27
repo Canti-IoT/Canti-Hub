@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
+import 'dart:math';
 
 class ParameterWidget extends StatefulWidget {
   final AlarmsParameterTableData parameterData;
@@ -147,8 +148,14 @@ class _ParameterWidgetState extends State<ParameterWidget> {
                 ),
                 child: Expanded(
                   child: SfRangeSlider(
-                    min: parameter.min - 20,
-                    max: parameter.max + 20,
+                    min: [
+                      parameter.min - 20,
+                      (parameterData.lowerValue ?? 0) - 20
+                    ].reduce(min),
+                    max: [
+                      parameter.max + 20,
+                      (parameterData.upperValue ?? 0) + 20
+                    ].reduce(max),
                     dragMode: SliderDragMode.both,
                     showLabels: true,
                     enableTooltip: true,
@@ -205,7 +212,7 @@ class _ParameterWidgetState extends State<ParameterWidget> {
               IconButton(
                 icon: const Icon(Icons.delete),
                 onPressed: () {
-                  // Handle removal of this widget
+                  databaseR.deleteAlarmParameter(parameterData);
                 },
               ),
             ],
