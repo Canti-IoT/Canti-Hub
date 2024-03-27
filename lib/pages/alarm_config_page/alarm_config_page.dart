@@ -42,7 +42,12 @@ class AlarmConfigPage extends StatelessWidget {
                 labelText: "Alarm Name",
               ),
               controller:
-                  TextEditingController(text: "Alarm 1"), // Default value
+                  TextEditingController(text: alarm.name), // Default value
+              onSubmitted: (value) {
+                context
+                    .read<DatabaseProvider>()
+                    .updateAlarm(alarm.copyWith(name: value));
+              },
             ),
           ),
 
@@ -65,7 +70,17 @@ class AlarmConfigPage extends StatelessWidget {
             child: FloatingActionButton.extended(
               heroTag: "delete",
               onPressed: () {
-                // Handle delete
+                context
+                    .read<DatabaseProvider>()
+                    .alarmParameters
+                    .map((alarmParameter) => context
+                        .read<DatabaseProvider>()
+                        .deleteAlarmParameter(alarmParameter))
+                    .toList();
+
+                context.read<DatabaseProvider>().deleteAlarm(alarm);
+
+                Navigator.of(context).pop();
               },
               icon: Icon(Icons.delete),
               label: Text(
