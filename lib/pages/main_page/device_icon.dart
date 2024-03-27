@@ -22,7 +22,6 @@ class DeviceIcon extends StatelessWidget {
         width: 76,
         child: Stack(
           children: [
-            // Image Container (below)
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Container(
@@ -31,9 +30,17 @@ class DeviceIcon extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Image.asset(
-                  Files.bme680,
-                  fit: BoxFit.cover,
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      Files.bme680,
+                      fit: BoxFit.cover,
+                    ),
+                    // Grey overlay
+                    Container(
+                      color: backgroundColor.withOpacity(0.5),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -47,6 +54,16 @@ class DeviceIcon extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: Colors.green,
                   border: Border.all(color: backgroundColor, width: 2),
+                ),
+              ),
+            ),
+            ClipRRect(
+              child: Container(
+                width: 60,
+                height: 60,
+                child: Icon(
+                  Icons.settings,
+                  size: 36.0,
                 ),
               ),
             ),
