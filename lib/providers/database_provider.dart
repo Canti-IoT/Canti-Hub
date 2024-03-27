@@ -208,6 +208,12 @@ class DatabaseProvider extends ChangeNotifier {
     await getAllAlarms();
   }
 
+  Future<void> deleteAlarm(AlarmsTableData alarm) async {
+    await _database.delete(_database.alarmsTable).delete(alarm);
+    notifyListeners();
+    await getAllAlarms();
+  }
+
   // DeviceAlarmsTable
   Future<void> insertDeviceAlarm(DeviceAlarmsTableData deviceAlarm) async {
     await _database.into(_database.deviceAlarmsTable).insert(deviceAlarm);
@@ -242,6 +248,12 @@ class DatabaseProvider extends ChangeNotifier {
 
   Future<void> updateAlarmParameter(AlarmsParameterTableData parameter) async {
     await _database.update(_database.alarmsParameterTable).replace(parameter);
+    notifyListeners();
+    await getAllAlarmParameters(parameter.alarmId);
+  }
+
+  Future<void> deleteAlarmParameter(AlarmsParameterTableData parameter) async {
+    await _database.delete(_database.alarmsParameterTable).delete(parameter);
     notifyListeners();
     await getAllAlarmParameters(parameter.alarmId);
   }
