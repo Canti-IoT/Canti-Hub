@@ -38,7 +38,7 @@ class ParametersProvider extends ChangeNotifier {
     var database = context.read<DatabaseProvider>();
     if (database.parameters.length != parameters.length) {
       for (var parameter in parameters) {
-        database.upsertParameter(ParametersTableCompanion(
+        database.insertParameter(ParametersTableCompanion(
             index: Value(parameter.index),
             name: Value(parameter.name),
             recurrence: Value(parameter.recurrence),

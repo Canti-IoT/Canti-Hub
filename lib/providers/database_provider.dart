@@ -63,7 +63,9 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> insertParameter(ParametersTableCompanion parameter) async {
-    await _database.into(_database.parametersTable).insert(parameter);
+    await _database
+        .into(_database.parametersTable)
+        .insert(parameter, mode: InsertMode.insertOrIgnore);
     notifyListeners();
     await getAllParameters();
   }
