@@ -33,7 +33,7 @@ class DetailWidget extends StatelessWidget {
             children: [
               IconButton(
                 icon: Icon(Icons.edit),
-                iconSize: 36,
+                iconSize: 24,
                 onPressed: () => _showPopup(context),
               ),
             ],
