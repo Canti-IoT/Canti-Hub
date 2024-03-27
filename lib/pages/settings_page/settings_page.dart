@@ -8,6 +8,7 @@ import 'package:canti_hub/pages/settings_page/settings_widgets/nested_setting.da
 import 'package:canti_hub/pages/settings_page/settings_widgets/toggle_setting.dart';
 import 'package:canti_hub/pages/settings_page/settings_widgets/web_link_setting.dart';
 import 'package:canti_hub/providers/settings_provider.dart';
+import 'package:canti_hub/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_octicons/flutter_octicons.dart';
@@ -54,6 +55,7 @@ class SettingsPage extends StatelessWidget {
             initialValue: context.watch<SettingsProvider>().systemTheme,
             updateValue: (newValue) {
               context.read<SettingsProvider>().systemTheme = newValue;
+              context.read<ThemeProvider>().loadTheme(context);
             },
           ),
           if (!context.watch<SettingsProvider>().systemTheme)
@@ -62,6 +64,7 @@ class SettingsPage extends StatelessWidget {
               initialValue: context.watch<SettingsProvider>().darkTheme,
               updateValue: (newValue) {
                 context.read<SettingsProvider>().darkTheme = newValue;
+                context.read<ThemeProvider>().loadTheme(context);
               },
             ),
           NestedSetting(

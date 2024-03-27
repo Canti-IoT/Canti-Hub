@@ -21,14 +21,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       leading: leftIcon != null
           ? IconButton(
-              icon: Icon(leftIcon, color: Colors.black),
+              icon: Icon(leftIcon),
               onPressed: onLeftIconPressed,
             )
           : null,
       actions: rightIcon != null
           ? [
               IconButton(
-                icon: Icon(rightIcon, color: Colors.black),
+                icon: Icon(rightIcon),
                 onPressed: onRightIconPressed,
               ),
             ]
