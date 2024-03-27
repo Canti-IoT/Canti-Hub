@@ -15,7 +15,7 @@ class DatabaseProvider extends ChangeNotifier {
   late List<MqttParameterTableData> mqttParameters;
   late List<AlarmsTableData> alarms;
   late List<DeviceAlarmsTableData> deviceAlarms;
-  late List<AlarmsParameterTableData> alarmParameter;
+  late List<AlarmsParameterTableData> alarmParameters;
 
   Database get database => _database;
 
@@ -32,7 +32,7 @@ class DatabaseProvider extends ChangeNotifier {
     await getAllMqttParameters();
     await getAllAlarms();
     await getAllDeviceAlarms();
-    await getAllAlarmParameters();
+    await getAllAlarmParameters(0);
 
     notifyListeners();
   }
@@ -73,6 +73,13 @@ class DatabaseProvider extends ChangeNotifier {
   Future<void> getAllParameters() async {
     parameters = await _database.select(_database.parametersTable).get();
     notifyListeners();
+  }
+
+  Future<ParametersTableData?> getParameterById(int id) async {
+    var parameter = await (_database.select(_database.parametersTable)
+          ..where((tbl) => tbl.index.equals(id)))
+        .getSingle();
+    return parameter;
   }
 
   Future<void> updateParameter(ParametersTableData parameter) async {
@@ -178,9 +185,16 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   // AlarmsTable
-  Future<void> insertAlarm(AlarmsTableData alarm) async {
-    await _database.into(_database.alarmsTable).insert(alarm);
+  Future<AlarmsTableData?> insertAlarm(AlarmsTableCompanion alarm) async {
+    final id = await _database.into(_database.alarmsTable).insert(alarm);
     notifyListeners();
+    getAllAlarms();
+
+    final insertedAlarm = await (_database.select(_database.alarmsTable)
+          ..where((tbl) => tbl.id.equals(id)))
+        .getSingleOrNull();
+
+    return insertedAlarm;
   }
 
   Future<void> getAllAlarms() async {
@@ -210,19 +224,24 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   // AlarmsParameterTable
-  Future<void> insertAlarmParameter(AlarmsParameterTableData parameter) async {
+  Future<void> insertAlarmParameter(
+      AlarmsParameterTableCompanion parameter) async {
     await _database.into(_database.alarmsParameterTable).insert(parameter);
     notifyListeners();
+    await getAllAlarmParameters(parameter.alarmId.value);
   }
 
-  Future<void> getAllAlarmParameters() async {
-    alarmParameter =
-        await _database.select(_database.alarmsParameterTable).get();
+  Future<void> getAllAlarmParameters(int alarmId) async {
+    // Await the result of the query
+    alarmParameters = await (_database.select(_database.alarmsParameterTable)
+          ..where((tbl) => tbl.alarmId.equals(alarmId)))
+        .get();
     notifyListeners();
   }
 
   Future<void> updateAlarmParameter(AlarmsParameterTableData parameter) async {
     await _database.update(_database.alarmsParameterTable).replace(parameter);
     notifyListeners();
+    await getAllAlarmParameters(parameter.alarmId);
   }
 }
