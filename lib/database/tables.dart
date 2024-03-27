@@ -73,6 +73,7 @@ class MqttParameterTable extends Table {
 
 class AlarmsTable extends Table {
   IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text()();
   BoolColumn get activated => boolean()();
 }
 
@@ -86,7 +87,7 @@ class DeviceAlarmsTable extends Table {
 
 class AlarmsParameterTable extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get idAlarm => integer().references(AlarmsTable, #id)();
+  IntColumn get alarmId => integer().references(AlarmsTable, #id)();
   IntColumn get parameterId => integer().references(ParametersTable, #index)();
   IntColumn get lowerValue => integer().nullable()();
   IntColumn get upperValue => integer().nullable()();
