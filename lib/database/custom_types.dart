@@ -1,3 +1,3 @@
 enum DeviceType { physical, virtual }
 
-enum TriggerType { inner, outer }
+enum TriggerType { disabled, inner, outer }
