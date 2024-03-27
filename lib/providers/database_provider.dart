@@ -205,6 +205,7 @@ class DatabaseProvider extends ChangeNotifier {
   Future<void> updateAlarm(AlarmsTableData alarm) async {
     await _database.update(_database.alarmsTable).replace(alarm);
     notifyListeners();
+    await getAllAlarms();
   }
 
   // DeviceAlarmsTable

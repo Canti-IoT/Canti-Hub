@@ -31,11 +31,20 @@ class AlarmsPage extends StatelessWidget {
               title: alarm.name,
               initialValue: alarm.activated, // Provide the current toggle state
               onEditPressed: () {
-                print('edit ');
+                context
+                    .read<DatabaseProvider>()
+                    .getAllAlarmParameters(alarm.id);
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AlarmConfigPage(alarm: alarm)),
+                );
               },
               onToggle: (value) {
-                // Handle toggle state change
-                print('Toggle State Changed: $value');
+                context
+                    .read<DatabaseProvider>()
+                    .updateAlarm(alarm.copyWith(activated: value));
               },
             );
           }),
