@@ -1,7 +1,6 @@
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
-import 'package:canti_hub/pages/common/settings_type.dart';
 import 'package:canti_hub/pages/main_page/devices_list.dart';
-import 'package:canti_hub/pages/nested_settings_page/nested_settings_page.dart';
+import 'package:canti_hub/pages/settings_page/pages/alarms_page/alarms_page.dart';
 import 'package:canti_hub/pages/settings_page/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -26,10 +25,7 @@ class MainPage extends StatelessWidget {
           onRightIconPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => NestedSettingsPage(
-                      pageTitle: localisation!.alarms,
-                      pageType: SettingsType.alarms)),
+              MaterialPageRoute(builder: (context) => AlarmsPage()),
             );
           }),
       body: Column(

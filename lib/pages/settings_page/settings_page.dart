@@ -1,6 +1,5 @@
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
 import 'package:canti_hub/pages/common/settings_type.dart';
-import 'package:canti_hub/pages/nested_settings_page/nested_settings_page.dart';
 import 'package:canti_hub/pages/settings_page/pages/mqtt_page/mqtt_page.dart';
 import 'package:canti_hub/pages/settings_page/pages/parameters_page/parameters_page.dart';
 import 'package:canti_hub/pages/settings_page/pages/wifi_page/wifi_page.dart';
