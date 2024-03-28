@@ -31,7 +31,7 @@ class MqttSettingsPage extends StatelessWidget {
           final mqttItem = context.watch<DatabaseProvider>().mqtt[index];
 
           return DetailWidget(
-            title: mqttItem.serverUrl,
+            title: '${mqttItem.serverUrl} - ${mqttItem.username}',
             onEditPressed: () {
               _showMqttPopup(context, mqtt: mqttItem);
             },
@@ -151,7 +151,8 @@ class MqttSettingsPage extends StatelessWidget {
                   context.read<DatabaseProvider>().insertMqtt(
                       MqttTableCompanion.insert(
                           serverUrl: serverUrl,
-                          port: Value(int.parse(port)),
+                          port:
+                              port != "" ? Value(int.parse(port)) : Value(1883),
                           username: username,
                           apiKey: Value(apiKey),
                           password: Value(password)));

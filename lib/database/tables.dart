@@ -47,7 +47,8 @@ class WifiTable extends Table {
 class MqttTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get serverUrl => text()();
-  IntColumn get port => integer().nullable()();
+  IntColumn get port =>
+      integer().nullable().withDefault(const Constant(1883))();
   TextColumn get apiKey => text().nullable()();
   TextColumn get username => text()();
   TextColumn get password => text().nullable()();
