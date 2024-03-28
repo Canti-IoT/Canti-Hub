@@ -1,5 +1,6 @@
 import 'package:canti_hub/pages/start_page.dart';
 import 'package:canti_hub/providers/database_provider.dart';
+import 'package:canti_hub/providers/device_provider.dart';
 import 'package:canti_hub/providers/parameters_provicer.dart';
 import 'package:canti_hub/providers/settings_provider.dart';
 import 'package:canti_hub/providers/theme_provider.dart';
@@ -22,6 +23,7 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DatabaseProvider()),
         ChangeNotifierProvider(create: (context) => SettingsProvider()),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => DeviceProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
