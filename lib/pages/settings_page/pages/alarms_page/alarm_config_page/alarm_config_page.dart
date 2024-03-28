@@ -1,7 +1,7 @@
 import 'package:canti_hub/database/custom_types.dart';
 import 'package:canti_hub/database/database.dart';
-import 'package:canti_hub/pages/alarm_config_page/parameter_widget.dart';
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
+import 'package:canti_hub/pages/settings_page/pages/alarms_page/alarm_config_page/parameter_widget.dart';
 import 'package:canti_hub/providers/database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

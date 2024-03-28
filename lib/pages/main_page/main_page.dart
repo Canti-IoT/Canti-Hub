@@ -1,5 +1,5 @@
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
-import 'package:canti_hub/pages/main_page/devices_list.dart';
+import 'package:canti_hub/pages/main_page/widgets/devices_list.dart';
 import 'package:canti_hub/pages/settings_page/pages/alarms_page/alarms_page.dart';
 import 'package:canti_hub/pages/settings_page/settings_page.dart';
 import 'package:flutter/material.dart';

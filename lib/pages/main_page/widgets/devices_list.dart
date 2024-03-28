@@ -1,6 +1,6 @@
-import 'package:canti_hub/pages/main_page/plus_icon.dart';
+import 'package:canti_hub/pages/main_page/widgets/device_icon.dart';
+import 'package:canti_hub/pages/main_page/widgets/plus_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:canti_hub/pages/main_page/device_icon.dart';
 
 class DevicesList extends StatelessWidget {
   const DevicesList({
