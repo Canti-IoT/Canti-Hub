@@ -1,5 +1,5 @@
 import 'package:canti_hub/database/database.dart';
-import 'package:canti_hub/pages/alarm_config_page/alarm_config_page.dart';
+import 'package:canti_hub/pages/settings_page/pages/alarms_page/alarm_config_page/alarm_config_page.dart';
 import 'package:canti_hub/pages/settings_page/pages/alarms_page/detail_widget.dart';
 import 'package:canti_hub/providers/database_provider.dart';
 import 'package:drift/drift.dart' hide Column;
