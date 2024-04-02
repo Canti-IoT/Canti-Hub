@@ -21,5 +21,10 @@
   "alarms": "Alarms",
 
   "@_ADD_DEVICE": {},
-  "add_device": "Add Device"
+  "add_device": "Add Device",
+
+
+  "@_MISC": {},
+  "cancel": "Cancel",
+  "add": "Add"
 }
