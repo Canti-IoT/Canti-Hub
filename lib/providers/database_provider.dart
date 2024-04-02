@@ -38,9 +38,10 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   // DevicesTable
-  Future<void> insertDevice(DevicesTableCompanion device) async {
-    _database.into(_database.devicesTable).insert(device);
+  Future<int> insertDevice(DevicesTableCompanion device) async {
+    int id = await _database.into(_database.devicesTable).insert(device);
     notifyListeners();
+    return id;
   }
 
   Future<void> getAllDevices() async {

@@ -26,7 +26,7 @@ class DeviceProvider with ChangeNotifier {
   late List<MqttParameter> parameters;
 
   DeviceProvider() {
-    _deviceType = DeviceType.physical;
+    _deviceType = DeviceType.virtual;
     _mqtt = MqttTableData(
         id: -1, serverUrl: 'uninitialized', username: 'uninitialized');
     parameters = [];
@@ -59,11 +59,62 @@ class DeviceProvider with ChangeNotifier {
         index: index,
         name: parameter.name,
         checkbox: false,
-        topic: '',
+        topic: '\${USERNAME}/feeds/\${PARAMETER}',
       ));
     }
 
     parameters = tmpParameters;
+  }
+
+  void save(BuildContext context) async {
+    if (deviceType == DeviceType.virtual) {
+      int mqttId = await context.read<DatabaseProvider>().insertDevice(
+          DevicesTableCompanion.insert(
+              type: deviceType,
+              softwareVersion: 'mqtt',
+              hardwareVersion: 'mqtt'));
+
+      Map<String, String> replacements = {
+        'USERNAME': mqtt.username,
+        'PARAMETER': '',
+      };
+
+      for (var parameter in parameters) {
+        replacements['PARAMETER'] = parameter.name;
+        parameter.topic = _replacePlaceholders(parameter.topic, replacements);
+        print(parameter.topic);
+      }
+    } else {
+      // context.read<DatabaseProvider>().insertDevice(DevicesTableCompanion.insert(type: deviceType, ));
+    }
+    clean();
+  }
+
+  void clean() {
+    _deviceType = DeviceType.virtual;
+    _mqtt = MqttTableData(
+      id: -1,
+      serverUrl: 'uninitialized',
+      username: 'uninitialized',
+    );
+
+    // Reset boolean value and topic for each parameter
+    parameters.forEach((parameter) {
+      parameter.checkbox = false;
+      parameter.topic = '\${USERNAME}/feeds/\${PARAMETER}';
+    });
     notifyListeners();
+  }
+
+  String _replacePlaceholders(String input, Map<String, String> replacements) {
+    String result = input;
+    replacements.forEach((key, value) {
+      if (result.contains('\${$key}')) {
+        result = result.replaceAll('\${$key}', value);
+      } else {
+        result = result.replaceAll('\${$key}', '<!-- ${key} is missing -->');
+      }
+    });
+    return result;
   }
 }

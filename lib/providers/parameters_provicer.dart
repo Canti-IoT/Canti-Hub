@@ -4,6 +4,7 @@ import 'package:canti_hub/common/parameters.dart';
 import 'package:canti_hub/database/database.dart';
 import 'package:canti_hub/pages/main_page/main_page.dart';
 import 'package:canti_hub/providers/database_provider.dart';
+import 'package:canti_hub/providers/device_provider.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,8 @@ class ParametersProvider extends ChangeNotifier {
         context,
         MaterialPageRoute(builder: (context) => MainPage()),
       );
+
+      context.read<DeviceProvider>().loadParameters(context);
     } catch (e) {
       print('Error loading parameters: $e');
     }
