@@ -26,48 +26,36 @@ class DetailPage extends StatelessWidget {
           ParameterWidget(
             parameterName: 'Temperature',
             value: 26.0, // Replace with actual value
-            minValue: 0.0, // Define min value
-            maxValue: 50.0, // Define max value
             desiredValue: 21.0,
-            unit: 'C',
+            unit: '°C',
           ),
           ParameterWidget(
             parameterName: 'Humidity',
             value: 50.0, // Replace with actual value
-            minValue: 0.0, // Define min value
-            maxValue: 100.0, // Define max value
             desiredValue: 50.0,
             unit: '%',
           ),
           ParameterWidget(
-            parameterName: 'Air Quality - VOCs',
+            parameterName: 'Air Quality(VOCs)',
             value: 0.6, // Replace with actual value
-            minValue: 0.0, // Define min value
-            maxValue: 1.0, // Define max value
             desiredValue: 1.0,
             unit: '%',
           ),
           ParameterWidget(
             parameterName: 'Pressure',
             value: 1000.0, // Replace with actual value
-            minValue: 900.0, // Define min value
-            maxValue: 1100.0, // Define max value
             desiredValue: 1010.0,
-            unit: 'pa',
+            unit: 'Pa',
           ),
           ParameterWidget(
             parameterName: 'Noise Level',
             value: 30.0, // Replace with actual value
-            minValue: 0.0, // Define min value
-            maxValue: 100.0, // Define max value
             desiredValue: 1.0,
-            unit: 'db',
+            unit: 'dB',
           ),
           ParameterWidget(
             parameterName: 'Light Level',
             value: 500.0, // Replace with actual value
-            minValue: 0.0, // Define min value
-            maxValue: 1000.0, // Define max value
             desiredValue: 50.0,
             unit: 'lux',
           ),

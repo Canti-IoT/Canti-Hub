@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class ParameterWidget extends StatelessWidget {
   final String parameterName;
   final double value;
   final String unit;
-  final double minValue;
-  final double maxValue;
   final double desiredValue;
 
   const ParameterWidget({
@@ -14,8 +11,6 @@ class ParameterWidget extends StatelessWidget {
     required this.parameterName,
     required this.value,
     required this.unit,
-    required this.minValue,
-    required this.maxValue,
     required this.desiredValue,
   }) : super(key: key);
 
@@ -27,7 +22,7 @@ class ParameterWidget extends StatelessWidget {
       margin: EdgeInsets.all(5.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.blue[100],
+          color: Theme.of(context).colorScheme.secondaryContainer,
           borderRadius: BorderRadius.circular(10.0),
         ),
         padding: EdgeInsets.all(5.0),
@@ -35,41 +30,29 @@ class ParameterWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SfRadialGauge(
-                      axes: <RadialAxis>[
-                        RadialAxis(
-                          minimum: minValue,
-                          maximum: maxValue,
-                          showLabels: false,
-                          pointers: <GaugePointer>[
-                            RangePointer(
-                              value: value,
-                              width: 0.15,
-                              color: colorizeGauge(),
-                              sizeUnit: GaugeSizeUnit.factor,
-                            ),
-                          ],
-                          annotations: <GaugeAnnotation>[
-                            GaugeAnnotation(
-                              widget: Text(
-                                '$displayValue $unit',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                              angle: 90,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '$displayValue ',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
-              ),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  unit,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
+            SizedBox(height: 8), // Adjust spacing as needed
             Text(
               parameterName,
               maxLines: 1,
@@ -92,20 +75,5 @@ class ParameterWidget extends StatelessWidget {
     } else {
       return value.toStringAsFixed(1);
     }
-  }
-
-  Color colorizeGauge() {
-    Color color;
-    double distanceToDesired = (value - desiredValue).abs();
-
-    if (distanceToDesired < 0.05 * (maxValue - minValue)) {
-      color = Colors.green;
-    } else if (distanceToDesired < 0.2 * (maxValue - minValue)) {
-      color = Colors.yellow;
-    } else {
-      color = Colors.red;
-    }
-
-    return color;
   }
 }
