@@ -7,9 +7,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-class AlarmConfigPage extends StatelessWidget {
+class AlarmConfigPage extends StatefulWidget {
   final AlarmsTableData alarm;
   const AlarmConfigPage({Key? key, required this.alarm}) : super(key: key);
+
+  @override
+  _AlarmConfigPageState createState() => _AlarmConfigPageState();
+}
+
+class _AlarmConfigPageState extends State<AlarmConfigPage> {
+  late TextEditingController _alarmNameController;
+
+  @override
+  void initState() {
+    super.initState();
+    _alarmNameController = TextEditingController(text: widget.alarm.name);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +54,11 @@ class AlarmConfigPage extends StatelessWidget {
               decoration: InputDecoration(
                 labelText: "Alarm Name",
               ),
-              controller:
-                  TextEditingController(text: alarm.name), // Default value
-              onSubmitted: (value) {
+              controller: _alarmNameController,
+              onChanged: (value) {
                 context
                     .read<DatabaseProvider>()
-                    .updateAlarm(alarm.copyWith(name: value));
+                    .updateAlarm(widget.alarm.copyWith(name: value));
               },
             ),
           ),
@@ -78,7 +90,7 @@ class AlarmConfigPage extends StatelessWidget {
                         .deleteAlarmParameter(alarmParameter))
                     .toList();
 
-                context.read<DatabaseProvider>().deleteAlarm(alarm);
+                context.read<DatabaseProvider>().deleteAlarm(widget.alarm);
 
                 Navigator.of(context).pop();
               },
@@ -171,7 +183,7 @@ class AlarmConfigPage extends StatelessWidget {
                       // Perform your database insertion
                       context.read<DatabaseProvider>().insertAlarmParameter(
                           AlarmsParameterTableCompanion.insert(
-                              alarmId: alarm.id,
+                              alarmId: widget.alarm.id,
                               parameterId: parameterId,
                               triggerType: TriggerType.disabled));
 
