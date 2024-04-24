@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum ParametersDisplayMode { list, grid_1, grid_2, grid_3 }
+
 class SettingsProvider extends ChangeNotifier {
-  late bool _checkAppUpdate;
-  late bool _checkFirmwareUpdate;
-  late bool _systemTheme;
-  late bool _darkTheme;
+  late bool _checkAppUpdate = false;
+  late bool _checkFirmwareUpdate = false;
+  late bool _systemTheme = true;
+  late bool _darkTheme = false;
+  ParametersDisplayMode _displayMode = ParametersDisplayMode.grid_2;
 
   static const String _checkAppUpdateKey = 'checkAppUpdate';
   static const String _checkFirmwareUpdateKey = 'checkFirmwareUpdate';
   static const String _systemThemeKey = 'systemTheme';
   static const String _darkThemeKey = 'darkTheme';
+  static const String _displayModeKey = 'displayMode';
 
   // Load settings from local storage (SharedPreferences)
   Future<void> loadSettings() async {
@@ -21,6 +25,8 @@ class SettingsProvider extends ChangeNotifier {
     _checkFirmwareUpdate = prefs.getBool(_checkFirmwareUpdateKey) ?? false;
     _systemTheme = prefs.getBool(_systemThemeKey) ?? true;
     _darkTheme = prefs.getBool(_darkThemeKey) ?? false;
+    _displayMode = ParametersDisplayMode.values[
+        prefs.getInt(_displayModeKey) ?? ParametersDisplayMode.grid_2.index];
 
     // Notify listeners after loading settings
     notifyListeners();
@@ -62,8 +68,21 @@ class SettingsProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> _saveToSharedPreferences(String key, bool value) async {
+  ParametersDisplayMode get displayMode => _displayMode;
+  set displayMode(ParametersDisplayMode newValue) {
+    if (_displayMode != newValue) {
+      _displayMode = newValue;
+      _saveToSharedPreferences(_displayModeKey, newValue.index);
+      notifyListeners();
+    }
+  }
+
+  Future<void> _saveToSharedPreferences(String key, dynamic value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(key, value);
+    if (value is bool) {
+      prefs.setBool(key, value);
+    } else if (value is int) {
+      prefs.setInt(key, value);
+    }
   }
 }

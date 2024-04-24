@@ -3,14 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ThemeProvider with ChangeNotifier {
-  late ThemeData _lightTheme;
-  late ThemeData _darkTheme;
-  late ThemeMode _themeMode;
+  static ThemeData _lightTheme= ThemeData.light();
+  static ThemeData _darkTheme = ThemeData.dark();
+  static ThemeMode _themeMode = ThemeMode.system;
 
   ThemeProvider() {
-    _lightTheme = ThemeData.light();
-    _darkTheme = ThemeData.dark();
-    _themeMode = ThemeMode.system;
   }
 
   ThemeData get getLightTheme => _lightTheme;
