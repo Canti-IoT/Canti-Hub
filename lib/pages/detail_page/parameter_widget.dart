@@ -1,4 +1,6 @@
+import 'package:canti_hub/providers/settings_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ParameterWidget extends StatelessWidget {
   final String parameterName;
@@ -16,6 +18,55 @@ class ParameterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final displayMode = context.watch<SettingsProvider>().displayMode;
+
+    return displayMode == ParametersDisplayMode.list
+        ? _buildListLayout(context)
+        : _buildGridLayout(context);
+  }
+
+  Widget _buildListLayout(BuildContext context) {
+  String displayValue = formatValue(value);
+
+  return Container(
+    margin: EdgeInsets.all(5.0),
+    child: Container(
+      padding: EdgeInsets.all(16.0), // Padding of 8
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Text(
+              parameterName,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          SizedBox(width: 8), // Adjust spacing as needed
+          Text(
+            '$displayValue $unit',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.end,
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+
+  Widget _buildGridLayout(BuildContext context) {
     String displayValue = formatValue(value);
 
     return Container(

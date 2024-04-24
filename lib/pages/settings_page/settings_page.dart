@@ -2,6 +2,7 @@ import 'package:canti_hub/pages/common/custom_app_bar.dart';
 import 'package:canti_hub/pages/settings_page/pages/mqtt_page/mqtt_page.dart';
 import 'package:canti_hub/pages/settings_page/pages/parameters_page/parameters_page.dart';
 import 'package:canti_hub/pages/settings_page/pages/wifi_page/wifi_page.dart';
+import 'package:canti_hub/pages/settings_page/widgets/dropdown_setting.dart';
 import 'package:canti_hub/pages/settings_page/widgets/nested_setting.dart';
 import 'package:canti_hub/pages/settings_page/widgets/toggle_setting.dart';
 import 'package:canti_hub/pages/settings_page/widgets/web_link_setting.dart';
@@ -18,6 +19,13 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var localisation = AppLocalizations.of(context);
+
+    final Map<ParametersDisplayMode, String> displayModeMap = {
+      ParametersDisplayMode.list: localisation!.settings_view_list,
+      ParametersDisplayMode.grid_1: localisation.settings_view_grid1,
+      ParametersDisplayMode.grid_2: localisation.settings_view_grid2,
+      ParametersDisplayMode.grid_3: localisation.settings_view_grid3,
+    };
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -65,6 +73,21 @@ class SettingsPage extends StatelessWidget {
                 context.read<ThemeProvider>().loadTheme(context);
               },
             ),
+          DropdownSetting(
+            label: localisation.settings_view,
+            onChanged: (String value) {
+              for (var entry in displayModeMap.entries) {
+                if (entry.value == value) {
+                  context.read<SettingsProvider>().displayMode = entry.key;
+                  break;
+                }
+              }
+            },
+            items: displayModeMap.values.toList(),
+            value:
+                displayModeMap[context.watch<SettingsProvider>().displayMode] ??
+                    'error',
+          ),
           NestedSetting(
               label: localisation.parameters_configuration,
               page: ParametersPage()),
