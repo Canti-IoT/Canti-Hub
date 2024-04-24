@@ -14,6 +14,10 @@
     <!-- legacy for Android 9 or lower -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="28" />
 
+    <!-- In the permission part of your manifest, these permission are needed if you target Android 14 phones -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" /> <!-- Here, chose the type according to your app -->
+
     <application
         android:label="Canti Hub"
         android:name="${applicationName}"
