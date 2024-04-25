@@ -24,7 +24,7 @@ class ColectedDataTable extends Table {
   IntColumn get parameterId => integer().references(ParametersTable, #index)();
   IntColumn get deviceId => integer().references(DevicesTable, #id)();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
-  IntColumn get value => integer()();
+  RealColumn get value => real()();
 
   @override
   Set<Column<Object>>? get primaryKey => {parameterId, deviceId, createdAt};
