@@ -17,7 +17,7 @@ class PlusIcon extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddDevicePage()),
+            MaterialPageRoute(builder: (context) => AddDevicePage()),
           );
         },
         child: Container(

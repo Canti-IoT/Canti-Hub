@@ -1,19 +1,32 @@
-import 'package:canti_hub/database/custom_types.dart';
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
+import 'package:canti_hub/pages/main_page/pages/add_device_page/add_mqtt_device_widgets.dart';
 import 'package:canti_hub/pages/main_page/pages/add_device_page/widgets/device_type_widget.dart';
-import 'package:canti_hub/pages/main_page/pages/add_device_page/widgets/mqtt_parameter_widget.dart';
-import 'package:canti_hub/pages/main_page/pages/add_device_page/widgets/mqtt_service_widget.dart';
 import 'package:canti_hub/providers/device_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'add_bluetooth_device_widgets.dart';
 
 class AddDevicePage extends StatelessWidget {
-  const AddDevicePage({Key? key}) : super(key: key);
+  AddDevicePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var localisation = AppLocalizations.of(context);
+    
+
+   
+
+    // context.read<BleScanner>().startScan([
+    //   Uuid.parse(
+    //       "4fafc201-1fb5-459e-8fcc-c5c9c331914b"), // Parameter Index Service
+    //   Uuid.parse(
+    //       "f35d596b-fff1-466d-97d8-ba175cd0a674"), // Parameter Value Service
+    //   Uuid.parse(
+    //       "cc944d76-a6b6-4a01-b7f8-77b02967f31f"), // Configuration service
+    // ]);
+
+    // var scannerState = context.watch<BleScannerState>();
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -27,33 +40,11 @@ class AddDevicePage extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 80.0),
         children: [
           DeviceTypeWidget(),
-          if (context.watch<DeviceProvider>().deviceType == DeviceType.virtual)
-            MqttServiceWidget(),
-          // if (context.watch<DeviceProvider>().deviceType == DeviceType.virtual)
-          ...context
-              .watch<DeviceProvider>()
-              .parameters
-              .where((parameter) =>
-                  context.watch<DeviceProvider>().deviceType ==
-                  DeviceType.virtual)
-              .map((parameter) => MqttParameterWidget(
-                    parameter: parameter,
-                    onCheckboxChanged: (value) {
-                      // Update checkbox value in your provider or wherever you store state
-                      context
-                          .read<DeviceProvider>()
-                          .parameters[parameter.index]
-                          .checkbox = value;
-                    },
-                    onTopicChanged: (value) {
-                      // Update topic value in your provider or wherever you store state
-                      context
-                          .read<DeviceProvider>()
-                          .parameters[parameter.index]
-                          .topic = value;
-                    },
-                  ))
-              .toList(),
+          // Use the Bluetooth widget group
+          AddBluetoothDeviceWidgets(),
+          // Use the MQTT widget group
+          AddMqttDeviceWidgets(),
+          // Add other common widgets for both Bluetooth and MQTT devices here
         ],
       ),
       floatingActionButton: Row(
