@@ -20,6 +20,7 @@ class BluetoothProvider extends ChangeNotifier {
   set scanResults(List<ScanResult> value) {
     _scanResults = value;
   }
+
   bool _isScanning = false;
   late StreamSubscription<List<ScanResult>> _scanResultsSubscription;
   late StreamSubscription<bool> _isScanningSubscription;
@@ -86,7 +87,8 @@ class BluetoothProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {}
     try {
-      await FlutterBluePlus.startScan(timeout: const Duration(seconds: 15));
+      await FlutterBluePlus.startScan(
+          timeout: const Duration(seconds: 15));
     } catch (e) {}
   }
 
@@ -98,7 +100,8 @@ class BluetoothProvider extends ChangeNotifier {
 
   void refresh() {
     if (_isScanning == false) {
-      FlutterBluePlus.startScan(timeout: const Duration(seconds: 15));
+      FlutterBluePlus.startScan(
+          timeout: const Duration(seconds: 15));
     }
     notifyListeners();
   }
