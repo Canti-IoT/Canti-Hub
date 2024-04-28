@@ -4,6 +4,9 @@ import 'package:drift/drift.dart';
 class DevicesTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get type => intEnum<DeviceType>()();
+  TextColumn get remoteId => text()();
+  TextColumn get name => text()();
+  TextColumn get displayNmae => text()();
   TextColumn get softwareVersion => text()();
   TextColumn get hardwareVersion => text()();
 }
