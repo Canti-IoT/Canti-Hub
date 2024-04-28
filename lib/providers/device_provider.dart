@@ -2,6 +2,7 @@ import 'package:canti_hub/database/custom_types.dart';
 import 'package:canti_hub/database/database.dart';
 import 'package:canti_hub/providers/database_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 
 class MqttParameter {
@@ -24,6 +25,9 @@ class DeviceProvider with ChangeNotifier {
   late DeviceType _deviceType;
   late MqttTableData _mqtt;
   late List<MqttParameter> parameters;
+  late String _name = '';
+  late BluetoothDevice _device =
+      BluetoothDevice(remoteId: DeviceIdentifier('0'));
 
   DeviceProvider() {
     _deviceType = DeviceType.bluetooth;
@@ -34,6 +38,13 @@ class DeviceProvider with ChangeNotifier {
 
   DeviceType get deviceType => _deviceType;
   MqttTableData get mqtt => _mqtt;
+  String get name => _name;
+  BluetoothDevice get device => _device;
+
+  set device(BluetoothDevice device) {
+    _device = device;
+    notifyListeners();
+  }
 
   set deviceType(DeviceType newDeviceType) {
     _deviceType = newDeviceType;
@@ -42,6 +53,11 @@ class DeviceProvider with ChangeNotifier {
 
   set mqtt(MqttTableData newMqtt) {
     _mqtt = newMqtt;
+    notifyListeners();
+  }
+
+  set name(String name) {
+    _name = name;
     notifyListeners();
   }
 
@@ -71,6 +87,9 @@ class DeviceProvider with ChangeNotifier {
       int mqttId = await context.read<DatabaseProvider>().insertDevice(
           DevicesTableCompanion.insert(
               type: deviceType,
+              remoteId: '',
+              name: 'mqtt',
+              displayNmae: 'mqtt',
               softwareVersion: 'mqtt',
               hardwareVersion: 'mqtt'));
 
@@ -84,19 +103,41 @@ class DeviceProvider with ChangeNotifier {
         parameter.topic = _replacePlaceholders(parameter.topic, replacements);
         print(parameter.topic);
       }
-    } else {
-      // context.read<DatabaseProvider>().insertDevice(DevicesTableCompanion.insert(type: deviceType, ));
+    } else if (deviceType == DeviceType.bluetooth) {
+      var devicesList = context.read<DatabaseProvider>().devices;
+      print("#########");
+      print(devicesList.toString());
+      DevicesTableData? existingDevice = null;
+      try {
+        existingDevice = devicesList
+            .firstWhere((device) => device.remoteId == _device.remoteId.str);
+      } catch (e) {}
+      if (existingDevice == null) {
+        await context.read<DatabaseProvider>().insertDevice(
+            DevicesTableCompanion.insert(
+                type: deviceType,
+                remoteId: _device.remoteId.str,
+                name: device.platformName,
+                displayNmae: _name == '' ? device.platformName : _name,
+                softwareVersion: 'bluetooth',
+                hardwareVersion: 'bluetooth'));
+      }
+      else{
+        print('device already in db');
+      }
     }
     clean();
   }
 
   void clean() {
-    _deviceType = DeviceType.mqtt;
+    _deviceType = DeviceType.bluetooth;
     _mqtt = MqttTableData(
       id: -1,
       serverUrl: 'uninitialized',
       username: 'uninitialized',
     );
+    name = '';
+    device = BluetoothDevice(remoteId: DeviceIdentifier('0'));
 
     // Reset boolean value and topic for each parameter
     parameters.forEach((parameter) {

@@ -1,6 +1,9 @@
+import 'package:canti_hub/database/custom_types.dart';
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
 import 'package:canti_hub/pages/main_page/pages/add_device_page/add_mqtt_device_widgets.dart';
+import 'package:canti_hub/pages/main_page/pages/add_device_page/widgets/device_name_widget.dart';
 import 'package:canti_hub/pages/main_page/pages/add_device_page/widgets/device_type_widget.dart';
+import 'package:canti_hub/providers/bluetooth_provider.dart';
 import 'package:canti_hub/providers/device_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -13,9 +16,6 @@ class AddDevicePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var localisation = AppLocalizations.of(context);
-    
-
-   
 
     // context.read<BleScanner>().startScan([
     //   Uuid.parse(
@@ -39,9 +39,12 @@ class AddDevicePage extends StatelessWidget {
       body: ListView(
         padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 80.0),
         children: [
+          DeviceNameWidget(),
           DeviceTypeWidget(),
           // Use the Bluetooth widget group
-          AddBluetoothDeviceWidgets(),
+          if(context.watch<DeviceProvider>().deviceType ==
+              DeviceType.bluetooth)
+          AddBluetoothDeviceWidgets(context: context),
           // Use the MQTT widget group
           AddMqttDeviceWidgets(),
           // Add other common widgets for both Bluetooth and MQTT devices here
@@ -64,6 +67,21 @@ class AddDevicePage extends StatelessWidget {
               ),
             ),
           ),
+          if (context.watch<DeviceProvider>().deviceType ==
+              DeviceType.bluetooth)
+            Spacer(),
+          if (context.watch<DeviceProvider>().deviceType ==
+              DeviceType.bluetooth)
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: FloatingActionButton(
+                onPressed: () {
+                  context.read<BluetoothProvider>().refresh();
+                },
+                child: Icon(Icons.refresh),
+              ),
+            ),
+          SizedBox(width: 16.0),
           FloatingActionButton.extended(
             heroTag: "add parameter",
             onPressed: () {
