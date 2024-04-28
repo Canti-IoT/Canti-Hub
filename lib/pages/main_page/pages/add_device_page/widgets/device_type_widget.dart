@@ -2,6 +2,7 @@ import 'package:canti_hub/database/custom_types.dart';
 import 'package:canti_hub/providers/device_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DeviceTypeWidget extends StatefulWidget {
   @override
@@ -9,11 +10,12 @@ class DeviceTypeWidget extends StatefulWidget {
 }
 
 class _DeviceTypeWidgetState extends State<DeviceTypeWidget> {
-  DeviceType _selectedDeviceType = DeviceType.virtual;
+  DeviceType _selectedDeviceType = DeviceType.mqtt;
   bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
+    var localisation = AppLocalizations.of(context);
     _selectedDeviceType = context.watch<DeviceProvider>().deviceType;
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -53,7 +55,7 @@ class _DeviceTypeWidgetState extends State<DeviceTypeWidget> {
                     return DropdownMenuItem<DeviceType>(
                       value: value,
                       child: Text(
-                        value == DeviceType.virtual ? 'Virtual' : 'Bluetooth',
+                        value == DeviceType.bluetooth ? localisation!.bluetooth : localisation!.mqtt,
                         style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.normal,

@@ -27,6 +27,8 @@
 
   "@_ADD_DEVICE": {},
   "add_device": "Add Device",
+  "bluetooth": "Bluetooth",
+  "mqtt": "MQTT",
 
 
   "@_MISC": {},

@@ -26,7 +26,7 @@ class DeviceProvider with ChangeNotifier {
   late List<MqttParameter> parameters;
 
   DeviceProvider() {
-    _deviceType = DeviceType.virtual;
+    _deviceType = DeviceType.bluetooth;
     _mqtt = MqttTableData(
         id: -1, serverUrl: 'uninitialized', username: 'uninitialized');
     parameters = [];
@@ -67,7 +67,7 @@ class DeviceProvider with ChangeNotifier {
   }
 
   void save(BuildContext context) async {
-    if (deviceType == DeviceType.virtual) {
+    if (deviceType == DeviceType.mqtt) {
       int mqttId = await context.read<DatabaseProvider>().insertDevice(
           DevicesTableCompanion.insert(
               type: deviceType,
@@ -91,7 +91,7 @@ class DeviceProvider with ChangeNotifier {
   }
 
   void clean() {
-    _deviceType = DeviceType.virtual;
+    _deviceType = DeviceType.mqtt;
     _mqtt = MqttTableData(
       id: -1,
       serverUrl: 'uninitialized',

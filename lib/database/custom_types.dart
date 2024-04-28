@@ -1,3 +1,3 @@
-enum DeviceType { physical, virtual }
+enum DeviceType { bluetooth, mqtt }
 
 enum TriggerType { disabled, inner, outer }
