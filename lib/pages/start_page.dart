@@ -1,6 +1,7 @@
 import 'package:canti_hub/pages/main_page/main_page.dart';
+import 'package:canti_hub/providers/database_provider.dart';
 import 'package:canti_hub/providers/device_provider.dart';
-import 'package:canti_hub/providers/parameters_provicer.dart';
+import 'package:canti_hub/providers/parameters_provider.dart';
 import 'package:canti_hub/providers/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -18,10 +19,13 @@ class StartPage extends StatelessWidget {
       Future.microtask(() {
         context.read<SettingsProvider>().loadTheme();
       });
-      context.read<ParametersProvider>().loadParameters(context);
-      Future.microtask(() {
-        context.read<DeviceProvider>().loadParameters(context);
+      Future.delayed(Duration(microseconds: 500), () {
+        context.read<ParametersProvider>().loadParameters(context);
+        Future.microtask(() {
+          context.read<DeviceProvider>().loadParameters();
+        });
       });
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => MainPage()),
