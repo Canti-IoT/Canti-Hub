@@ -1,4 +1,3 @@
-import 'package:canti_hub/database/custom_types.dart';
 import 'package:canti_hub/providers/device_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

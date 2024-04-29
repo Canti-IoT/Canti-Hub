@@ -1,11 +1,15 @@
 import 'package:canti_hub/database/custom_types.dart';
+import 'package:canti_hub/database/database.dart';
+import 'package:canti_hub/database/tables.dart';
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
 import 'package:canti_hub/pages/main_page/pages/add_device_page/add_mqtt_device_widgets.dart';
 import 'package:canti_hub/pages/main_page/pages/add_device_page/widgets/device_name_widget.dart';
 import 'package:canti_hub/pages/main_page/pages/add_device_page/widgets/device_type_widget.dart';
 import 'package:canti_hub/providers/bluetooth_provider.dart';
+import 'package:canti_hub/providers/database_provider.dart';
 import 'package:canti_hub/providers/device_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'add_bluetooth_device_widgets.dart';
@@ -16,17 +20,6 @@ class AddDevicePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var localisation = AppLocalizations.of(context);
-
-    // context.read<BleScanner>().startScan([
-    //   Uuid.parse(
-    //       "4fafc201-1fb5-459e-8fcc-c5c9c331914b"), // Parameter Index Service
-    //   Uuid.parse(
-    //       "f35d596b-fff1-466d-97d8-ba175cd0a674"), // Parameter Value Service
-    //   Uuid.parse(
-    //       "cc944d76-a6b6-4a01-b7f8-77b02967f31f"), // Configuration service
-    // ]);
-
-    // var scannerState = context.watch<BleScannerState>();
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -42,9 +35,9 @@ class AddDevicePage extends StatelessWidget {
           DeviceNameWidget(),
           DeviceTypeWidget(),
           // Use the Bluetooth widget group
-          if(context.watch<DeviceProvider>().deviceType ==
+          if (context.watch<DeviceProvider>().deviceType ==
               DeviceType.bluetooth)
-          AddBluetoothDeviceWidgets(context: context),
+            AddBluetoothDeviceWidgets(context: context),
           // Use the MQTT widget group
           AddMqttDeviceWidgets(),
           // Add other common widgets for both Bluetooth and MQTT devices here
@@ -62,7 +55,7 @@ class AddDevicePage extends StatelessWidget {
               },
               icon: Icon(Icons.cancel),
               label: Text(
-                localisation!.cancel,
+                localisation.cancel,
                 style: TextStyle(fontSize: 16.0),
               ),
             ),
@@ -84,12 +77,41 @@ class AddDevicePage extends StatelessWidget {
           SizedBox(width: 16.0),
           FloatingActionButton.extended(
             heroTag: "add parameter",
-            onPressed: () {
-              context.read<DeviceProvider>().save(context);
+            onPressed: () async {
+              context.read<BluetoothProvider>().stopListentingToScanResults();
+              context.read<BluetoothProvider>().stopScaning();
+              var id = await context.read<DeviceProvider>().save();
+              var device = context.read<DeviceProvider>().device;
+              // var id = context.read<DeviceProvider>().getId();
+              context.read<BluetoothProvider>().connect(device);
+              context.read<BluetoothProvider>().initConnection();
+              await Future.delayed(Duration(seconds: 1));
+              context.read<BluetoothProvider>().discoverServices();
+              await Future.delayed(Duration(seconds: 1));
+              var indexes = await context
+                  .read<BluetoothProvider>()
+                  .com
+                  ?.readIndexCharacteristic();
+              if (id != null) {
+                if (indexes != null) {
+                  indexes.forEach((index) {
+                    context.read<DatabaseProvider>().insertDeviceParameter(
+                        DeviceParameterTableCompanion.insert(
+                            parameterId: index,
+                            deviceId: id
+                           ));
+                  });
+                }
+              } else {
+                print("invalid id");
+              }
+
+              context.read<BluetoothProvider>().disposeDevice();
+              Navigator.popUntil(context, (route) => route.isFirst);
             },
             icon: Icon(Icons.add),
             label: Text(
-              localisation!.add,
+              localisation.add,
               style: TextStyle(fontSize: 16.0),
             ),
           ),

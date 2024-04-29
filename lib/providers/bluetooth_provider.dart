@@ -41,6 +41,7 @@ class BluetoothProvider extends ChangeNotifier {
   int? _mtuSize;
   BluetoothConnectionState _connectionState =
       BluetoothConnectionState.disconnected;
+  BluetoothConnectionState get connectionState => _connectionState;
   List<BluetoothService> _services = [];
   bool _isDiscoveringServices = false;
   bool _isConnecting = false;
@@ -113,7 +114,7 @@ class BluetoothProvider extends ChangeNotifier {
 
   void connect(BluetoothDevice device) {
     _device = device;
-    _device?.connect(autoConnect: true);
+    _device?.connect();
     notifyListeners();
   }
 
@@ -158,6 +159,7 @@ class BluetoothProvider extends ChangeNotifier {
 
     try {
       _services = await _device!.discoverServices();
+      print("services: ${_services.toString()}");
       com = Communication(_services);
     } catch (e) {}
     _isDiscoveringServices = false;

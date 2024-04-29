@@ -1,6 +1,4 @@
 import 'package:canti_hub/database/custom_types.dart';
-import 'package:canti_hub/pages/main_page/pages/add_device_page/widgets/device_type_widget.dart';
-import 'package:canti_hub/pages/main_page/pages/add_device_page/widgets/mqtt_parameter_widget.dart';
 import 'package:canti_hub/pages/main_page/pages/add_device_page/widgets/mqtt_service_widget.dart';
 import 'package:canti_hub/providers/device_provider.dart';
 import 'package:flutter/material.dart';

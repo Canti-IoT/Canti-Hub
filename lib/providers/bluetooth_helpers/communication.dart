@@ -21,10 +21,6 @@ class Communication {
     for (BluetoothService service in services) {
       for (BluetoothCharacteristic characteristic in service.characteristics) {
         characteristicUuid = characteristic.uuid.toString();
-        print('C: $characteristicUuid');
-        print('I: ${Strings.INDEX_CHARACTERISTIC_UUID}');
-        print('F: ${Strings.CONFIG_CHARACTERISTIC_UUID}');
-        print('V: ${Strings.VALUE_CHARACTERISTIC_UUID}');
         if (characteristicUuid == Strings.INDEX_CHARACTERISTIC_UUID) {
           indexCharacteristic = characteristic;
         } else if (characteristicUuid == Strings.CONFIG_CHARACTERISTIC_UUID) {
@@ -129,14 +125,15 @@ class Communication {
     try {
       await indexCharacteristic.write(cmd);
     } catch (e) {
-      // Handle write data error
     }
     List<int> indexes = [];
     try {
       List<int> data = await indexCharacteristic.read();
       int newIndex = await ByteManipulation.bytes2Int32(data) ?? 0;
       while (!indexes.contains(newIndex)) {
-        indexes.add(newIndex);
+        if (newIndex != 0) {
+          indexes.add(newIndex);
+        }
         data = await indexCharacteristic.read();
         newIndex = await ByteManipulation.bytes2Int32(data) ?? 0;
       }
