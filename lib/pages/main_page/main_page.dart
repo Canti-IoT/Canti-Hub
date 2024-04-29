@@ -3,13 +3,32 @@ import 'package:canti_hub/pages/detail_page/parameter_widget.dart';
 import 'package:canti_hub/pages/main_page/widgets/devices_list.dart';
 import 'package:canti_hub/pages/settings_page/pages/alarms_page/alarms_page.dart';
 import 'package:canti_hub/pages/settings_page/settings_page.dart';
+import 'package:canti_hub/providers/bluetooth_provider.dart';
 import 'package:canti_hub/providers/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
+
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() =>
+        context.read<BluetoothProvider>().startListentingToAdapterState());
+  }
+
+  @override
+  void dispose() {
+    context.read<BluetoothProvider>().stopListentingToAdapterState();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

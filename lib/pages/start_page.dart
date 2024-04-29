@@ -12,10 +12,10 @@ class StartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 1), () {
+    Future.microtask(() {
       context.read<DatabaseProvider>().initDatabase();
       context.read<SettingsProvider>().loadSettings();
-      Timer(Duration(seconds: 2), () {
+      Future.microtask(() {
         context.read<SettingsProvider>().loadTheme();
       });
       context.read<ParametersProvider>().loadParameters(context);

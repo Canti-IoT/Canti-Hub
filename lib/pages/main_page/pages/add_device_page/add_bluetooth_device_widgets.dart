@@ -19,18 +19,20 @@ class _AddBluetoothDeviceWidgetsState extends State<AddBluetoothDeviceWidgets> {
   @override
   void initState() {
     super.initState();
-    widget.context.read<BluetoothProvider>().turnOn();
-    widget.context.read<BluetoothProvider>().startListentingToAdapterState();
-    widget.context.read<BluetoothProvider>().startListentingToScanResults();
-    widget.context.read<BluetoothProvider>().startScaning();
+    Future.microtask(() {
+      context.read<BluetoothProvider>().turnOn();
+      context.read<BluetoothProvider>().startListentingToAdapterState();
+      context.read<BluetoothProvider>().startListentingToScanResults();
+      context.read<BluetoothProvider>().startScaning();
+    });
     // Add initialization code here
   }
 
   @override
   void dispose() {
-    widget.context.read<BluetoothProvider>().stopListentingToAdapterState();
-    widget.context.read<BluetoothProvider>().stopListentingToScanResults();
-    widget.context.read<BluetoothProvider>().stopScaning();
+    context.read<BluetoothProvider>().stopListentingToAdapterState();
+    context.read<BluetoothProvider>().stopListentingToScanResults();
+    context.read<BluetoothProvider>().stopScaning();
     super.dispose();
   }
 
