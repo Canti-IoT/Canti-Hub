@@ -1,11 +1,13 @@
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
 import 'package:canti_hub/pages/detail_page/parameter_widget.dart';
+import 'package:canti_hub/pages/main_page/pages/add_device_page/widgets/bluetooth_adapter_state_widget.dart';
 import 'package:canti_hub/pages/main_page/widgets/devices_list.dart';
 import 'package:canti_hub/pages/settings_page/pages/alarms_page/alarms_page.dart';
 import 'package:canti_hub/pages/settings_page/settings_page.dart';
 import 'package:canti_hub/providers/bluetooth_provider.dart';
 import 'package:canti_hub/providers/settings_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -61,7 +63,11 @@ class _MainPageState extends State<MainPage> {
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
-          const DevicesList(),
+          if (context.watch<BluetoothProvider>().adapterState !=
+              BluetoothAdapterState.on)
+            BluetoothAdapterStateWidget(),
+
+          DevicesList(),
 
           // Placeholder for the heatmap or any other content
           Expanded(

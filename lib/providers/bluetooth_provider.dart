@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class BluetoothProvider extends ChangeNotifier {
-  BluetoothAdapterState _adapterState = BluetoothAdapterState.unknown;
+  BluetoothAdapterState adapterState = BluetoothAdapterState.unknown;
   late StreamSubscription<BluetoothAdapterState> _adapterStateSubscription;
   List<BluetoothDevice> _systemDevices = [];
   List<ScanResult> _scanResults = [];
@@ -55,7 +55,7 @@ class BluetoothProvider extends ChangeNotifier {
 
   void startListentingToAdapterState() {
     _adapterStateSubscription = FlutterBluePlus.adapterState.listen((state) {
-      _adapterState = state;
+      adapterState = state;
       notifyListeners();
     });
   }
