@@ -143,4 +143,16 @@ class Communication {
     }
     return indexes;
   }
+
+    Future<double?> readParameterValue(int parameterIndex) async {
+    var index = await ByteManipulation.int8Bytes(parameterIndex);
+    try {
+      await valueCharacteristic.write(index);
+      List<int> data = await valueCharacteristic.read();
+      return await ByteManipulation.bytes2Float32(data);
+    } catch (e) {
+      // Handle read data error
+      return null;
+    }
+  }
 }
