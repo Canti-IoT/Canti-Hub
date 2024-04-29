@@ -1,22 +1,32 @@
 import 'package:canti_hub/common/files.dart';
-import 'package:canti_hub/pages/detail_page/detail_page.dart';
+import 'package:canti_hub/pages/main_page/pages/detail_page/detail_page.dart';
+import 'package:canti_hub/providers/database_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DeviceIcon extends StatelessWidget {
+  final int index;
+
   const DeviceIcon({
     Key? key,
+    required this.index,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = Theme.of(context).backgroundColor;
+    Color backgroundColor = Theme.of(context).colorScheme.background;
+    int selectedDeviceIndex =
+        context.watch<DatabaseProvider>().selectedDeviceIndex;
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => DetailPage()),
-        );
+        context.read<DatabaseProvider>().selectedDeviceIndex = index;
+        if (index == selectedDeviceIndex) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => DetailPage()),
+          );
+        }
       },
       child: Container(
         width: 76,
@@ -36,10 +46,6 @@ class DeviceIcon extends StatelessWidget {
                       Files.bme680,
                       fit: BoxFit.cover,
                     ),
-                    // Grey overlay
-                    Container(
-                      color: backgroundColor.withOpacity(0.5),
-                    ),
                   ],
                 ),
               ),
@@ -55,18 +61,34 @@ class DeviceIcon extends StatelessWidget {
                   color: Colors.green,
                   border: Border.all(color: backgroundColor, width: 2),
                 ),
-              ),
-            ),
-            ClipRRect(
-              child: Container(
-                width: 60,
-                height: 60,
-                child: Icon(
-                  Icons.settings,
-                  size: 36.0,
+                child: Center(
+                  child: Text(
+                    '${index + 1}',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                 ),
               ),
             ),
+            if (selectedDeviceIndex == index)
+              Positioned(
+                top: 0,
+                left: 0,
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.settings,
+                      color: backgroundColor,
+                      size: 36.0,
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

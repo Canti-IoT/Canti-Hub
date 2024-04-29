@@ -21,7 +21,7 @@ class DevicesList extends StatelessWidget {
         itemBuilder: (context, index) {
           // Example CircleAvatar with a dot for online/offline indicator
           if (index < devices.length) {
-            return DeviceIcon();
+            return DeviceIcon(index: index);
           } else {
             return PlusIcon();
           }

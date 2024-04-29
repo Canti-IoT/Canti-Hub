@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 class DatabaseProvider extends ChangeNotifier {
   late Database _database;
+  int _selectedDeviceIndex = 0;
   late List<DevicesTableData> devices;
   late List<ParametersTableData> parameters;
   late List<ColectedDataTableData> collectedData;
@@ -37,6 +38,11 @@ class DatabaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  int get selectedDeviceIndex => _selectedDeviceIndex;
+  set selectedDeviceIndex(int index) {
+    _selectedDeviceIndex = index;
+    notifyListeners();
+  }
   // DevicesTable
   Future<int> insertDevice(DevicesTableCompanion device) async {
     int id = await _database.into(_database.devicesTable).insert(device);
