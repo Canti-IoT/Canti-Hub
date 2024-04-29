@@ -1,4 +1,5 @@
-import 'package:canti_hub/providers/database_provider.dart';
+import 'package:canti_hub/pages/main_page/main_page.dart';
+import 'package:canti_hub/providers/device_provider.dart';
 import 'package:canti_hub/providers/parameters_provicer.dart';
 import 'package:canti_hub/providers/settings_provider.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +14,18 @@ class StartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.microtask(() {
-      context.read<DatabaseProvider>().initDatabase();
       context.read<SettingsProvider>().loadSettings();
       Future.microtask(() {
         context.read<SettingsProvider>().loadTheme();
       });
       context.read<ParametersProvider>().loadParameters(context);
+      Future.microtask(() {
+        context.read<DeviceProvider>().loadParameters(context);
+      });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainPage()),
+      );
     });
 
     return Scaffold(
