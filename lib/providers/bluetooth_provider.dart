@@ -50,7 +50,8 @@ class BluetoothProvider extends ChangeNotifier {
   StreamSubscription<int>? _mtuSubscription;
 
   BluetoothProvider() {
-    FlutterBluePlus.setLogLevel(LogLevel.verbose, color: true);
+    // FlutterBluePlus.setLogLevel(LogLevel.verbose, color: true);
+    FlutterBluePlus.setLogLevel(LogLevel.none, color: true);
   }
 
   void turnOn() async {
@@ -159,7 +160,6 @@ class BluetoothProvider extends ChangeNotifier {
 
     try {
       _services = await _device!.discoverServices();
-      print("services: ${_services.toString()}");
       com = Communication(_services);
     } catch (e) {}
     _isDiscoveringServices = false;
