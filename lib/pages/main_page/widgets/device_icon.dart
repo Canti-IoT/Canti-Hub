@@ -32,6 +32,25 @@ class DeviceIcon extends StatelessWidget {
         width: 76,
         child: Stack(
           children: [
+            Positioned(
+              top: 0,
+              left: 0,
+              child: Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                child: Center(
+                  child: Icon(
+                    Icons.settings,
+                    color: backgroundColor,
+                    size: 36.0,
+                  ),
+                ),
+              ),
+            ),
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Container(
@@ -42,10 +61,11 @@ class DeviceIcon extends StatelessWidget {
                 ),
                 child: Stack(
                   children: [
-                    Image.asset(
-                      Files.bme680,
-                      fit: BoxFit.cover,
-                    ),
+                    if (index != selectedDeviceIndex)
+                      Image.asset(
+                        Files.bme680,
+                        fit: BoxFit.cover,
+                      ),
                   ],
                 ),
               ),
@@ -54,8 +74,8 @@ class DeviceIcon extends StatelessWidget {
               bottom: 0,
               right: 12,
               child: Container(
-                width: 18,
-                height: 18,
+                width: 20,
+                height: 20,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.green,
@@ -65,30 +85,11 @@ class DeviceIcon extends StatelessWidget {
                   child: Text(
                     '${index + 1}',
                     style: Theme.of(context).textTheme.bodySmall,
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
             ),
-            if (selectedDeviceIndex == index)
-              Positioned(
-                top: 0,
-                left: 0,
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.settings,
-                      color: backgroundColor,
-                      size: 36.0,
-                    ),
-                  ),
-                ),
-              ),
           ],
         ),
       ),
