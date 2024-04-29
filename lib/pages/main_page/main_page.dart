@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:canti_hub/database/database.dart';
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
 import 'package:canti_hub/pages/main_page/pages/detail_page/parameter_widget.dart';
 import 'package:canti_hub/pages/main_page/widgets/bluetooth_adapter_state_widget.dart';
@@ -20,15 +23,91 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  late Timer _cyclicTask;
+
   @override
   void initState() {
     super.initState();
     Future.microtask(() =>
         context.read<BluetoothProvider>().startListentingToAdapterState());
+    _startCyclicTask();
+  }
+
+  void _startCyclicTask() {
+    _cyclicTask = Timer.periodic(const Duration(seconds: 60), (timer) {
+      _bluetoothTask();
+    });
+  }
+
+  void _bluetoothTask() {
+    if (context.read<BluetoothProvider>().adapterState ==
+        BluetoothAdapterState.on) {
+      context.read<BluetoothProvider>().startListentingToScanResults();
+      context.read<BluetoothProvider>().startScaning();
+      var devices = context.read<DatabaseProvider>().devices;
+      Future.delayed(Duration(seconds: 1), () {
+        devices.forEach((dbDevice) async {
+          var device = null;
+          var systemDevices = context.read<BluetoothProvider>().systemDevices;
+          var scanResults = context.read<BluetoothProvider>().scanResults;
+
+          for (BluetoothDevice systemDevice in systemDevices) {
+            String remoteId = systemDevice.remoteId.str;
+            String platformName = systemDevice.platformName;
+            if (remoteId == dbDevice.remoteId) {
+              device = systemDevice;
+              break;
+            }
+          }
+
+          if (device == null) {
+            for (ScanResult scanResult in scanResults) {
+              String remoteId = scanResult.device.remoteId.str;
+              if (remoteId == dbDevice.remoteId) {
+                device = scanResult.device;
+                break;
+              }
+            }
+          }
+          context
+              .read<DatabaseProvider>()
+              .updateDevice(dbDevice.copyWith(lastOnline: DateTime.now()));
+
+          if (device != null) {
+            context.read<BluetoothProvider>().connect(device);
+            context.read<BluetoothProvider>().initConnection();
+            var deviceParameters =
+                context.read<DatabaseProvider>().deviceParameters;
+            await Future.delayed(Duration(seconds: 1));
+            context.read<BluetoothProvider>().discoverServices();
+            await Future.delayed(Duration(seconds: 1));
+            for (var param in deviceParameters) {
+              var index = param.parameterId;
+              var value = await context
+                  .read<BluetoothProvider>()
+                  .com!
+                  .readParameterValue(index);
+              if (value != null) {
+                context.read<DatabaseProvider>().insertCollectedData(
+                    ColectedDataTableCompanion.insert(
+                        parameterId: index,
+                        deviceId: dbDevice.id,
+                        value: value));
+              }
+            }
+
+            context.read<BluetoothProvider>().disposeDevice();
+            context.read<BluetoothProvider>().stopListentingToScanResults();
+            context.read<BluetoothProvider>().stopScaning();
+          }
+        });
+      });
+    }
   }
 
   @override
   void dispose() {
+    _cyclicTask.cancel();
     context.read<BluetoothProvider>().stopListentingToAdapterState();
     super.dispose();
   }
@@ -45,7 +124,6 @@ class _MainPageState extends State<MainPage> {
       selectedDevice =
           context.watch<DatabaseProvider>().devices[selectedDeviceIndex];
     }
-    print("Parameters: ${deviceParameters.toString()}");
     return Scaffold(
       appBar: CustomAppBar(
           leftIcon: Icons.settings,
@@ -98,9 +176,14 @@ class _MainPageState extends State<MainPage> {
                   var parameter = context
                       .watch<DatabaseProvider>()
                       .getParameterByIndex(param!.parameterId);
+                  context.watch<DatabaseProvider>().collectedData;
+                  var value = context
+                      .read<DatabaseProvider>()
+                      .getData(param.deviceId, param.parameterId)
+                      ?.value;
                   return ParameterWidget(
                     parameterName: parameter!.name,
-                    value: 0.0,
+                    value: value ?? -0.1,
                     desiredValue: parameter!.normal,
                     unit: parameter!.units,
                   );
