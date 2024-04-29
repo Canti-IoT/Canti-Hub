@@ -21,7 +21,6 @@ class _AddBluetoothDeviceWidgetsState extends State<AddBluetoothDeviceWidgets> {
     super.initState();
     Future.microtask(() {
       context.read<BluetoothProvider>().turnOn();
-      context.read<BluetoothProvider>().startListentingToAdapterState();
       context.read<BluetoothProvider>().startListentingToScanResults();
       context.read<BluetoothProvider>().startScaning();
     });
@@ -30,7 +29,6 @@ class _AddBluetoothDeviceWidgetsState extends State<AddBluetoothDeviceWidgets> {
 
   @override
   void dispose() {
-    context.read<BluetoothProvider>().stopListentingToAdapterState();
     context.read<BluetoothProvider>().stopListentingToScanResults();
     context.read<BluetoothProvider>().stopScaning();
     super.dispose();
