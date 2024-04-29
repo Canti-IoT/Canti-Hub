@@ -5,6 +5,7 @@ import 'package:canti_hub/pages/main_page/widgets/devices_list.dart';
 import 'package:canti_hub/pages/settings_page/pages/alarms_page/alarms_page.dart';
 import 'package:canti_hub/pages/settings_page/settings_page.dart';
 import 'package:canti_hub/providers/bluetooth_provider.dart';
+import 'package:canti_hub/providers/database_provider.dart';
 import 'package:canti_hub/providers/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -35,7 +36,16 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     var localisation = AppLocalizations.of(context);
-
+    var deviceParameters = context.watch<DatabaseProvider>().deviceParameters;
+    var selectedDeviceIndex =
+        context.watch<DatabaseProvider>().selectedDeviceIndex;
+    var devices = context.watch<DatabaseProvider>().devices;
+    var selectedDevice = null;
+    if (selectedDeviceIndex < devices.length) {
+      selectedDevice =
+          context.watch<DatabaseProvider>().devices[selectedDeviceIndex];
+    }
+    print("Parameters: ${deviceParameters.toString()}");
     return Scaffold(
       appBar: CustomAppBar(
           leftIcon: Icons.settings,
@@ -82,45 +92,19 @@ class _MainPageState extends State<MainPage> {
                         ? context.watch<SettingsProvider>().displayMode.index
                         : 1,
                 padding: EdgeInsets.all(16.0),
-                children: [
-                  // Add ParameterWidget instances for different parameters
-                  ParameterWidget(
-                    parameterName: 'Temperature',
-                    value: 26.0, // Replace with actual value
-                    desiredValue: 21.0,
-                    unit: '°C',
-                  ),
-                  ParameterWidget(
-                    parameterName: 'Humidity',
-                    value: 50.0, // Replace with actual value
-                    desiredValue: 50.0,
-                    unit: '%',
-                  ),
-                  ParameterWidget(
-                    parameterName: 'Air Quality(VOCs)',
-                    value: 0.6, // Replace with actual value
-                    desiredValue: 1.0,
-                    unit: '%',
-                  ),
-                  ParameterWidget(
-                    parameterName: 'Pressure',
-                    value: 1000.0, // Replace with actual value
-                    desiredValue: 1010.0,
-                    unit: 'Pa',
-                  ),
-                  ParameterWidget(
-                    parameterName: 'Noise Level',
-                    value: 30.0, // Replace with actual value
-                    desiredValue: 1.0,
-                    unit: 'dB',
-                  ),
-                  ParameterWidget(
-                    parameterName: 'Light Level',
-                    value: 500.0, // Replace with actual value
-                    desiredValue: 50.0,
-                    unit: 'lux',
-                  ),
-                ],
+                children: deviceParameters
+                    .where((element) => element.deviceId == selectedDevice!.id)
+                    .map((param) {
+                  var parameter = context
+                      .watch<DatabaseProvider>()
+                      .getParameterByIndex(param!.parameterId);
+                  return ParameterWidget(
+                    parameterName: parameter!.name,
+                    value: 0.0,
+                    desiredValue: parameter!.normal,
+                    unit: parameter!.units,
+                  );
+                }).toList(),
               ),
             ),
           ),
