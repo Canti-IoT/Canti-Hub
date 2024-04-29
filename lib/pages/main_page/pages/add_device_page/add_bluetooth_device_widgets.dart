@@ -28,13 +28,6 @@ class _AddBluetoothDeviceWidgetsState extends State<AddBluetoothDeviceWidgets> {
   }
 
   @override
-  void dispose() {
-    context.read<BluetoothProvider>().stopListentingToScanResults();
-    context.read<BluetoothProvider>().stopScaning();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Column(
       children: [

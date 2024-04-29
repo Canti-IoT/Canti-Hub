@@ -33,7 +33,10 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DatabaseProvider()),
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
         ChangeNotifierProvider(create: (_) => DeviceProvider()),
-        ChangeNotifierProvider(create: (_) => BluetoothProvider()),
+        ChangeNotifierProxyProvider<DatabaseProvider, BluetoothProvider>(
+            create: (_) => BluetoothProvider(),
+            update: (_, db, bl) =>
+                (bl != null) ? (bl..updateDb(db)) : BluetoothProvider()),
       ],
       child: Consumer<SettingsProvider>(
         builder: (context, themeProvider, child) {
