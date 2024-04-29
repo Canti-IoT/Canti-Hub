@@ -1,5 +1,4 @@
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
-import 'package:canti_hub/pages/main_page/pages/detail_page/parameter_widget.dart';
 import 'package:canti_hub/providers/database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -31,6 +30,8 @@ class DetailPage extends StatelessWidget {
           Text('Display Name: ${device.displayNmae}'),
           Text('Software Version: ${device.softwareVersion}'),
           Text('Hardware Version: ${device.hardwareVersion}'),
+          Text('First connection: ${device.firstConnection.toIso8601String()}'),
+          Text('Last online: ${device.lastOnline.toIso8601String()}'),
           // Add more Text widgets for other device properties as needed
         ],
       ),
