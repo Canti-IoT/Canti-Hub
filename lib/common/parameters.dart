@@ -1,21 +1,21 @@
-import 'dart:convert';
-import 'dart:io';
-
 class Parameter {
   final String name;
   final int index;
   final int recurrence;
-  final int normal;
-  final int max;
-  final int min;
+  final double normal;
+  final double max;
+  final double min;
+  final String units;
 
-  Parameter(
-      {required this.name,
-      required this.index,
-      required this.recurrence,
-      required this.normal,
-      required this.max,
-      required this.min});
+  Parameter({
+    required this.name,
+    required this.index,
+    required this.recurrence,
+    required this.normal,
+    required this.max,
+    required this.min,
+    required this.units,
+  });
 
   factory Parameter.fromJson(Map<String, dynamic> json) {
     return Parameter(
@@ -25,6 +25,7 @@ class Parameter {
       normal: json['normal'],
       max: json['max'],
       min: json['min'],
+      units: json['units'],
     );
   }
 }

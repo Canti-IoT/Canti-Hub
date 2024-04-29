@@ -1,8 +1,6 @@
-import 'package:canti_hub/common/parameters.dart';
 import 'package:canti_hub/database/database.dart';
 import 'package:canti_hub/providers/database_provider.dart';
-import 'package:canti_hub/providers/parameters_provicer.dart';
-import 'package:drift/drift.dart' hide Column;
+import 'package:canti_hub/providers/parameters_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -132,9 +130,9 @@ class DetailWidget extends StatelessWidget {
                     .read<DatabaseProvider>()
                     .updateParameter(parameter.copyWith(
                       recurrence: int.parse(recurrence),
-                      normal: int.parse(normal),
-                      min: int.parse(min),
-                      max: int.parse(max),
+                      normal: double.parse(normal),
+                      min: double.parse(min),
+                      max: double.parse(max),
                     ));
                 // Close the dialog
                 Navigator.of(context).pop();

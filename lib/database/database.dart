@@ -25,6 +25,7 @@ LazyDatabase _openConnection() {
   WifiTable,
   MqttTable,
   DeviceMqttTable,
+  DeviceParameterTable,
   MqttParameterTable,
   AlarmsTable,
   DeviceAlarmsTable,

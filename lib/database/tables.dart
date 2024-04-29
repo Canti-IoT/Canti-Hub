@@ -9,15 +9,18 @@ class DevicesTable extends Table {
   TextColumn get displayNmae => text()();
   TextColumn get softwareVersion => text()();
   TextColumn get hardwareVersion => text()();
+  DateTimeColumn get firstConnection => dateTime()();
+  DateTimeColumn get lastOnline => dateTime()();
 }
 
 class ParametersTable extends Table {
   IntColumn get index => integer()();
   TextColumn get name => text()();
   IntColumn get recurrence => integer()();
-  IntColumn get normal => integer()();
-  IntColumn get max => integer()();
-  IntColumn get min => integer()();
+  RealColumn get normal => real()();
+  RealColumn get max => real()();
+  RealColumn get min => real()();
+  TextColumn get units => text()();
 
   @override
   Set<Column<Object>>? get primaryKey => {index};
@@ -63,6 +66,14 @@ class DeviceMqttTable extends Table {
 
   @override
   Set<Column<Object>>? get primaryKey => {deviceId, mqttId};
+}
+
+class DeviceParameterTable extends Table {
+  IntColumn get parameterId => integer().references(ParametersTable, #index)();
+  IntColumn get deviceId => integer().references(DevicesTable, #id)();
+
+  @override
+  Set<Column<Object>>? get primaryKey => {parameterId, deviceId};
 }
 
 class MqttParameterTable extends Table {

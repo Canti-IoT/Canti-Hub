@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 class ParametersProvider extends ChangeNotifier {
   List<Parameter> parameters = [];
+  DatabaseProvider? _dbProvider;
 
   void loadParameters(BuildContext context) async {
     try {
@@ -22,24 +23,28 @@ class ParametersProvider extends ChangeNotifier {
 
       notifyListeners();
 
-      _insertParameters(context);
-
+      _insertParameters();
     } catch (e) {
       print('Error loading parameters: $e');
     }
   }
 
-  void _insertParameters(BuildContext context) async {
-    var database = context.read<DatabaseProvider>();
-    if (database.parameters.length != parameters.length) {
+  void updateDb(DatabaseProvider? dbProvider) {
+    _dbProvider = dbProvider;
+  }
+
+  void _insertParameters() async {
+    if (_dbProvider != null &&
+        _dbProvider!.parameters.length != parameters.length) {
       for (var parameter in parameters) {
-        database.insertParameter(ParametersTableCompanion(
+        _dbProvider!.insertParameter(ParametersTableCompanion(
             index: Value(parameter.index),
             name: Value(parameter.name),
             recurrence: Value(parameter.recurrence),
             normal: Value(parameter.normal),
             min: Value(parameter.min),
-            max: Value(parameter.max)));
+            max: Value(parameter.max),
+            units: Value(parameter.units)));
       }
     }
   }

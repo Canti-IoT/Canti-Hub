@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:canti_hub/common/files.dart';
 import 'package:canti_hub/database/database.dart';
+import 'package:canti_hub/database/tables.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +14,7 @@ class DatabaseProvider extends ChangeNotifier {
   List<WifiTableData>? _wifi;
   List<MqttTableData>? _mqtt;
   List<MqttParameterTableData>? _mqttParameters;
+  List<DeviceParameterTableData>? _deviceParameters;
   List<AlarmsTableData>? _alarms;
   List<DeviceAlarmsTableData>? _deviceAlarms;
   List<AlarmsParameterTableData>? _alarmParameters;
@@ -25,6 +26,7 @@ class DatabaseProvider extends ChangeNotifier {
   List<WifiTableData> get wifi => _wifi ?? [];
   List<MqttTableData> get mqtt => _mqtt ?? [];
   List<MqttParameterTableData> get mqttParameters => _mqttParameters ?? [];
+  List<DeviceParameterTableData> get deviceParameters => _deviceParameters ?? [];
   List<AlarmsTableData> get alarms => _alarms ?? [];
   List<DeviceAlarmsTableData> get deviceAlarms => _deviceAlarms ?? [];
   List<AlarmsParameterTableData> get alarmParameters => _alarmParameters ?? [];
@@ -36,26 +38,35 @@ class DatabaseProvider extends ChangeNotifier {
       _database = Database();
       _database!.customStatement('PRAGMA foreign_keys = ON');
 
-      getAllDevices();
-      getAllParameters();
-      getAllCollectedData();
-      getAllDeviceWifi();
-      getAllWifi();
-      getAllMqtt();
-      getAllMqttParameters();
-      getAllAlarms();
-      getAllDeviceAlarms();
-      getAllAlarmParameters(0);
+      getAll();
 
       notifyListeners();
       print("db init done");
     });
   }
 
+  void getAll() async {
+    getAllDevices();
+    getAllParameters();
+    getAllCollectedData();
+    getAllDeviceWifi();
+    getAllWifi();
+    getAllMqtt();
+    getAllMqttParameters();
+    getAllDeviceParameters();
+    getAllAlarms();
+    getAllDeviceAlarms();
+    getAllAlarmParameters(0);
+  }
+
   int get selectedDeviceIndex => _selectedDeviceIndex;
   set selectedDeviceIndex(int index) {
     _selectedDeviceIndex = index;
     notifyListeners();
+  }
+
+  ParametersTableData? getParameterByIndex(int index) {
+    return _parameters?.firstWhere((parameter) => parameter.index == index);
   }
 
   // DevicesTable
@@ -67,7 +78,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> getAllDevices() async {
-    _devices = await _database!.select(_database!.devicesTable).get() ?? [];
+    _devices = await _database!.select(_database!.devicesTable).get();
     notifyListeners();
   }
 
@@ -94,8 +105,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> getAllParameters() async {
-    _parameters =
-        await _database!.select(_database!.parametersTable).get() ?? [];
+    _parameters = await _database!.select(_database!.parametersTable).get();
     notifyListeners();
   }
 
@@ -120,7 +130,7 @@ class DatabaseProvider extends ChangeNotifier {
 
   Future<void> getAllCollectedData() async {
     _collectedData =
-        await _database!.select(_database!.colectedDataTable).get() ?? [];
+        await _database!.select(_database!.colectedDataTable).get();
     notifyListeners();
   }
 
@@ -136,8 +146,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> getAllDeviceWifi() async {
-    _deviceWifi =
-        await _database!.select(_database!.deviceWifiTable).get() ?? [];
+    _deviceWifi = await _database!.select(_database!.deviceWifiTable).get();
     notifyListeners();
   }
 
@@ -154,7 +163,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> getAllWifi() async {
-    _wifi = await _database!.select(_database!.wifiTable).get() ?? [];
+    _wifi = await _database!.select(_database!.wifiTable).get();
     notifyListeners();
   }
 
@@ -178,7 +187,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> getAllMqtt() async {
-    _mqtt = await _database!.select(_database!.mqttTable).get() ?? [];
+    _mqtt = await _database!.select(_database!.mqttTable).get();
     notifyListeners();
   }
 
@@ -195,19 +204,40 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   // MqttParameterTable
-  Future<void> insertMqttParameter(MqttParameterTableData parameter) async {
+  Future<void> insertMqttParameter(
+      MqttParameterTableCompanion parameter) async {
     await _database!.into(_database!.mqttParameterTable).insert(parameter);
     notifyListeners();
+    getAllMqttParameters();
   }
 
   Future<void> getAllMqttParameters() async {
     _mqttParameters =
-        await _database!.select(_database!.mqttParameterTable).get() ?? [];
+        await _database!.select(_database!.mqttParameterTable).get();
     notifyListeners();
   }
 
   Future<void> updateMqttParameter(MqttParameterTableData parameter) async {
     await _database!.update(_database!.mqttParameterTable).replace(parameter);
+    notifyListeners();
+  }
+
+  // DeviceParameterTable
+  Future<void> insertDeviceParameter(
+      DeviceParameterTableCompanion parameter) async {
+    await _database!.into(_database!.deviceParameterTable).insert(parameter);
+    notifyListeners();
+    getAllDeviceParameters;
+  }
+
+  Future<void> getAllDeviceParameters() async {
+    _deviceParameters =
+        await _database!.select(_database!.deviceParameterTable).get();
+    notifyListeners();
+  }
+
+  Future<void> updateDeviceParameter(DeviceParameterTableData parameter) async {
+    await _database!.update(_database!.deviceParameterTable).replace(parameter);
     notifyListeners();
   }
 
@@ -225,7 +255,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> getAllAlarms() async {
-    _alarms = await _database!.select(_database!.alarmsTable).get() ?? [];
+    _alarms = await _database!.select(_database!.alarmsTable).get();
     notifyListeners();
   }
 
@@ -248,8 +278,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> getAllDeviceAlarms() async {
-    _deviceAlarms =
-        await _database!.select(_database!.deviceAlarmsTable).get() ?? [];
+    _deviceAlarms = await _database!.select(_database!.deviceAlarmsTable).get();
     notifyListeners();
   }
 
@@ -269,9 +298,8 @@ class DatabaseProvider extends ChangeNotifier {
   Future<void> getAllAlarmParameters(int alarmId) async {
     // Await the result of the query
     _alarmParameters = await (_database!.select(_database!.alarmsParameterTable)
-              ..where((tbl) => tbl.alarmId.equals(alarmId)))
-            .get() ??
-        [];
+          ..where((tbl) => tbl.alarmId.equals(alarmId)))
+        .get();
     notifyListeners();
   }
 

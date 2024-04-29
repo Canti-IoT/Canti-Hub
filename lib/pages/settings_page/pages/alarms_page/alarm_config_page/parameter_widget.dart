@@ -47,6 +47,7 @@ class _ParameterWidgetState extends State<ParameterWidget> {
                   normal: 0,
                   max: 0,
                   min: 0,
+                  units: ' '
                 ));
 
     switch (parameterData.triggerType) {
