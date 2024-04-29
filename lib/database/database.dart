@@ -36,4 +36,21 @@ class Database extends _$Database {
 
   @override
   int get schemaVersion => 1;
-}
+
+
+  Future<List<TypedResult>> getLatestCollectedData() async {
+    final query = selectOnly(deviceParameterTable)
+      ..addColumns([
+       colectedDataTable.deviceId,
+        colectedDataTable.parameterId,
+           colectedDataTable.createdAt,
+            colectedDataTable.value,
+      ]);
+    query
+      ..groupBy([colectedDataTable.parameterId])
+      ..orderBy([
+       OrderingTerm.desc(colectedDataTable.createdAt)
+      ]);
+  return await query.get();
+  }
+} 
