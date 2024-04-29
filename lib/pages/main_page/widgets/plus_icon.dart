@@ -1,9 +1,5 @@
-import 'package:canti_hub/database/custom_types.dart';
-import 'package:canti_hub/database/database.dart';
 import 'package:canti_hub/pages/main_page/pages/add_device_page/add_device_page.dart';
-import 'package:canti_hub/providers/database_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class PlusIcon extends StatelessWidget {
   const PlusIcon({

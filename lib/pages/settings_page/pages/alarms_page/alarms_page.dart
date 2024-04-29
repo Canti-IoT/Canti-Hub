@@ -2,7 +2,6 @@ import 'package:canti_hub/database/database.dart';
 import 'package:canti_hub/pages/settings_page/pages/alarms_page/alarm_config_page/alarm_config_page.dart';
 import 'package:canti_hub/pages/settings_page/pages/alarms_page/detail_widget.dart';
 import 'package:canti_hub/providers/database_provider.dart';
-import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
