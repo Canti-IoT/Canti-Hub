@@ -17,6 +17,8 @@ class DeviceIcon extends StatelessWidget {
     Color backgroundColor = Theme.of(context).colorScheme.background;
     int selectedDeviceIndex =
         context.watch<DatabaseProvider>().selectedDeviceIndex;
+        var lastOnline = context.watch<DatabaseProvider>().devices[selectedDeviceIndex].lastOnline;
+    bool online =  DateTime.now().difference(lastOnline) < Duration(seconds: 60);
 
     return GestureDetector(
       onTap: () {
@@ -78,7 +80,7 @@ class DeviceIcon extends StatelessWidget {
                 height: 20,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.green,
+                  color: online ? Colors.green : Colors.red,
                   border: Border.all(color: backgroundColor, width: 2),
                 ),
                 child: Center(
