@@ -32,7 +32,6 @@ class SettingsPage extends StatelessWidget {
         title: localisation!.settings,
         onLeftIconPressed: () {
           Navigator.popUntil(context, (route) => route.isFirst);
-          print('here');
         },
       ),
       body: ListView(

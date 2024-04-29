@@ -188,7 +188,6 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
                               triggerType: TriggerType.disabled));
 
                       Navigator.of(context).pop();
-                      print(selectedItem);
                     },
                     child: Text('OK'),
                   ),

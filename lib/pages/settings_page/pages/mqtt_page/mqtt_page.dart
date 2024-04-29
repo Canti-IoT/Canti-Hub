@@ -21,8 +21,6 @@ class MqttSettingsPage extends StatelessWidget {
             .settings_mqtt, // Use the provided pageTitle for the app bar title
         onLeftIconPressed: () {
           Navigator.of(context).pop();
-          // Navigator.popUntil(context, (route) => route.isFirst);
-          print('here');
         },
       ),
       body: ListView.builder(

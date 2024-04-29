@@ -123,7 +123,6 @@ class DeviceProvider with ChangeNotifier {
                 hardwareVersion: 'bluetooth'));
       }
       else{
-        print('device already in db');
       }
     }
     clean();

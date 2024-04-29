@@ -62,7 +62,6 @@ class BluetoothProvider extends ChangeNotifier {
 
   void startListentingToAdapterState() {
     _adapterStateSubscription = FlutterBluePlus.adapterState.listen((state) {
-      print("${state.toString()}");
       adapterState = state;
       notifyListeners();
     });
