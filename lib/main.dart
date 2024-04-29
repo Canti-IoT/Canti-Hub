@@ -2,7 +2,7 @@ import 'package:canti_hub/pages/start_page.dart';
 import 'package:canti_hub/providers/bluetooth_provider.dart';
 import 'package:canti_hub/providers/database_provider.dart';
 import 'package:canti_hub/providers/device_provider.dart';
-import 'package:canti_hub/providers/parameters_provicer.dart';
+import 'package:canti_hub/providers/parameters_provider.dart';
 import 'package:canti_hub/providers/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,10 +29,17 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ParametersProvider()),
         ChangeNotifierProvider(create: (_) => DatabaseProvider()),
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
-        ChangeNotifierProvider(create: (_) => DeviceProvider()),
+        ChangeNotifierProxyProvider<DatabaseProvider, ParametersProvider>(
+            create: (_) => ParametersProvider(),
+            update: (_, db, element) => (element != null)
+                ? (element..updateDb(db))
+                : ParametersProvider()),
+        ChangeNotifierProxyProvider<DatabaseProvider, DeviceProvider>(
+            create: (_) => DeviceProvider(),
+            update: (_, db, element) =>
+                (element != null) ? (element..updateDb(db)) : DeviceProvider()),
         ChangeNotifierProxyProvider<DatabaseProvider, BluetoothProvider>(
             create: (_) => BluetoothProvider(),
             update: (_, db, bl) =>
