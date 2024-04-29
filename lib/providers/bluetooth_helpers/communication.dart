@@ -12,15 +12,6 @@ class Communication {
   static const int unixtimeCmd = 0xA0;
   static const int resetComCmd = 0xFF;
 
-  int parameterIndex = 0;
-  int newRecurrenceValue = 0;
-  int currentValue = 0;
-  int intervalType = 0;
-  double lowerLimit = 0.0;
-  double upperLimit = 0.0;
-  int alarmIndex = 0;
-  int unixtime = 0;
-
   late BluetoothCharacteristic indexCharacteristic;
   late BluetoothCharacteristic valueCharacteristic;
   late BluetoothCharacteristic configCharacteristic;
