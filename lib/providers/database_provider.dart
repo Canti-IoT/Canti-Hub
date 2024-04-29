@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:canti_hub/database/database.dart';
-import 'package:canti_hub/database/tables.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +25,8 @@ class DatabaseProvider extends ChangeNotifier {
   List<WifiTableData> get wifi => _wifi ?? [];
   List<MqttTableData> get mqtt => _mqtt ?? [];
   List<MqttParameterTableData> get mqttParameters => _mqttParameters ?? [];
-  List<DeviceParameterTableData> get deviceParameters => _deviceParameters ?? [];
+  List<DeviceParameterTableData> get deviceParameters =>
+      _deviceParameters ?? [];
   List<AlarmsTableData> get alarms => _alarms ?? [];
   List<DeviceAlarmsTableData> get deviceAlarms => _deviceAlarms ?? [];
   List<AlarmsParameterTableData> get alarmParameters => _alarmParameters ?? [];
@@ -48,7 +48,7 @@ class DatabaseProvider extends ChangeNotifier {
   void getAll() async {
     getAllDevices();
     getAllParameters();
-    getAllCollectedData();
+    getLatestCollectedData();
     getAllDeviceWifi();
     getAllWifi();
     getAllMqtt();
@@ -63,6 +63,21 @@ class DatabaseProvider extends ChangeNotifier {
   set selectedDeviceIndex(int index) {
     _selectedDeviceIndex = index;
     notifyListeners();
+  }
+
+  ColectedDataTableData getData(int deviceId, int parameterId) {
+    List<ColectedDataTableData> matchingData = [];
+    try {
+      matchingData = _collectedData?.where((data) {
+            bool isMatch =
+                data.deviceId == deviceId && data.parameterId == parameterId;
+            return isMatch;
+          }).toList() ??
+          [];
+    } catch (e) {
+      print("Error in getData method: $e");
+    }
+    return matchingData[0];
   }
 
   ParametersTableData? getParameterByIndex(int index) {
@@ -85,6 +100,7 @@ class DatabaseProvider extends ChangeNotifier {
   Future<void> updateDevice(DevicesTableData device) async {
     await _database!.update(_database!.devicesTable).replace(device);
     notifyListeners();
+    getAllDevices();
   }
 
   // ParametersTable
@@ -123,8 +139,19 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   // ColectedDataTable
-  Future<void> insertCollectedData(ColectedDataTableData data) async {
+  Future<void> insertCollectedData(ColectedDataTableCompanion data) async {
     await _database!.into(_database!.colectedDataTable).insert(data);
+    notifyListeners();
+    getLatestCollectedData();
+  }
+
+  Future<void> getLatestCollectedData() async {
+    final query = await database!.select(_database!.colectedDataTable)..limit(100);
+    query.orderBy([
+      (t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)
+    ]);
+    _collectedData = await query.get();
+
     notifyListeners();
   }
 
