@@ -7,7 +7,6 @@ import 'package:canti_hub/pages/settings_page/widgets/nested_setting.dart';
 import 'package:canti_hub/pages/settings_page/widgets/toggle_setting.dart';
 import 'package:canti_hub/pages/settings_page/widgets/web_link_setting.dart';
 import 'package:canti_hub/providers/settings_provider.dart';
-import 'package:canti_hub/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_octicons/flutter_octicons.dart';
@@ -58,19 +57,17 @@ class SettingsPage extends StatelessWidget {
           ),
           ToggleSetting(
             label: localisation.settings_system_theme,
-            initialValue: context.watch<SettingsProvider>().systemTheme,
+            initialValue: context.watch<SettingsProvider>().systemThemeB,
             updateValue: (newValue) {
-              context.read<SettingsProvider>().systemTheme = newValue;
-              context.read<ThemeProvider>().loadTheme(context);
+              context.read<SettingsProvider>().systemThemeB = newValue;
             },
           ),
-          if (!context.watch<SettingsProvider>().systemTheme)
+          if (!context.watch<SettingsProvider>().systemThemeB)
             ToggleSetting(
               label: localisation.settings_dark_theme,
-              initialValue: context.watch<SettingsProvider>().darkTheme,
+              initialValue: context.watch<SettingsProvider>().darkThemeB,
               updateValue: (newValue) {
-                context.read<SettingsProvider>().darkTheme = newValue;
-                context.read<ThemeProvider>().loadTheme(context);
+                context.read<SettingsProvider>().darkThemeB = newValue;
               },
             ),
           DropdownSetting(

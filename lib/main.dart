@@ -4,8 +4,8 @@ import 'package:canti_hub/providers/database_provider.dart';
 import 'package:canti_hub/providers/device_provider.dart';
 import 'package:canti_hub/providers/parameters_provicer.dart';
 import 'package:canti_hub/providers/settings_provider.dart';
-import 'package:canti_hub/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +13,10 @@ import 'package:provider/provider.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   requestAppPermissions();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+
   runApp(App());
 }
 
@@ -28,11 +32,10 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ParametersProvider()),
         ChangeNotifierProvider(create: (_) => DatabaseProvider()),
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => DeviceProvider()),
         ChangeNotifierProvider(create: (_) => BluetoothProvider()),
       ],
-      child: Consumer<ThemeProvider>(
+      child: Consumer<SettingsProvider>(
         builder: (context, themeProvider, child) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
