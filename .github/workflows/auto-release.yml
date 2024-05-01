@@ -35,11 +35,11 @@ jobs:
       - name: Pub Get Packages
         run: flutter pub get
 
-      - name: Build MAKE generations
-        run: make
+      - name: Generate files
+        run: dart run build_runner build --delete-conflicting-outputs
 
-      - name: Build MAKE L10N
-        run: make l10n
+      - name: Generate localisation
+        run: flutter gen-l10n
 
       - name: Build APPBUNDLE
         run: flutter build appbundle --release
