@@ -72,7 +72,7 @@ class ParameterWidget extends StatelessWidget {
         data != null ? formatValue(data?.value ?? 0.0) : "No data";
     var time = data?.createdAt;
     String displayTime = time != null
-        ? "${time!.hour}:${time!.minute < 10 ? '0' : ''}${time!.minute} ${time!.day}/${time!.month}/${time!.year}"
+        ? "${time!.hour}:${time!.minute < 10 ? '0' : ''}${time!.minute}:${time!.second < 10 ? '0' : ''}${time!.second} ${time!.day}/${time!.month}/${time!.year}"
         : "No data";
     final displayMode = context.watch<SettingsProvider>().displayMode;
 
@@ -148,7 +148,7 @@ class ParameterWidget extends StatelessWidget {
   }
 
   String formatValue(double value) {
-    if (value % 1 == 0 || value % 1 == 0.1 || value % 1 == 0.9 || value > 400) {
+    if (value > 400) {
       return value.round().toString();
     } else {
       return value.toStringAsFixed(1);
