@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:canti_hub/database/database.dart';
 import 'package:canti_hub/providers/bluetooth_helpers/communication.dart';
 import 'package:canti_hub/providers/database_provider.dart';
 import 'package:flutter/material.dart';
@@ -164,5 +165,67 @@ class BluetoothProvider extends ChangeNotifier {
     } catch (e) {}
     _isDiscoveringServices = false;
     notifyListeners();
+  }
+
+    void readCollectedData() {
+    if (_dbProvider != null) {
+      if (_dbProvider!.database != null) {
+        if (adapterState == BluetoothAdapterState.on) {
+          startListentingToScanResults();
+          startScaning();
+          var devices = _dbProvider!.devices;
+          Future.delayed(Duration(seconds: 1), () {
+            devices.forEach((dbDevice) async {
+              var device = null;
+
+              for (BluetoothDevice systemDevice in systemDevices) {
+                String remoteId = systemDevice.remoteId.str;
+                if (remoteId == dbDevice.remoteId) {
+                  device = systemDevice;
+                  break;
+                }
+              }
+
+              if (device == null) {
+                for (ScanResult scanResult in scanResults) {
+                  String remoteId = scanResult.device.remoteId.str;
+                  if (remoteId == dbDevice.remoteId) {
+                    device = scanResult.device;
+                    break;
+                  }
+                }
+              }
+              _dbProvider!.updateDevice(dbDevice.copyWith(lastOnline: DateTime.now()));
+
+              if (device != null) {
+                connect(device);
+                initConnection();
+                var deviceParameters = _dbProvider!.deviceParameters;
+                await Future.delayed(Duration(seconds: 1));
+                discoverServices();
+                await Future.delayed(Duration(seconds: 1));
+                for (var param in deviceParameters) {
+                  var index = param.parameterId;
+                  var value = await com!.readParameterValue(index);
+                  if (value != null) {
+                    _dbProvider!.insertCollectedData(
+                      ColectedDataTableCompanion.insert(
+                        parameterId: index,
+                        deviceId: dbDevice.id,
+                        value: value,
+                      ),
+                    );
+                  }
+                }
+
+                disposeDevice();
+                stopListentingToScanResults();
+                stopScaning();
+              }
+            });
+          });
+        }
+      }
+    }
   }
 }

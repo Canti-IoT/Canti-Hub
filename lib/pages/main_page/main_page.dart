@@ -40,69 +40,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _bluetoothTask() {
-    if (context.read<BluetoothProvider>().adapterState ==
-        BluetoothAdapterState.on) {
-      context.read<BluetoothProvider>().startListentingToScanResults();
-      context.read<BluetoothProvider>().startScaning();
-      var devices = context.read<DatabaseProvider>().devices;
-      Future.delayed(Duration(seconds: 1), () {
-        devices.forEach((dbDevice) async {
-          var device = null;
-          var systemDevices = context.read<BluetoothProvider>().systemDevices;
-          var scanResults = context.read<BluetoothProvider>().scanResults;
-
-          for (BluetoothDevice systemDevice in systemDevices) {
-            String remoteId = systemDevice.remoteId.str;
-            String platformName = systemDevice.platformName;
-            if (remoteId == dbDevice.remoteId) {
-              device = systemDevice;
-              break;
-            }
-          }
-
-          if (device == null) {
-            for (ScanResult scanResult in scanResults) {
-              String remoteId = scanResult.device.remoteId.str;
-              if (remoteId == dbDevice.remoteId) {
-                device = scanResult.device;
-                break;
-              }
-            }
-          }
-          context
-              .read<DatabaseProvider>()
-              .updateDevice(dbDevice.copyWith(lastOnline: DateTime.now()));
-
-          if (device != null) {
-            context.read<BluetoothProvider>().connect(device);
-            context.read<BluetoothProvider>().initConnection();
-            var deviceParameters =
-                context.read<DatabaseProvider>().deviceParameters;
-            await Future.delayed(Duration(seconds: 1));
-            context.read<BluetoothProvider>().discoverServices();
-            await Future.delayed(Duration(seconds: 1));
-            for (var param in deviceParameters) {
-              var index = param.parameterId;
-              var value = await context
-                  .read<BluetoothProvider>()
-                  .com!
-                  .readParameterValue(index);
-              if (value != null) {
-                context.read<DatabaseProvider>().insertCollectedData(
-                    ColectedDataTableCompanion.insert(
-                        parameterId: index,
-                        deviceId: dbDevice.id,
-                        value: value));
-              }
-            }
-
-            context.read<BluetoothProvider>().disposeDevice();
-            context.read<BluetoothProvider>().stopListentingToScanResults();
-            context.read<BluetoothProvider>().stopScaning();
-          }
-        });
-      });
-    }
+    context.read<BluetoothProvider>().readCollectedData();
   }
 
   @override
