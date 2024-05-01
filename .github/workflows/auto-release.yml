@@ -35,6 +35,12 @@ jobs:
       - name: Pub Get Packages
         run: flutter pub get
 
+      - name: Build MAKE generations
+        run: make
+
+      - name: Build MAKE L10N
+        run: make l10n
+
       - name: Build APPBUNDLE
         run: flutter build appbundle --release
 
