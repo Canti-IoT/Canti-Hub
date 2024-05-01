@@ -34,7 +34,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _startCyclicTask() {
-    _cyclicTask = Timer.periodic(const Duration(seconds: 60), (timer) {
+    _cyclicTask = Timer.periodic(const Duration(seconds: 10), (timer) {
       _bluetoothTask();
     });
   }
