@@ -44,9 +44,11 @@ jobs:
       - name: Build APPBUNDLE
         run: flutter build apk --release
 
-      - name: Create Github Release
-        uses: 'actions/upload-artifact@v4'
+      - name: Release with Notes
+        uses: softprops/action-gh-release@v1
         with:
-          name: 'Built APK'
-          path: build/app/outputs/flutter-apk/app-release.apk
+          files: |
+            build/app/outputs/flutter-apk/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_RELEASE_TOKEN }}
 
