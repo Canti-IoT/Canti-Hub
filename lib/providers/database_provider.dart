@@ -149,15 +149,12 @@ class DatabaseProvider extends ChangeNotifier {
 
   Future<void> getLatestCollectedData() async {
     final query = await database!.select(_database!.colectedDataTable)
-      ..limit(_devices != null ? _devices!.length * 10 : 0);
+      ..limit(_devices != null ? _devices!.length * 10 : 10);
     query.orderBy([
       (t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)
     ]);
     _collectedData = await query.get();
-    // _collectedData?.forEach((element) {
-    //   print(element.toString());
-    // });
-    notifyListeners();
+     notifyListeners();
   }
 
   Future<void> getAllCollectedData() async {
