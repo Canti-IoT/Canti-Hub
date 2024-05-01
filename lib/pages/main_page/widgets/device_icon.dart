@@ -15,10 +15,18 @@ class DeviceIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color backgroundColor = Theme.of(context).colorScheme.background;
-    int selectedDeviceIndex =
+    int? selectedDeviceIndex =
         context.watch<DatabaseProvider>().selectedDeviceIndex;
-        var lastOnline = context.watch<DatabaseProvider>().devices[selectedDeviceIndex].lastOnline;
-    bool online =  DateTime.now().difference(lastOnline) < Duration(seconds: 60);
+    var lastOnline = null;
+    if(selectedDeviceIndex != null)
+    {
+    lastOnline = context
+        .watch<DatabaseProvider>()
+        .devices[selectedDeviceIndex]
+        .lastOnline;
+    }
+
+    bool online = DateTime.now().difference(lastOnline ?? DateTime.fromMillisecondsSinceEpoch(0)) < Duration(seconds: 120);
 
     return GestureDetector(
       onTap: () {

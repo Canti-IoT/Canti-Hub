@@ -11,7 +11,10 @@ class DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var localisation = AppLocalizations.of(context);
     var index = context.watch<DatabaseProvider>().selectedDeviceIndex;
-    var device = context.watch<DatabaseProvider>().devices[index];
+    var device;
+    if (index != null) {
+      device = context.watch<DatabaseProvider>().devices[index];
+    }
     return Scaffold(
       appBar: CustomAppBar(
         leftIcon: Icons.arrow_back,
@@ -20,21 +23,24 @@ class DetailPage extends StatelessWidget {
           Navigator.popUntil(context, (route) => route.isFirst);
         },
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Device Name: ${device.name}'),
-          Text('Device Type: ${device.type.toString().split('.').last}'),
-          Text('Device ID: ${device.id}'),
-          Text('Remote ID: ${device.remoteId}'),
-          Text('Display Name: ${device.displayNmae}'),
-          Text('Software Version: ${device.softwareVersion}'),
-          Text('Hardware Version: ${device.hardwareVersion}'),
-          Text('First connection: ${device.firstConnection.toIso8601String()}'),
-          Text('Last online: ${device.lastOnline.toIso8601String()}'),
-          // Add more Text widgets for other device properties as needed
-        ],
-      ),
+      body: device != null
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Device Name: ${device.name}'),
+                Text('Device Type: ${device.type.toString().split('.').last}'),
+                Text('Device ID: ${device.id}'),
+                Text('Remote ID: ${device.remoteId}'),
+                Text('Display Name: ${device.displayNmae}'),
+                Text('Software Version: ${device.softwareVersion}'),
+                Text('Hardware Version: ${device.hardwareVersion}'),
+                Text(
+                    'First connection: ${device.firstConnection.toIso8601String()}'),
+                Text('Last online: ${device.lastOnline.toIso8601String()}'),
+                // Add more Text widgets for other device properties as needed
+              ],
+            )
+          : Container(),
     );
   }
 }

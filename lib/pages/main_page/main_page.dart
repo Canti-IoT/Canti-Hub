@@ -30,7 +30,7 @@ class _MainPageState extends State<MainPage> {
     super.initState();
     Future.microtask(() =>
         context.read<BluetoothProvider>().startListentingToAdapterState());
-    _startCyclicTask();
+    _startCyclicTask(); 
   }
 
   void _startCyclicTask() {
@@ -120,10 +120,13 @@ class _MainPageState extends State<MainPage> {
         context.watch<DatabaseProvider>().selectedDeviceIndex;
     var devices = context.watch<DatabaseProvider>().devices;
     var selectedDevice = null;
-    if (selectedDeviceIndex < devices.length) {
-      selectedDevice =
-          context.watch<DatabaseProvider>().devices[selectedDeviceIndex];
+    if (selectedDeviceIndex != null) {
+      if (selectedDeviceIndex < devices.length) {
+        selectedDevice =
+            context.watch<DatabaseProvider>().devices[selectedDeviceIndex];
+      }
     }
+    context.watch<DatabaseProvider>().collectedData;
     return Scaffold(
       appBar: CustomAppBar(
           leftIcon: Icons.settings,
@@ -171,19 +174,17 @@ class _MainPageState extends State<MainPage> {
                         : 1,
                 padding: EdgeInsets.all(16.0),
                 children: deviceParameters
-                    .where((element) => element.deviceId == selectedDevice!.id)
+                    .where((element) => element.deviceId == selectedDevice?.id)
                     .map((param) {
                   var parameter = context
                       .watch<DatabaseProvider>()
                       .getParameterByIndex(param!.parameterId);
-                  context.watch<DatabaseProvider>().collectedData;
-                  var value = context
+                  var data = context
                       .read<DatabaseProvider>()
-                      .getData(param.deviceId, param.parameterId)
-                      ?.value;
+                      .getData(param.deviceId, param.parameterId);
                   return ParameterWidget(
                     parameterName: parameter!.name,
-                    value: value ?? -0.1,
+                    data: data,
                     desiredValue: parameter!.normal,
                     unit: parameter!.units,
                   );

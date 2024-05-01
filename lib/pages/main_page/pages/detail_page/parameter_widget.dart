@@ -1,17 +1,18 @@
+import 'package:canti_hub/database/database.dart';
 import 'package:canti_hub/providers/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ParameterWidget extends StatelessWidget {
   final String parameterName;
-  final double value;
+  final ColectedDataTableData? data;
   final String unit;
   final double desiredValue;
 
   const ParameterWidget({
     Key? key,
     required this.parameterName,
-    required this.value,
+    required this.data,
     required this.unit,
     required this.desiredValue,
   }) : super(key: key);
@@ -26,48 +27,54 @@ class ParameterWidget extends StatelessWidget {
   }
 
   Widget _buildListLayout(BuildContext context) {
-  String displayValue = formatValue(value);
+    String displayValue =
+        data != null ? formatValue(data?.value ?? 0.0) : "No data";
 
-  return Container(
-    margin: EdgeInsets.all(5.0),
-    child: Container(
-      padding: EdgeInsets.all(16.0), // Padding of 8
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondaryContainer,
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Text(
-              parameterName,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+    return Container(
+      margin: EdgeInsets.all(5.0),
+      child: Container(
+        padding: EdgeInsets.all(16.0), // Padding of 8
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.secondaryContainer,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Text(
+                parameterName,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          SizedBox(width: 8), // Adjust spacing as needed
-          Text(
-            '$displayValue $unit',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+            SizedBox(width: 8), // Adjust spacing as needed
+            Text(
+              '$displayValue $unit',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.end,
             ),
-            textAlign: TextAlign.end,
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   Widget _buildGridLayout(BuildContext context) {
-    String displayValue = formatValue(value);
+    String displayValue =
+        data != null ? formatValue(data?.value ?? 0.0) : "No data";
+    var time = data?.createdAt;
+    String displayTime = time != null
+        ? "${time!.hour}:${time!.minute < 10 ? '0' : ''}${time!.minute} ${time!.day}/${time!.month}/${time!.year}"
+        : "No data";
+    final displayMode = context.watch<SettingsProvider>().displayMode;
 
     return Container(
       margin: EdgeInsets.all(5.0),
@@ -84,23 +91,33 @@ class ParameterWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  '$displayValue ',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
+                Flexible(
+                  flex: displayValue.length,
+                  child: Text(
+                    '$displayValue ',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.left,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
-                  textAlign: TextAlign.center,
                 ),
-                Text(
-                  unit,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
+                if (displayMode != ParametersDisplayMode.grid_3)
+                  Flexible(
+                    flex: unit.length,
+                    child: Text(
+                      unit,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      textAlign: TextAlign.left,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
                   ),
-                  textAlign: TextAlign.center,
-                ),
               ],
             ),
             SizedBox(height: 8), // Adjust spacing as needed
@@ -114,6 +131,16 @@ class ParameterWidget extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            // if (displayMode != ParametersDisplayMode.grid_3)
+            Text(
+              displayTime,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+              ),
+            ),
           ],
         ),
       ),
@@ -121,7 +148,7 @@ class ParameterWidget extends StatelessWidget {
   }
 
   String formatValue(double value) {
-    if (value % 1 == 0 || value % 1 == 0.1 || value % 1 == 0.9) {
+    if (value % 1 == 0 || value % 1 == 0.1 || value % 1 == 0.9 || value > 400) {
       return value.round().toString();
     } else {
       return value.toStringAsFixed(1);

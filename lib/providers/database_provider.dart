@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class DatabaseProvider extends ChangeNotifier {
   Database? _database;
-  int _selectedDeviceIndex = 0;
+  int? _selectedDeviceIndex;
   List<DevicesTableData>? _devices;
   List<ParametersTableData>? _parameters;
   List<ColectedDataTableData>? _collectedData;
@@ -59,25 +59,26 @@ class DatabaseProvider extends ChangeNotifier {
     getAllAlarmParameters(0);
   }
 
-  int get selectedDeviceIndex => _selectedDeviceIndex;
-  set selectedDeviceIndex(int index) {
+  int? get selectedDeviceIndex => _selectedDeviceIndex;
+  set selectedDeviceIndex(int? index) {
     _selectedDeviceIndex = index;
     notifyListeners();
   }
 
-  ColectedDataTableData getData(int deviceId, int parameterId) {
-    List<ColectedDataTableData> matchingData = [];
-    try {
-      matchingData = _collectedData?.where((data) {
-            bool isMatch =
-                data.deviceId == deviceId && data.parameterId == parameterId;
-            return isMatch;
-          }).toList() ??
-          [];
-    } catch (e) {
-      print("Error in getData method: $e");
+  ColectedDataTableData? getData(int deviceId, int parameterId) {
+    if (_collectedData == null) {
+      return null;
     }
-    return matchingData[0];
+    if (_collectedData!.isEmpty) {
+      return null;
+    }
+
+    try {
+      return _collectedData?.firstWhere((data) =>
+          data.deviceId == deviceId && data.parameterId == parameterId);
+    } catch (e) {
+      return null;
+    }
   }
 
   ParametersTableData? getParameterByIndex(int index) {
@@ -94,6 +95,7 @@ class DatabaseProvider extends ChangeNotifier {
 
   Future<void> getAllDevices() async {
     _devices = await _database!.select(_database!.devicesTable).get();
+    _selectedDeviceIndex = _devices!.isNotEmpty ? 0 : null;
     notifyListeners();
   }
 
@@ -146,12 +148,15 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> getLatestCollectedData() async {
-    final query = await database!.select(_database!.colectedDataTable)..limit(100);
+    final query = await database!.select(_database!.colectedDataTable)
+      ..limit(_devices != null ? _devices!.length * 10 : 0);
     query.orderBy([
       (t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)
     ]);
     _collectedData = await query.get();
-
+    // _collectedData?.forEach((element) {
+    //   print(element.toString());
+    // });
     notifyListeners();
   }
 
@@ -254,7 +259,7 @@ class DatabaseProvider extends ChangeNotifier {
       DeviceParameterTableCompanion parameter) async {
     await _database!.into(_database!.deviceParameterTable).insert(parameter);
     notifyListeners();
-    getAllDeviceParameters;
+    getAllDeviceParameters();
   }
 
   Future<void> getAllDeviceParameters() async {
