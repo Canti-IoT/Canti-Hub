@@ -42,34 +42,15 @@ jobs:
         run: flutter gen-l10n
 
       - name: Build APPBUNDLE
-        run: flutter build appbundle --release
+        run: flutter build apk --release
 
       - name: Create Github Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/bundle/release/*.aab"
-          token: ${{ secrets.PERSONAL_RELEASE_TOKEN }}
+          artifacts: "build/app/outputs/bundle/release/*.apk"
 
       - name: Save APPBUNDLE to Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: APPBUNDLE
-          path: build/app/outputs/bundle/release/app-release.aab
-  release_internal:
-    name: Release Artifacts to internal track
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: Get APPBUNDLE from Artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: APPBUNDLE
-      - name: Release APPBUNDLE to internal track
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_JSONKEY }}
-          packageName: com.example.app
-          releaseFile: app-release.aab
-          track: internal
-          whatsNewDirectory: distribution/whatsnew
+          path: build/app/outputs/bundle/release/app-release.apk
