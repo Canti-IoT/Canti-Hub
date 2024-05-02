@@ -25,7 +25,7 @@ class _ParameterWidgetState extends State<ParameterWidget> {
   void initState() {
     super.initState();
     // Initialize configuration value and slider values based on your data
-    _configurationValue = 0; // You may set this based on your data
+    _configurationValue = widget.parameterData.triggerType.index;
     _sliderValues = SfRangeValues(
         (widget.parameterData.lowerValue ?? 0).toDouble(),
         (widget.parameterData.upperValue ?? 0).toDouble());
@@ -38,17 +38,16 @@ class _ParameterWidgetState extends State<ParameterWidget> {
     var parameterData = widget.parameterData;
     var databaseR = context.read<DatabaseProvider>();
     var databaseW = context.watch<DatabaseProvider>();
-    var parameter = databaseW.parameters
-        .firstWhere((param) => param.index == parameterData.parameterId,
-            orElse: () => const ParametersTableData(
-                  index: -1,
-                  name: 'error',
-                  recurrence: 0,
-                  normal: 0,
-                  max: 0,
-                  min: 0,
-                  units: ' '
-                ));
+    var parameter = databaseW.parameters.firstWhere(
+        (param) => param.index == parameterData.parameterId,
+        orElse: () => const ParametersTableData(
+            index: -1,
+            name: 'error',
+            recurrence: 0,
+            normal: 0,
+            max: 0,
+            min: 0,
+            units: ' '));
 
     switch (parameterData.triggerType) {
       case TriggerType.disabled: // Disable
