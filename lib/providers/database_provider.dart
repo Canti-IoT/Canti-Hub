@@ -33,6 +33,9 @@ class DatabaseProvider extends ChangeNotifier {
 
   Database? get database => _database;
   List<int> _invalidDeviceId = [];
+  List<int> processDeviceSettingChanges = [];
+  bool parametersChanged = true;
+  bool alarmsChanged = true;
 
   DatabaseProvider() {
     Future.microtask(() {
@@ -165,6 +168,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> updateParameter(ParametersTableData parameter) async {
+    parametersChanged = true;
     await _database!.update(_database!.parametersTable).replace(parameter);
     notifyListeners();
     await getAllParameters();
@@ -286,6 +290,7 @@ class DatabaseProvider extends ChangeNotifier {
   // DeviceParameterTable
   Future<void> insertDeviceParameter(
       DeviceParameterTableCompanion parameter) async {
+    processDeviceSettingChanges.add(parameter.deviceId.value);
     await _database!.into(_database!.deviceParameterTable).insert(parameter);
     notifyListeners();
     getAllDeviceParameters();
@@ -298,6 +303,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> updateDeviceParameter(DeviceParameterTableData parameter) async {
+    processDeviceSettingChanges.add(parameter.deviceId);
     await _database!.update(_database!.deviceParameterTable).replace(parameter);
     notifyListeners();
     getAllDeviceParameters();
@@ -322,6 +328,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> updateAlarm(AlarmsTableData alarm) async {
+    alarmsChanged = true;
     await _database!.update(_database!.alarmsTable).replace(alarm);
     notifyListeners();
     await getAllAlarms();
@@ -335,6 +342,7 @@ class DatabaseProvider extends ChangeNotifier {
 
   // DeviceAlarmsTable
   Future<void> insertDeviceAlarm(DeviceAlarmsTableCompanion deviceAlarm) async {
+    processDeviceSettingChanges.add(deviceAlarm.deviceId.value);
     await _database!.into(_database!.deviceAlarmsTable).insert(deviceAlarm);
     notifyListeners();
     getAllDeviceAlarms();
@@ -351,6 +359,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> deleteDeviceAlarm(DeviceAlarmsTableData deviceAlarm) async {
+    processDeviceSettingChanges.add(deviceAlarm.deviceId);
     await _database!.delete(_database!.deviceAlarmsTable).delete(deviceAlarm);
     notifyListeners();
     getAllDeviceAlarms();
@@ -359,6 +368,7 @@ class DatabaseProvider extends ChangeNotifier {
   // AlarmsParameterTable
   Future<void> insertAlarmParameter(
       AlarmsParameterTableCompanion parameter) async {
+    alarmsChanged = true;
     await _database!.into(_database!.alarmsParameterTable).insert(parameter);
     notifyListeners();
     await getAllAlarmParameters(parameter.alarmId.value);
@@ -373,6 +383,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> updateAlarmParameter(AlarmsParameterTableData parameter) async {
+    alarmsChanged = true;
     await _database!.update(_database!.alarmsParameterTable).replace(parameter);
     notifyListeners();
     await getAllAlarmParameters(parameter.alarmId);
