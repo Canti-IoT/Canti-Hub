@@ -96,6 +96,7 @@ class AlarmsTable extends Table {
 class DeviceAlarmsTable extends Table {
   IntColumn get deviceId => integer().references(DevicesTable, #id)();
   IntColumn get alarmId => integer().references(AlarmsTable, #id)();
+  IntColumn get slot => integer()();
 
   @override
   Set<Column<Object>>? get primaryKey => {deviceId, alarmId};
