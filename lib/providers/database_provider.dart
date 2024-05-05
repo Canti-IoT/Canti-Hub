@@ -32,6 +32,7 @@ class DatabaseProvider extends ChangeNotifier {
   List<AlarmsParameterTableData> get alarmParameters => _alarmParameters ?? [];
 
   Database? get database => _database;
+  List<int> _invalidDeviceId = [];
 
   DatabaseProvider() {
     Future.microtask(() {
@@ -106,22 +107,28 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> deleteDevice(DevicesTableData device) async {
+    _invalidDeviceId.add(device.id);
+
     // Delete related data from other tables first
     await (_database!.delete(_database!.colectedDataTable)
           ..where((tbl) => tbl.deviceId.equals(device.id)))
         .go();
+    getLatestCollectedData();
 
     await (_database!.delete(_database!.deviceWifiTable)
           ..where((tbl) => tbl.deviceId.equals(device.id)))
         .go();
+    getAllDeviceWifi();
 
     await (_database!.delete(_database!.deviceParameterTable)
           ..where((tbl) => tbl.deviceId.equals(device.id)))
         .go();
+    getAllDeviceParameters();
 
     await (_database!.delete(_database!.deviceAlarmsTable)
           ..where((tbl) => tbl.deviceId.equals(device.id)))
         .go();
+    getAllDeviceAlarms();
 
     await _database!.delete(_database!.devicesTable).delete(device);
     notifyListeners();
@@ -165,9 +172,11 @@ class DatabaseProvider extends ChangeNotifier {
 
   // ColectedDataTable
   Future<void> insertCollectedData(ColectedDataTableCompanion data) async {
-    await _database!.into(_database!.colectedDataTable).insert(data);
-    notifyListeners();
-    getLatestCollectedData();
+    if (_invalidDeviceId.contains(data.deviceId.value) == false) {
+      await _database!.into(_database!.colectedDataTable).insert(data);
+      notifyListeners();
+      getLatestCollectedData();
+    }
   }
 
   Future<void> getLatestCollectedData() async {

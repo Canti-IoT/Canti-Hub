@@ -71,7 +71,7 @@ class DeviceMqttTable extends Table {
 class DeviceParameterTable extends Table {
   IntColumn get parameterId => integer().references(ParametersTable, #index)();
   IntColumn get deviceId => integer().references(DevicesTable, #id)();
-  BoolColumn get useUserConig => boolean().withDefault(const Constant(false))();
+  BoolColumn get useUserConfig => boolean().withDefault(const Constant(false))();
 
   @override
   Set<Column<Object>>? get primaryKey => {parameterId, deviceId};

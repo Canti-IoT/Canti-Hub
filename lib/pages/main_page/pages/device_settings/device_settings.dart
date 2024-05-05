@@ -1,4 +1,5 @@
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
+import 'package:canti_hub/providers/bluetooth_provider.dart';
 import 'package:canti_hub/providers/database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -19,7 +20,7 @@ class DeviceSettings extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         leftIcon: Icons.arrow_back,
-        title: '${device.displayNmae}',
+        title: device != null ? '${device.displayNmae}' : 'no device',
         onLeftIconPressed: () {
           Navigator.popUntil(context, (route) => route.isFirst);
         },
@@ -29,7 +30,7 @@ class DeviceSettings extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ExpansionTile(
-                  initiallyExpanded: true,
+                  initiallyExpanded: false,
                   title: Text('Device Information', style: TextStyle(fontWeight: FontWeight.bold)),
                   children: [
                     Padding(
@@ -75,6 +76,7 @@ class DeviceSettings extends StatelessWidget {
           if( device != null)
           {
             print("Deleting device");
+            context.read<BluetoothProvider>().stopListentingToAdapterState();
             await context.read<DatabaseProvider>().deleteDevice(device);
             Navigator.of(context).pop();
           }

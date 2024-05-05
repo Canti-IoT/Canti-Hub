@@ -8,6 +8,7 @@ import 'package:canti_hub/pages/main_page/pages/add_device_page/widgets/device_t
 import 'package:canti_hub/providers/bluetooth_provider.dart';
 import 'package:canti_hub/providers/database_provider.dart';
 import 'package:canti_hub/providers/device_provider.dart';
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -98,7 +99,8 @@ class AddDevicePage extends StatelessWidget {
                     context.read<DatabaseProvider>().insertDeviceParameter(
                         DeviceParameterTableCompanion.insert(
                             parameterId: index,
-                            deviceId: id
+                            deviceId: id,
+                            useUserConfig: Value(false)
                            ));
                   });
                 }
