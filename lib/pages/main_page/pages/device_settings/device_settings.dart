@@ -77,13 +77,13 @@ class DeviceSettings extends StatelessWidget {
                     return ListTile(
                       leading: Icon(alarm != null ? Icons.delete : Icons.add),
                       title: Text(alarm != null
-                          ? 'Delete Alarm: ${alarmName}'
-                          : 'Add Alarm Slot ${i + 1}'),
+                          ? 'Alarm Slot ${i + 1}: ${alarmName}'
+                          : 'Alarm Slot ${i + 1}'),
                       onTap: () {
                         if (alarm != null) {
-                          // Implement deleting alarm functionality
+                          context.read<DatabaseProvider>().deleteDeviceAlarm(alarm);
                         } else {
-                          _showAddAlarmDialog(context, i + 1);
+                          _showAddAlarmDialog(context, i + 1, device.id);
                         }
                       },
                     );
@@ -128,7 +128,7 @@ class DeviceSettings extends StatelessWidget {
     );
   }
 
-  void _showAddAlarmDialog(BuildContext context, int slot) {
+  void _showAddAlarmDialog(BuildContext context, int slot, int deviceId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -144,7 +144,7 @@ class DeviceSettings extends StatelessWidget {
                         onTap: () {
                           context.read<DatabaseProvider>().insertDeviceAlarm(
                               DeviceAlarmsTableCompanion.insert(
-                                  deviceId: 0,
+                                  deviceId: deviceId,
                                   alarmId: alarm.id,
                                   slot: slot));
                           // Implement adding alarm functionality
