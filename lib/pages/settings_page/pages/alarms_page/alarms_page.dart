@@ -52,7 +52,7 @@ class AlarmsPage extends StatelessWidget {
           var alarm = await context
               .read<DatabaseProvider>()
               .insertAlarm(AlarmsTableCompanion.insert(
-                name: 'Alarm',
+                name: 'Alarm ${context.read<DatabaseProvider>().alarms.length + 1}',
                 activated: false,
               ));
 
