@@ -167,7 +167,25 @@ class BluetoothProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-    void readCollectedData() {
+  BluetoothDevice? _findDevice(DevicesTableData dbDevice) {
+    for (BluetoothDevice systemDevice in systemDevices) {
+      String remoteId = systemDevice.remoteId.str;
+      if (remoteId == dbDevice.remoteId) {
+        return systemDevice;
+      }
+    }
+
+    for (ScanResult scanResult in scanResults) {
+      String remoteId = scanResult.device.remoteId.str;
+      if (remoteId == dbDevice.remoteId) {
+        return scanResult.device;
+      }
+    }
+    
+    return null;
+  }
+
+  void readCollectedData() {
     if (_dbProvider != null) {
       if (_dbProvider!.database != null) {
         if (adapterState == BluetoothAdapterState.on) {
@@ -176,26 +194,10 @@ class BluetoothProvider extends ChangeNotifier {
           var devices = _dbProvider!.devices;
           Future.delayed(Duration(seconds: 1), () {
             devices.forEach((dbDevice) async {
-              var device = null;
+              var device = _findDevice(dbDevice);
 
-              for (BluetoothDevice systemDevice in systemDevices) {
-                String remoteId = systemDevice.remoteId.str;
-                if (remoteId == dbDevice.remoteId) {
-                  device = systemDevice;
-                  break;
-                }
-              }
-
-              if (device == null) {
-                for (ScanResult scanResult in scanResults) {
-                  String remoteId = scanResult.device.remoteId.str;
-                  if (remoteId == dbDevice.remoteId) {
-                    device = scanResult.device;
-                    break;
-                  }
-                }
-              }
-              _dbProvider!.updateDevice(dbDevice.copyWith(lastOnline: DateTime.now()));
+              _dbProvider!
+                  .updateDevice(dbDevice.copyWith(lastOnline: DateTime.now()));
 
               if (device != null) {
                 connect(device);
