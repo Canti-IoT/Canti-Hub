@@ -77,13 +77,13 @@ class DeviceSettings extends StatelessWidget {
                     return ListTile(
                       leading: Icon(alarm != null ? Icons.delete : Icons.add),
                       title: Text(alarm != null
-                          ? 'Alarm Slot ${i + 1}: ${alarmName}'
-                          : 'Alarm Slot ${i + 1}'),
+                          ? 'Delete Alarm: ${alarmName}'
+                          : 'Add Alarm Slot ${i + 1}'),
                       onTap: () {
                         if (alarm != null) {
-                          context.read<DatabaseProvider>().deleteDeviceAlarm(alarm);
+                          // Implement deleting alarm functionality
                         } else {
-                          _showAddAlarmDialog(context, i + 1, device.id);
+                          _showAddAlarmDialog(context, i + 1);
                         }
                       },
                     );
@@ -91,21 +91,23 @@ class DeviceSettings extends StatelessWidget {
                 ),
                 ExpansionTile(
                   initiallyExpanded: false,
-                  title: Text('Apply default parameter configuration',
+                  title: Text('Apply parameter configuration',
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  children: <Widget>[
-                    CheckboxListTile(
-                      value: true, // Example value
-                      onChanged: (bool? value) {},
-                      title: Text('Option 1'),
-                    ),
-                    CheckboxListTile(
-                      value: false, // Example value
-                      onChanged: (bool? value) {},
-                      title: Text('Option 2'),
-                    ),
-                    // Add more CheckboxListTile widgets as needed
-                  ],
+                  children: context.watch<DatabaseProvider>().deviceParameters
+                      .map<Widget>((deviceParam) {
+                        var parameter = context.watch<DatabaseProvider>()
+                            .getParameterByIndex(deviceParam.parameterId);
+                        return CheckboxListTile(
+                          value: deviceParam.useUserConfig,
+                          onChanged: (bool? value) {
+                            // Update the useUserConfig in the database
+                            context.read<DatabaseProvider>().updateDeviceParameter(
+                              deviceParam.copyWith(useUserConfig: value),
+                            );
+                          },
+                          title: Text(parameter?.name ?? 'Unknown Parameter'),
+                        );
+                      }).toList(),
                 ),
               ],
             )
@@ -126,7 +128,7 @@ class DeviceSettings extends StatelessWidget {
     );
   }
 
-  void _showAddAlarmDialog(BuildContext context, int slot, int deviceId) {
+  void _showAddAlarmDialog(BuildContext context, int slot) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -142,7 +144,7 @@ class DeviceSettings extends StatelessWidget {
                         onTap: () {
                           context.read<DatabaseProvider>().insertDeviceAlarm(
                               DeviceAlarmsTableCompanion.insert(
-                                  deviceId: deviceId,
+                                  deviceId: 0,
                                   alarmId: alarm.id,
                                   slot: slot));
                           // Implement adding alarm functionality

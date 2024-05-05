@@ -300,6 +300,7 @@ class DatabaseProvider extends ChangeNotifier {
   Future<void> updateDeviceParameter(DeviceParameterTableData parameter) async {
     await _database!.update(_database!.deviceParameterTable).replace(parameter);
     notifyListeners();
+    getAllDeviceParameters();
   }
 
   // AlarmsTable
