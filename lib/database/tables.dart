@@ -99,7 +99,7 @@ class DeviceAlarmsTable extends Table {
   IntColumn get slot => integer()();
 
   @override
-  Set<Column<Object>>? get primaryKey => {deviceId, alarmId};
+  Set<Column<Object>>? get primaryKey => {deviceId, alarmId, slot};
 }
 
 class AlarmsParameterTable extends Table {
