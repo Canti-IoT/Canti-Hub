@@ -1,5 +1,5 @@
 import 'package:canti_hub/common/files.dart';
-import 'package:canti_hub/pages/main_page/pages/detail_page/detail_page.dart';
+import 'package:canti_hub/pages/main_page/pages/device_settings/device_settings.dart';
 import 'package:canti_hub/providers/database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +34,7 @@ class DeviceIcon extends StatelessWidget {
         if (index == selectedDeviceIndex) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => DetailPage()),
+            MaterialPageRoute(builder: (context) => DeviceSettings()),
           );
         }
       },
