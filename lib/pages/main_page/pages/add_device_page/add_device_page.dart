@@ -79,7 +79,7 @@ class AddDevicePage extends StatelessWidget {
           FloatingActionButton.extended(
             heroTag: "add parameter",
             onPressed: () async {
-              context.read<BluetoothProvider>().stopListentingToScanResults();
+              context.read<BluetoothProvider>().stopListeningToScanResults();
               context.read<BluetoothProvider>().stopScaning();
               var id = await context.read<DeviceProvider>().save();
               var device = context.read<DeviceProvider>().device;

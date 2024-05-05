@@ -70,7 +70,7 @@ class BluetoothProvider extends ChangeNotifier {
     });
   }
 
-  void stopListentingToAdapterState() {
+  void stopListeningToAdapterState() {
     _adapterStateSubscription?.cancel();
   }
 
@@ -86,7 +86,7 @@ class BluetoothProvider extends ChangeNotifier {
     });
   }
 
-  void stopListentingToScanResults() {
+  void stopListeningToScanResults() {
     _scanResultsSubscription?.cancel();
     _isScanningSubscription?.cancel();
   }
@@ -221,7 +221,7 @@ class BluetoothProvider extends ChangeNotifier {
                 }
 
                 disposeDevice();
-                stopListentingToScanResults();
+                stopListeningToScanResults();
                 stopScaning();
               }
             });

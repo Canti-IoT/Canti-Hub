@@ -46,7 +46,7 @@ class _MainPageState extends State<MainPage> {
   @override
   void dispose() {
     _cyclicTask.cancel();
-    context.read<BluetoothProvider>().stopListentingToAdapterState();
+    context.read<BluetoothProvider>().stopListeningToAdapterState();
     super.dispose();
   }
 
