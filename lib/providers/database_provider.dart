@@ -105,6 +105,29 @@ class DatabaseProvider extends ChangeNotifier {
     getAllDevices();
   }
 
+  Future<void> deleteDevice(DevicesTableData device) async {
+    // Delete related data from other tables first
+    await (_database!.delete(_database!.colectedDataTable)
+          ..where((tbl) => tbl.deviceId.equals(device.id)))
+        .go();
+
+    await (_database!.delete(_database!.deviceWifiTable)
+          ..where((tbl) => tbl.deviceId.equals(device.id)))
+        .go();
+
+    await (_database!.delete(_database!.deviceParameterTable)
+          ..where((tbl) => tbl.deviceId.equals(device.id)))
+        .go();
+
+    await (_database!.delete(_database!.deviceAlarmsTable)
+          ..where((tbl) => tbl.deviceId.equals(device.id)))
+        .go();
+
+    await _database!.delete(_database!.devicesTable).delete(device);
+    notifyListeners();
+    getAllDevices();
+  }
+
   // ParametersTable
   Future<void> upsertParameter(ParametersTableCompanion parameter) async {
     await _database!
@@ -154,7 +177,7 @@ class DatabaseProvider extends ChangeNotifier {
       (t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)
     ]);
     _collectedData = await query.get();
-     notifyListeners();
+    notifyListeners();
   }
 
   Future<void> getAllCollectedData() async {
