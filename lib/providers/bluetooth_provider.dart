@@ -186,19 +186,84 @@ class BluetoothProvider extends ChangeNotifier {
     return null;
   }
 
-  void sendConfigurationData() {
-    if (_initialConfigWasSent == true) {}
+  Future<void> sendConfigurationData() async {
+    if (_dbProvider == null ||
+        com == null ||
+        adapterState != BluetoothAdapterState.on) {
+      return;
+    }
 
-    if (_dbProvider != null) {
+    if (!_initialConfigWasSent) {
+      await sendRecurrenceToAllDevices();
+      await sendAlarmsToAllDevices();
+      _initialConfigWasSent = true;
+    } else {
+      if (_dbProvider!.parametersChanged) {
+        await sendRecurrenceToAllDevices();
+      }
+      if (_dbProvider!.alarmsChanged) {
+        await sendAlarmsToAllDevices();
+      }
       while (_dbProvider!.processDeviceSettingChanges.isNotEmpty) {
-        // Remove and get the first element
         int deviceId = _dbProvider!.processDeviceSettingChanges.removeAt(0);
-//this isthe device.id form the devices list
+        await sendDeviceSpecificConfiguration(deviceId);
+      }
+    }
+  }
+
+  Future<void> sendDeviceSpecificConfiguration(int deviceId) async {
+    var device = _dbProvider!.devices.where((device) => device.id == deviceId);
+    var deviceAlarms =
+        _dbProvider!.deviceAlarms.where((alarm) => alarm.deviceId == deviceId);
+    for (var reference in deviceAlarms) {
+      var alarm = _dbProvider!.alarms
+          .firstWhere((alarm) => alarm.id == reference.alarmId);
+      var alarmParameters = _dbProvider!.alarmParameters
+          .where((alarmParameter) => alarm.id == alarmParameter.alarmId);
+      for (var alarmParameter in alarmParameters) {
+        await com!.sendAlarmSettingCommand(
+            reference.slot,
+            alarmParameter.parameterId,
+            alarmParameter.triggerType,
+            alarmParameter.lowerValue ?? 0.0,
+            alarmParameter.upperValue ?? 0.0);
       }
     }
 
-    // _dbProvider.parametersChanged; this is boolean, handle for all devices
-    // _dbProvider.alarmsChanged; this is boolean, handle for all devices
+    var deviceParameters = _dbProvider!.deviceParameters
+        .where((param) => param.deviceId == deviceId && param.useUserConfig);
+    for (var param in deviceParameters) {
+      var parameter = _dbProvider!.parameters
+          .firstWhere((parameter) => parameter.index == param.parameterId);
+      await com!.sendRecurrenceCommand(param.parameterId, parameter.recurrence);
+    }
+  }
+
+  Future<void> sendRecurrenceToAllDevices() async {
+    var parameters = _dbProvider!.deviceParameters.where((param) => param.useUserConfig);
+    for (var param in parameters) {
+      var parameter = _dbProvider!.parameters
+          .firstWhere((parameter) => parameter.index == param.parameterId);
+      await com!.sendRecurrenceCommand(param.parameterId, parameter.recurrence);
+    }
+  }
+
+  Future<void> sendAlarmsToAllDevices() async {
+    var allDeviceAlarms = _dbProvider!.deviceAlarms;
+    for (var deviceAlarm in allDeviceAlarms) {
+      var alarm = _dbProvider!.alarms
+          .firstWhere((alarm) => alarm.id == deviceAlarm.alarmId);
+      var alarmParameters = _dbProvider!.alarmParameters
+          .where((alarmParameter) => alarm.id == alarmParameter.alarmId);
+      for (var alarmParameter in alarmParameters) {
+        await com!.sendAlarmSettingCommand(
+            deviceAlarm.slot,
+            alarmParameter.parameterId,
+            alarmParameter.triggerType,
+            alarmParameter.lowerValue ?? 0.0,
+            alarmParameter.upperValue ?? 0.0);
+      }
+    }
   }
 
   void readCollectedData() {
