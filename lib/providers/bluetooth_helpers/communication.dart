@@ -106,6 +106,17 @@ class Communication {
     }
   }
 
+  Future<int?> readUnixtimeCommand() async {
+    var cmd = await ByteManipulation.int8Bytes(unixtimeCmd);
+    try {
+      await valueCharacteristic.write(cmd);
+      List<int> data = await valueCharacteristic.read();
+      return await ByteManipulation.bytes2Int64(data);
+    } catch (e) {
+      // Handle write data error
+    }
+  }
+
   Future<void> sendResetCommand() async {
     var cmd = await ByteManipulation.int8Bytes(resetComCmd);
     try {
