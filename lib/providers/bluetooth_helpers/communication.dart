@@ -1,4 +1,5 @@
 import 'package:canti_hub/common/strings.dart';
+import 'package:canti_hub/database/custom_types.dart';
 import 'package:canti_hub/providers/bluetooth_helpers/byte_manipulation.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
@@ -54,11 +55,11 @@ class Communication {
     }
   }
 
-  Future<void> sendAlarmSettingCommand(int parameterIndex, int intervalType,
-      double lowerLimit, double upperLimit) async {
-    var cmd = await ByteManipulation.int8Bytes(alarmCmd);
+  Future<void> sendAlarmSettingCommand(int alarmSlot, int parameterIndex,
+      TriggerType intervalType, double lowerLimit, double upperLimit) async {
+    var cmd = await ByteManipulation.int8Bytes(alarmCmd | alarmSlot);
     var index = await ByteManipulation.int32Bytes(parameterIndex);
-    var type = await ByteManipulation.int32Bytes(intervalType);
+    var type = await ByteManipulation.int32Bytes(intervalType.index);
     var lower = await ByteManipulation.float32Bytes(lowerLimit);
     var upper = await ByteManipulation.float32Bytes(upperLimit);
     try {
@@ -68,8 +69,8 @@ class Communication {
     }
   }
 
-  Future<void> sendDisableAlarmCommand(int alarmIndex) async {
-    var cmd = await ByteManipulation.int8Bytes(disableAlarmCmd | alarmIndex);
+  Future<void> sendDisableAlarmCommand(int alarmSlot) async {
+    var cmd = await ByteManipulation.int8Bytes(disableAlarmCmd | alarmSlot);
     try {
       await sendConfigData([cmd]);
     } catch (e) {
@@ -124,8 +125,7 @@ class Communication {
     var cmd = await ByteManipulation.int8Bytes(0x00); // Reset command value
     try {
       await indexCharacteristic.write(cmd);
-    } catch (e) {
-    }
+    } catch (e) {}
     List<int> indexes = [];
     try {
       List<int> data = await indexCharacteristic.read();
@@ -144,7 +144,7 @@ class Communication {
     return indexes;
   }
 
-    Future<double?> readParameterValue(int parameterIndex) async {
+  Future<double?> readParameterValue(int parameterIndex) async {
     var index = await ByteManipulation.int8Bytes(parameterIndex);
     try {
       await valueCharacteristic.write(index);
