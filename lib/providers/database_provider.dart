@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:canti_hub/database/database.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class DatabaseProvider extends ChangeNotifier {
   Database? _database;
@@ -45,7 +46,6 @@ class DatabaseProvider extends ChangeNotifier {
       getAll();
 
       notifyListeners();
-      print("db init done");
     });
   }
 
@@ -290,7 +290,7 @@ class DatabaseProvider extends ChangeNotifier {
   // DeviceParameterTable
   Future<void> insertDeviceParameter(
       DeviceParameterTableCompanion parameter) async {
-    processDeviceSettingChanges.add(parameter.deviceId.value);
+    processDeviceSettingChanges.addOrUpdate(parameter.deviceId.value);
     await _database!.into(_database!.deviceParameterTable).insert(parameter);
     notifyListeners();
     getAllDeviceParameters();
@@ -303,7 +303,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> updateDeviceParameter(DeviceParameterTableData parameter) async {
-    processDeviceSettingChanges.add(parameter.deviceId);
+    processDeviceSettingChanges.addOrUpdate(parameter.deviceId);
     await _database!.update(_database!.deviceParameterTable).replace(parameter);
     notifyListeners();
     getAllDeviceParameters();
@@ -342,7 +342,7 @@ class DatabaseProvider extends ChangeNotifier {
 
   // DeviceAlarmsTable
   Future<void> insertDeviceAlarm(DeviceAlarmsTableCompanion deviceAlarm) async {
-    processDeviceSettingChanges.add(deviceAlarm.deviceId.value);
+    processDeviceSettingChanges.addOrUpdate(deviceAlarm.deviceId.value);
     await _database!.into(_database!.deviceAlarmsTable).insert(deviceAlarm);
     notifyListeners();
     getAllDeviceAlarms();
@@ -359,7 +359,7 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future<void> deleteDeviceAlarm(DeviceAlarmsTableData deviceAlarm) async {
-    processDeviceSettingChanges.add(deviceAlarm.deviceId);
+    processDeviceSettingChanges.addOrUpdate(deviceAlarm.deviceId);
     await _database!.delete(_database!.deviceAlarmsTable).delete(deviceAlarm);
     notifyListeners();
     getAllDeviceAlarms();
