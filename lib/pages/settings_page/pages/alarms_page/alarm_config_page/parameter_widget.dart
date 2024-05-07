@@ -189,8 +189,8 @@ class _ParameterWidgetState extends State<ParameterWidget> {
                         _sliderValues = values;
                       });
                       databaseR.updateAlarmParameter(parameterData.copyWith(
-                          lowerValue: Value(values.start.toInt()),
-                          upperValue: Value(values.end.toInt())));
+                          lowerValue: Value(values.start),
+                          upperValue: Value(values.end)));
                     },
                   ),
                 ),
