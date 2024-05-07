@@ -11,6 +11,7 @@ class DevicesTable extends Table {
   TextColumn get hardwareVersion => text()();
   DateTimeColumn get firstConnection => dateTime()();
   DateTimeColumn get lastOnline => dateTime()();
+  DateTimeColumn get time => dateTime().nullable()();
 }
 
 class ParametersTable extends Table {
