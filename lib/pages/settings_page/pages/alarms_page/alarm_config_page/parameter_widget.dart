@@ -267,8 +267,8 @@ class _ParameterWidgetState extends State<ParameterWidget> {
               onPressed: () {
                 context.read<DatabaseProvider>().updateAlarmParameter(
                     widget.parameterData.copyWith(
-                        lowerValue: Value(startValue.toInt()),
-                        upperValue: Value(endValue.toInt())));
+                        lowerValue: Value(startValue),
+                        upperValue: Value(endValue)));
 
                 setState(() {
                   _sliderValues = SfRangeValues(startValue, endValue);
