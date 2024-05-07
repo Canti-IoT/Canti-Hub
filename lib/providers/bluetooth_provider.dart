@@ -13,6 +13,7 @@ class BluetoothProvider extends ChangeNotifier {
   StreamSubscription<BluetoothAdapterState>? _adapterStateSubscription;
   List<BluetoothDevice> _systemDevices = [];
   List<ScanResult> _scanResults = [];
+  bool _initialConfigWasSent = false;
 
   List<BluetoothDevice> get systemDevices => _systemDevices;
   set systemDevices(List<BluetoothDevice> value) {
@@ -181,8 +182,23 @@ class BluetoothProvider extends ChangeNotifier {
         return scanResult.device;
       }
     }
-    
+
     return null;
+  }
+
+  void sendConfigurationData() {
+    if (_initialConfigWasSent == true) {}
+
+    if (_dbProvider != null) {
+      while (_dbProvider!.processDeviceSettingChanges.isNotEmpty) {
+        // Remove and get the first element
+        int deviceId = _dbProvider!.processDeviceSettingChanges.removeAt(0);
+//this isthe device.id form the devices list
+      }
+    }
+
+    // _dbProvider.parametersChanged; this is boolean, handle for all devices
+    // _dbProvider.alarmsChanged; this is boolean, handle for all devices
   }
 
   void readCollectedData() {
