@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:canti_hub/common/app_settings.dart';
 import 'package:canti_hub/common/files.dart';
 import 'package:canti_hub/database/tables.dart';
 import 'package:canti_hub/database/custom_types.dart';
@@ -13,7 +14,7 @@ LazyDatabase _openConnection() {
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, Files.database));
 
-    return NativeDatabase(file, logStatements: true);
+    return NativeDatabase(file, logStatements: AppSettings.dbLogging);
   });
 }
 
