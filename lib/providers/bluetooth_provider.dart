@@ -193,26 +193,63 @@ class BluetoothProvider extends ChangeNotifier {
       return;
     }
 
+    startListentingToScanResults();
+    startScaning();
+
+    var dbDevices = _dbProvider!.devices;
+
     if (!_initialConfigWasSent) {
-      await sendRecurrenceToAllDevices();
-      await sendAlarmsToAllDevices();
+      for (var dbDevice in dbDevices) {
+        var device = _findDevice(dbDevice);
+        if (device != null) {
+          connect(device);
+          initConnection();
+          discoverServices();
+          await sendRecurrenceToDevice(dbDevice.id);
+          await sendAlarmToDevice(dbDevice.id);
+          disposeDevice();
+        }
+      }
       _initialConfigWasSent = true;
     } else {
-      if (_dbProvider!.parametersChanged) {
-        await sendRecurrenceToAllDevices();
-      }
-      if (_dbProvider!.alarmsChanged) {
-        await sendAlarmsToAllDevices();
+      for (var dbDevice in dbDevices) {
+        var device = _findDevice(dbDevice);
+        if (device != null) {
+          connect(device);
+          initConnection();
+          discoverServices();
+          if (_dbProvider!.parametersChanged) {
+            await sendRecurrenceToDevice(dbDevice.id);
+          }
+          if (_dbProvider!.alarmsChanged) {
+            await sendAlarmToDevice(dbDevice.id);
+          }
+          disposeDevice();
+        }
       }
       while (_dbProvider!.processDeviceSettingChanges.isNotEmpty) {
         int deviceId = _dbProvider!.processDeviceSettingChanges.removeAt(0);
-        await sendDeviceSpecificConfiguration(deviceId);
+        var dbDevice = _dbProvider!.devices
+            .firstWhere((element) => element.id == deviceId);
+        var blDevice = _findDevice(dbDevice);
+        if (blDevice != null) {
+          connect(blDevice);
+          initConnection();
+          discoverServices();
+          await sendAlarmToDevice(deviceId);
+          await sendRecurrenceToDevice(deviceId);
+          disposeDevice();
+        }
       }
     }
   }
 
   Future<void> sendDeviceSpecificConfiguration(int deviceId) async {
-    var device = _dbProvider!.devices.where((device) => device.id == deviceId);
+    await sendAlarmToDevice(deviceId);
+    await sendRecurrenceToDevice(deviceId);
+  }
+
+  Future<void> sendAlarmToDevice(int deviceId) async {
     var deviceAlarms =
         _dbProvider!.deviceAlarms.where((alarm) => alarm.deviceId == deviceId);
     for (var reference in deviceAlarms) {
@@ -229,40 +266,15 @@ class BluetoothProvider extends ChangeNotifier {
             alarmParameter.upperValue ?? 0.0);
       }
     }
+  }
 
+  Future<void> sendRecurrenceToDevice(int deviceId) async {
     var deviceParameters = _dbProvider!.deviceParameters
         .where((param) => param.deviceId == deviceId && param.useUserConfig);
     for (var param in deviceParameters) {
       var parameter = _dbProvider!.parameters
           .firstWhere((parameter) => parameter.index == param.parameterId);
       await com!.sendRecurrenceCommand(param.parameterId, parameter.recurrence);
-    }
-  }
-
-  Future<void> sendRecurrenceToAllDevices() async {
-    var parameters = _dbProvider!.deviceParameters.where((param) => param.useUserConfig);
-    for (var param in parameters) {
-      var parameter = _dbProvider!.parameters
-          .firstWhere((parameter) => parameter.index == param.parameterId);
-      await com!.sendRecurrenceCommand(param.parameterId, parameter.recurrence);
-    }
-  }
-
-  Future<void> sendAlarmsToAllDevices() async {
-    var allDeviceAlarms = _dbProvider!.deviceAlarms;
-    for (var deviceAlarm in allDeviceAlarms) {
-      var alarm = _dbProvider!.alarms
-          .firstWhere((alarm) => alarm.id == deviceAlarm.alarmId);
-      var alarmParameters = _dbProvider!.alarmParameters
-          .where((alarmParameter) => alarm.id == alarmParameter.alarmId);
-      for (var alarmParameter in alarmParameters) {
-        await com!.sendAlarmSettingCommand(
-            deviceAlarm.slot,
-            alarmParameter.parameterId,
-            alarmParameter.triggerType,
-            alarmParameter.lowerValue ?? 0.0,
-            alarmParameter.upperValue ?? 0.0);
-      }
     }
   }
 
