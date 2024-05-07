@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:canti_hub/common/app_settings.dart';
 import 'package:canti_hub/database/database.dart';
 import 'package:canti_hub/providers/bluetooth_helpers/communication.dart';
 import 'package:canti_hub/providers/database_provider.dart';
@@ -52,8 +53,7 @@ class BluetoothProvider extends ChangeNotifier {
   StreamSubscription<int>? _mtuSubscription;
 
   BluetoothProvider() {
-    // FlutterBluePlus.setLogLevel(LogLevel.verbose, color: true);
-    FlutterBluePlus.setLogLevel(LogLevel.none, color: true);
+    FlutterBluePlus.setLogLevel(AppSettings.blLogging, color: true);
   }
 
   void turnOn() async {
@@ -187,31 +187,41 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   Future<void> sendConfigurationData() async {
+    print('${DateTime.now()} - Starting sendConfigurationData');
     if (_dbProvider == null ||
         com == null ||
         adapterState != BluetoothAdapterState.on) {
+      print(
+          '${DateTime.now()} - Aborting sendConfigurationData: prerequisites not met');
       return;
     }
 
-    startListentingToScanResults();
-    startScaning();
-
     var dbDevices = _dbProvider!.devices;
-
     if (!_initialConfigWasSent) {
+      startListentingToScanResults();
+      startScaning();
+      print('${DateTime.now()} - Scanning started');
+      print('${DateTime.now()} - Initial configuration not sent');
       for (var dbDevice in dbDevices) {
         var device = _findDevice(dbDevice);
         if (device != null) {
+          print('${DateTime.now()} - Connecting to device: ${device.remoteId}');
           connect(device);
           initConnection();
           discoverServices();
           await sendRecurrenceToDevice(dbDevice.id);
           await sendAlarmToDevice(dbDevice.id);
           disposeDevice();
+          print(
+              '${DateTime.now()} - Device configuration completed and disposed: ${device.remoteId}');
         }
       }
       _initialConfigWasSent = true;
+      print('${DateTime.now()} - Initial configuration set to true');
     } else {
+      startListentingToScanResults();
+      startScaning();
+      print('${DateTime.now()} - Scanning started');
       for (var dbDevice in dbDevices) {
         var device = _findDevice(dbDevice);
         if (device != null) {
@@ -226,6 +236,14 @@ class BluetoothProvider extends ChangeNotifier {
           }
           disposeDevice();
         }
+        if (_dbProvider!.parametersChanged) {
+          print('Sent all parameters cahnge');
+          _dbProvider!.parametersChanged = false;
+        }
+        if (_dbProvider!.alarmsChanged) {
+          print('Sent all alarm cahnge');
+          _dbProvider!.alarmsChanged = false;
+        }
       }
       while (_dbProvider!.processDeviceSettingChanges.isNotEmpty) {
         int deviceId = _dbProvider!.processDeviceSettingChanges.removeAt(0);
@@ -233,20 +251,20 @@ class BluetoothProvider extends ChangeNotifier {
             .firstWhere((element) => element.id == deviceId);
         var blDevice = _findDevice(dbDevice);
         if (blDevice != null) {
+          print(
+              '${DateTime.now()} - Processing queued device setting changes for device: ${blDevice.remoteId}');
           connect(blDevice);
           initConnection();
           discoverServices();
           await sendAlarmToDevice(deviceId);
           await sendRecurrenceToDevice(deviceId);
           disposeDevice();
+          print(
+              '${DateTime.now()} - Queued device settings updated and device disposed: ${blDevice.remoteId}');
         }
       }
     }
-  }
-
-  Future<void> sendDeviceSpecificConfiguration(int deviceId) async {
-    await sendAlarmToDevice(deviceId);
-    await sendRecurrenceToDevice(deviceId);
+    print('${DateTime.now()} - Completed sendConfigurationData');
   }
 
   Future<void> sendAlarmToDevice(int deviceId) async {
@@ -264,6 +282,15 @@ class BluetoothProvider extends ChangeNotifier {
             alarmParameter.triggerType,
             alarmParameter.lowerValue ?? 0.0,
             alarmParameter.upperValue ?? 0.0);
+        print(
+            'Sent alarm setting to device $deviceId: slot ${reference.slot}, parameterId ${alarmParameter.parameterId}, triggerType ${alarmParameter.triggerType}, lowerValue ${alarmParameter.lowerValue ?? 0.0}, upperValue ${alarmParameter.upperValue ?? 0.0}');
+      }
+      if (alarm.activated == true) {
+        print('Alarm was enabled');
+        com!.sendEnableAlarmCommand(reference.slot);
+      } else {
+        print('Alarm was disabled');
+        com!.sendDisableAlarmCommand(reference.slot);
       }
     }
   }
@@ -275,6 +302,8 @@ class BluetoothProvider extends ChangeNotifier {
       var parameter = _dbProvider!.parameters
           .firstWhere((parameter) => parameter.index == param.parameterId);
       await com!.sendRecurrenceCommand(param.parameterId, parameter.recurrence);
+      print(
+          'Sent recurrence to device $deviceId: parameterId ${param.parameterId}, recurrence ${parameter.recurrence}');
     }
   }
 
@@ -289,12 +318,11 @@ class BluetoothProvider extends ChangeNotifier {
             devices.forEach((dbDevice) async {
               var device = _findDevice(dbDevice);
 
-              _dbProvider!
-                  .updateDevice(dbDevice.copyWith(lastOnline: DateTime.now()));
-
               if (device != null) {
                 connect(device);
                 initConnection();
+                _dbProvider!.updateDevice(
+                    dbDevice.copyWith(lastOnline: DateTime.now()));
                 var deviceParameters = _dbProvider!.deviceParameters;
                 await Future.delayed(Duration(seconds: 1));
                 discoverServices();

@@ -40,6 +40,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _bluetoothTask() {
+    context.read<BluetoothProvider>().sendConfigurationData();
     context.read<BluetoothProvider>().readCollectedData();
   }
 
