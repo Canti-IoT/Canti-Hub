@@ -107,7 +107,7 @@ class AlarmsParameterTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get alarmId => integer().references(AlarmsTable, #id)();
   IntColumn get parameterId => integer().references(ParametersTable, #index)();
-  IntColumn get lowerValue => integer().nullable()();
-  IntColumn get upperValue => integer().nullable()();
+  RealColumn get lowerValue => real().nullable()();
+  RealColumn get upperValue => real().nullable()();
   IntColumn get triggerType => intEnum<TriggerType>()();
 }
