@@ -35,7 +35,7 @@ class _DeviceTypeWidgetState extends State<DeviceTypeWidget> {
             child: Row(
               children: [
                 Text(
-                  'Device Type:',
+                  '${localisation!.device_type}:',
                   style: TextStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,

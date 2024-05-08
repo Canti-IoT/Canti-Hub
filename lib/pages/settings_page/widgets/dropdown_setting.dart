@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DropdownSetting extends StatefulWidget {
   final String label;
@@ -49,6 +50,7 @@ class _DropdownSettingState extends State<DropdownSetting> {
   }
 
   Future<void> _showDropdown(BuildContext context) async {
+    var localisation = AppLocalizations.of(context);
     String? newValue = await showDialog<String>(
       context: context,
       builder: (BuildContext context) {
@@ -76,7 +78,7 @@ class _DropdownSettingState extends State<DropdownSetting> {
               onPressed: () {
                 Navigator.of(context).pop(selectedValue);
               },
-              child: Text('OK'),
+              child: Text(localisation!.ok),
             ),
           ],
         );

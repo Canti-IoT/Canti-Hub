@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:canti_hub/providers/device_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MqttParameterWidget extends StatefulWidget {
   final MqttParameter parameter;
@@ -27,6 +28,7 @@ class _MqttParameterWidgetState extends State<MqttParameterWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var localisation = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0), // Add padding to the bottom
       child: Container(
@@ -76,7 +78,7 @@ class _MqttParameterWidgetState extends State<MqttParameterWidget> {
                   style:
                       TextStyle(fontSize: 16.0), // Adjust font size for topic
                   decoration: InputDecoration(
-                    labelText: 'Topic',
+                    labelText: localisation!.mqtt_topic,
                     border: UnderlineInputBorder(),
                   ),
                 ),

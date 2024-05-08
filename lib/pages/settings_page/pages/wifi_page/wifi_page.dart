@@ -55,6 +55,7 @@ class WifiSettingsPage extends StatelessWidget {
 
   Future<void> _showWifiPopup(BuildContext context,
       {WifiTableData? wifi}) async {
+    var localisation = AppLocalizations.of(context);
     String ssid = "";
     String password = "";
     if (wifi != null) {
@@ -66,7 +67,7 @@ class WifiSettingsPage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("WiFi Connection"),
+          title: Text(localisation!.wifi_connection),
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -78,7 +79,7 @@ class WifiSettingsPage extends StatelessWidget {
                   // Update ssid when input changes
                   ssid = value;
                 },
-                decoration: InputDecoration(labelText: "SSID"),
+                decoration: InputDecoration(labelText: localisation!.wifi_ssid),
               ),
               SizedBox(height: 8.0),
               TextFormField(
@@ -87,7 +88,7 @@ class WifiSettingsPage extends StatelessWidget {
                 onChanged: (value) {
                   password = value;
                 },
-                decoration: InputDecoration(labelText: "Password"),
+                decoration: InputDecoration(labelText: localisation!.password),
               ),
             ],
           ),
@@ -96,7 +97,7 @@ class WifiSettingsPage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text(localisation!.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -111,7 +112,7 @@ class WifiSettingsPage extends StatelessWidget {
 
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              child: Text(localisation!.ok),
             ),
           ],
         );

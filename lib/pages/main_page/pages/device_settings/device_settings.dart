@@ -21,7 +21,8 @@ class DeviceSettings extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         leftIcon: Icons.arrow_back,
-        title: device != null ? '${device.displayNmae}' : 'no device',
+        title:
+            device != null ? '${device.displayNmae}' : localisation!.no_device,
         onLeftIconPressed: () {
           Navigator.popUntil(context, (route) => route.isFirst);
         },
@@ -31,7 +32,7 @@ class DeviceSettings extends StatelessWidget {
               children: [
                 ExpansionTile(
                   initiallyExpanded: false,
-                  title: Text('Device Information',
+                  title: Text(localisation!.device_information,
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   children: [
                     Padding(
@@ -39,16 +40,19 @@ class DeviceSettings extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Device Name: ${device.name}'),
+                          Text('${localisation!.device_name}: ${device.name}'),
                           Text(
-                              'Device Type: ${device.type.toString().split('.').last}'),
-                          Text('Device ID: ${device.remoteId}'),
-                          Text('Software Version: ${device.softwareVersion}'),
-                          Text('Hardware Version: ${device.hardwareVersion}'),
+                              '${localisation!.device_type}: ${device.type.toString().split('.').last}'),
                           Text(
-                              'First connection: ${DateFormat('HH:mm:ss dd/MM/yyyy').format(device.firstConnection)}'),
+                              '${localisation!.device_id}: ${device.remoteId}'),
                           Text(
-                              'Last online: ${DateFormat('HH:mm:ss dd/MM/yyyy').format(device.lastOnline)}'),
+                              '${localisation!.software_version}: ${device.softwareVersion}'),
+                          Text(
+                              '${localisation!.hardware_version}: ${device.hardwareVersion}'),
+                          Text(
+                              '${localisation!.first_connection}: ${DateFormat('HH:mm:ss dd/MM/yyyy').format(device.firstConnection)}'),
+                          Text(
+                              '${localisation!.last_online}: ${DateFormat('HH:mm:ss dd/MM/yyyy').format(device.lastOnline)}'),
                         ],
                       ),
                     ),
@@ -56,7 +60,7 @@ class DeviceSettings extends StatelessWidget {
                 ),
                 ExpansionTile(
                   initiallyExpanded: false,
-                  title: Text('Device Alarms',
+                  title: Text(localisation!.device_alarms,
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   children: List<Widget>.generate(3, (i) {
                     var deviceAlarms =
@@ -76,11 +80,13 @@ class DeviceSettings extends StatelessWidget {
                     return ListTile(
                       leading: Icon(alarm != null ? Icons.delete : Icons.add),
                       title: Text(alarm != null
-                          ? 'Alarm Slot ${i + 1}: ${alarmName}'
-                          : 'Alarm Slot ${i + 1}'),
+                          ? '${localisation!.alarm_slot} ${i + 1}: ${alarmName}'
+                          : '${localisation!.alarm_slot} ${i + 1}'),
                       onTap: () {
                         if (alarm != null) {
-                          context.read<DatabaseProvider>().deleteDeviceAlarm(alarm);
+                          context
+                              .read<DatabaseProvider>()
+                              .deleteDeviceAlarm(alarm);
                         } else {
                           _showAddAlarmDialog(context, i + 1, device.id);
                         }
@@ -90,23 +96,28 @@ class DeviceSettings extends StatelessWidget {
                 ),
                 ExpansionTile(
                   initiallyExpanded: false,
-                  title: Text('Apply parameter configuration',
+                  title: Text(localisation!.apply_parameter_configuration,
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  children: context.watch<DatabaseProvider>().deviceParameters
+                  children: context
+                      .watch<DatabaseProvider>()
+                      .deviceParameters
                       .map<Widget>((deviceParam) {
-                        var parameter = context.watch<DatabaseProvider>()
-                            .getParameterByIndex(deviceParam.parameterId);
-                        return CheckboxListTile(
-                          value: deviceParam.useUserConfig,
-                          onChanged: (bool? value) {
-                            // Update the useUserConfig in the database
-                            context.read<DatabaseProvider>().updateDeviceParameter(
+                    var parameter = context
+                        .watch<DatabaseProvider>()
+                        .getParameterByIndex(deviceParam.parameterId);
+                    return CheckboxListTile(
+                      value: deviceParam.useUserConfig,
+                      onChanged: (bool? value) {
+                        // Update the useUserConfig in the database
+                        context.read<DatabaseProvider>().updateDeviceParameter(
                               deviceParam.copyWith(useUserConfig: value),
                             );
-                          },
-                          title: Text(parameter?.name ?? 'Unknown Parameter'),
-                        );
-                      }).toList(),
+                      },
+                      title: Text(parameter != null
+                          ? localisation.parameter(parameter.name)
+                          : localisation.unknown_parameter),
+                    );
+                  }).toList(),
                 ),
               ],
             )
@@ -115,26 +126,26 @@ class DeviceSettings extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           if (device != null) {
-            print("Deleting device");
             context.read<BluetoothProvider>().stopListeningToAdapterState();
             await context.read<DatabaseProvider>().deleteDevice(device);
             Navigator.of(context).pop();
           }
         },
         icon: Icon(Icons.delete),
-        label: Text('Delete Device'),
+        label: Text(localisation!.delete_device),
       ),
     );
   }
 
   void _showAddAlarmDialog(BuildContext context, int slot, int deviceId) {
+    var localisation = AppLocalizations.of(context);
     showDialog(
       context: context,
       builder: (BuildContext context) {
         var alarms =
             Provider.of<DatabaseProvider>(context, listen: false).alarms;
         return AlertDialog(
-          title: Text('Select an Alarm'),
+          title: Text(localisation!.select_an_alarm),
           content: SingleChildScrollView(
             child: ListBody(
               children: alarms
@@ -147,7 +158,7 @@ class DeviceSettings extends StatelessWidget {
                                   alarmId: alarm.id,
                                   slot: slot));
                           // Implement adding alarm functionality
-                          print('selected alarm');
+                          print(localisation!.selected_alarm);
                           print(alarm.toString());
                           Navigator.of(context).pop();
                         },
@@ -157,7 +168,7 @@ class DeviceSettings extends StatelessWidget {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: Text(localisation!.cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },

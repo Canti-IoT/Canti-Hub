@@ -1,11 +1,12 @@
 import 'package:canti_hub/providers/bluetooth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BluetoothAdapterStateWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Implement the BluetoothAdapterStateWidget UI here
+     var localisation = AppLocalizations.of(context);
     return GestureDetector(
       onTap: () {
         context.read<BluetoothProvider>().turnOn();
@@ -21,8 +22,8 @@ class BluetoothAdapterStateWidget extends StatelessWidget {
           children: [
             Icon(Icons.bluetooth),
             Text(
-                'Bluetooth Adapter State: ${context.watch<BluetoothProvider>().adapterState}'),
-            Text('Tap to turn on Bluetooth'),
+                '${localisation!.adapter_state}: ${context.watch<BluetoothProvider>().adapterState}'),
+            Text(localisation!.turon_bluetooth_on),
           ],
         ),
       ),

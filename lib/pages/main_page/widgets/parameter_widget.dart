@@ -2,6 +2,7 @@ import 'package:canti_hub/database/database.dart';
 import 'package:canti_hub/providers/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ParameterWidget extends StatelessWidget {
   final String parameterName;
@@ -27,8 +28,9 @@ class ParameterWidget extends StatelessWidget {
   }
 
   Widget _buildListLayout(BuildContext context) {
+    var localisation = AppLocalizations.of(context);
     String displayValue =
-        data != null ? formatValue(data?.value ?? 0.0) : "No data";
+        data != null ? formatValue(data?.value ?? 0.0) : localisation!.no_data;
 
     return Container(
       margin: EdgeInsets.all(5.0),
@@ -43,7 +45,7 @@ class ParameterWidget extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                parameterName,
+                localisation!.parameter(parameterName),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -68,12 +70,13 @@ class ParameterWidget extends StatelessWidget {
   }
 
   Widget _buildGridLayout(BuildContext context) {
+    var localisation = AppLocalizations.of(context);
     String displayValue =
-        data != null ? formatValue(data?.value ?? 0.0) : "No data";
+        data != null ? formatValue(data?.value ?? 0.0) : localisation!.no_data;
     var time = data?.createdAt;
     String displayTime = time != null
         ? "${time!.hour}:${time!.minute < 10 ? '0' : ''}${time!.minute}:${time!.second < 10 ? '0' : ''}${time!.second} ${time!.day}/${time!.month}/${time!.year}"
-        : "No data";
+        : localisation!.no_data;
     final displayMode = context.watch<SettingsProvider>().displayMode;
 
     return Container(
@@ -122,7 +125,7 @@ class ParameterWidget extends StatelessWidget {
             ),
             SizedBox(height: 8), // Adjust spacing as needed
             Text(
-              parameterName,
+              localisation!.parameter(parameterName),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
@@ -131,7 +134,6 @@ class ParameterWidget extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            // if (displayMode != ParametersDisplayMode.grid_3)
             Text(
               displayTime,
               maxLines: 1,

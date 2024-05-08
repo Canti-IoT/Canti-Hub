@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'dart:math';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ParameterWidget extends StatefulWidget {
   final AlarmsParameterTableData parameterData;
@@ -33,6 +34,7 @@ class _ParameterWidgetState extends State<ParameterWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var localisation = AppLocalizations.of(context);
     Color activeTrackColor;
     Color inactiveTrackColor;
     var parameterData = widget.parameterData;
@@ -78,12 +80,13 @@ class _ParameterWidgetState extends State<ParameterWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            parameter.name, // Replace with your parameter name
+            localisation!
+                .parameter(parameter.name), // Replace with your parameter name
             style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16.0),
-          const Text(
-            "Configuration:",
+          Text(
+            "${localisation!.interval_type}:",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Row(
@@ -99,7 +102,7 @@ class _ParameterWidgetState extends State<ParameterWidget> {
                   });
                 },
               ),
-              const Text("Disable"),
+              Text(localisation!.disable),
               Radio(
                 value: 1,
                 groupValue: _configurationValue,
@@ -111,7 +114,7 @@ class _ParameterWidgetState extends State<ParameterWidget> {
                   });
                 },
               ),
-              const Text("Inside"),
+              Text(localisation!.inside),
               Radio(
                 value: 2,
                 groupValue: _configurationValue,
@@ -123,12 +126,12 @@ class _ParameterWidgetState extends State<ParameterWidget> {
                   });
                 },
               ),
-              const Text("Outside"),
+              Text(localisation!.outside),
             ],
           ),
           const SizedBox(height: 16.0),
-          const Text(
-            "Slider:",
+          Text(
+            "${localisation!.interval}:",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Row(
@@ -224,11 +227,12 @@ class _ParameterWidgetState extends State<ParameterWidget> {
 
   Future<void> _showSliderValuesPopup(BuildContext context,
       {double startValue = 0.0, double endValue = 0.0}) async {
+    var localisation = AppLocalizations.of(context);
     await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Slider Values"),
+          title: Text(localisation!.slider_values),
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -241,7 +245,8 @@ class _ParameterWidgetState extends State<ParameterWidget> {
                   // Update startValue when input changes
                   startValue = double.tryParse(value) ?? 0.0;
                 },
-                decoration: const InputDecoration(labelText: "Start Value"),
+                decoration:
+                    InputDecoration(labelText: localisation!.start_value),
               ),
               const SizedBox(height: 8.0),
               TextFormField(
@@ -252,7 +257,7 @@ class _ParameterWidgetState extends State<ParameterWidget> {
                   // Update endValue when input changes
                   endValue = double.tryParse(value) ?? 0.0;
                 },
-                decoration: const InputDecoration(labelText: "End Value"),
+                decoration: InputDecoration(labelText: localisation!.end_value),
               ),
             ],
           ),
@@ -261,7 +266,7 @@ class _ParameterWidgetState extends State<ParameterWidget> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: Text(localisation!.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -276,7 +281,7 @@ class _ParameterWidgetState extends State<ParameterWidget> {
 
                 Navigator.of(context).pop();
               },
-              child: const Text('OK'),
+              child: Text(localisation!.ok),
             ),
           ],
         );

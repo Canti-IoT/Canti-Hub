@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:canti_hub/providers/device_provider.dart';
 import 'package:canti_hub/providers/database_provider.dart';
-import 'package:canti_hub/database/database.dart'; // Import MqttTableData
+import 'package:canti_hub/database/database.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MqttServiceWidget extends StatefulWidget {
   @override
@@ -15,6 +16,7 @@ class _MqttServiceWidgetState extends State<MqttServiceWidget> {
 
   @override
   Widget build(BuildContext context) {
+      var localisation = AppLocalizations.of(context);
     if (context.watch<DeviceProvider>().mqtt.id != -1) {
       _selectedMqttService = context.watch<DeviceProvider>().mqtt;
     }
@@ -36,7 +38,7 @@ class _MqttServiceWidgetState extends State<MqttServiceWidget> {
             child: Row(
               children: [
                 Text(
-                  'Mqtt Service:',
+                  '${localisation!.mqtt_service}:',
                   style: TextStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,

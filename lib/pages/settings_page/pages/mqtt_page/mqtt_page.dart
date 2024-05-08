@@ -50,6 +50,7 @@ class MqttSettingsPage extends StatelessWidget {
 
   Future<void> _showMqttPopup(BuildContext context,
       {MqttTableData? mqtt}) async {
+            var localisation = AppLocalizations.of(context);
     String serverUrl = "";
     String port = "";
     String apiKey = "";
@@ -67,7 +68,7 @@ class MqttSettingsPage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("MQTT Connection"),
+          title: Text(localisation!.mqtt_connection),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +81,7 @@ class MqttSettingsPage extends StatelessWidget {
                     // Update serverUrl when input changes
                     serverUrl = value;
                   },
-                  decoration: InputDecoration(labelText: "Server URL"),
+                  decoration: InputDecoration(labelText: localisation!.server_url),
                 ),
                 SizedBox(height: 8.0),
                 TextFormField(
@@ -90,7 +91,7 @@ class MqttSettingsPage extends StatelessWidget {
                     // Update port when input changes
                     port = value;
                   },
-                  decoration: InputDecoration(labelText: "Port"),
+                  decoration: InputDecoration(labelText: localisation!.port),
                 ),
                 SizedBox(height: 8.0),
                 TextFormField(
@@ -100,7 +101,7 @@ class MqttSettingsPage extends StatelessWidget {
                     // Update key when input changes
                     apiKey = value;
                   },
-                  decoration: InputDecoration(labelText: "API Key"),
+                  decoration: InputDecoration(labelText: localisation!.api_key),
                 ),
                 SizedBox(height: 8.0),
                 TextFormField(
@@ -110,7 +111,7 @@ class MqttSettingsPage extends StatelessWidget {
                     // Update username when input changes
                     username = value;
                   },
-                  decoration: InputDecoration(labelText: "Username"),
+                  decoration: InputDecoration(labelText: localisation!.username),
                 ),
                 SizedBox(height: 8.0),
                 TextFormField(
@@ -120,7 +121,7 @@ class MqttSettingsPage extends StatelessWidget {
                     // Update password when input changes
                     password = value;
                   },
-                  decoration: InputDecoration(labelText: "Password"),
+                  decoration: InputDecoration(labelText: localisation!.password),
                 ),
               ],
             ),
@@ -130,13 +131,12 @@ class MqttSettingsPage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text(localisation!.cancel),
             ),
             TextButton(
               onPressed: () {
                 // Perform actions with the MQTT connection settings here
                 // For example: connect to MQTT broker
-                print("Connecting to MQTT Broker...");
                 // to validate the connection
                 if (mqtt != null) {
                   context.read<DatabaseProvider>().updateMqtt(mqtt.copyWith(
@@ -159,7 +159,7 @@ class MqttSettingsPage extends StatelessWidget {
                 // Close the dialog
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              child: Text(localisation!.ok),
             ),
           ],
         );

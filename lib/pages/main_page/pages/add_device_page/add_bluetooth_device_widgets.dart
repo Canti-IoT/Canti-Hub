@@ -3,6 +3,7 @@ import 'package:canti_hub/providers/database_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:canti_hub/providers/bluetooth_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddBluetoothDeviceWidgets extends StatefulWidget {
   final BuildContext context;
@@ -29,9 +30,10 @@ class _AddBluetoothDeviceWidgetsState extends State<AddBluetoothDeviceWidgets> {
 
   @override
   Widget build(BuildContext context) {
+    var localisation = AppLocalizations.of(context);
     return Column(
       children: [
-        Text('System Devices:'),
+        Text(localisation!.system_devices),
         ...context
             .watch<BluetoothProvider>()
             .systemDevices
@@ -40,7 +42,7 @@ class _AddBluetoothDeviceWidgetsState extends State<AddBluetoothDeviceWidgets> {
                 .devices
                 .any((element) => element.remoteId == device.remoteId.str))
             .map((device) => DeviceWidget(device: device)),
-        Text('Scan Devices:'),
+        Text(localisation!.scan_devices),
         ...context
             .watch<BluetoothProvider>()
             .scanResults

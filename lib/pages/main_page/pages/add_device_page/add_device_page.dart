@@ -104,8 +104,6 @@ class AddDevicePage extends StatelessWidget {
                            ));
                   });
                 }
-              } else {
-                print("invalid id");
               }
 
               context.read<BluetoothProvider>().disposeDevice();

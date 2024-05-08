@@ -3,6 +3,7 @@ import 'package:canti_hub/providers/database_provider.dart';
 import 'package:canti_hub/providers/parameters_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DetailWidget extends StatelessWidget {
   final ParametersTableData parameter;
@@ -13,6 +14,7 @@ class DetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var localisation = AppLocalizations.of(context);
     return Column(
       children: [
         ListTile(
@@ -21,7 +23,7 @@ class DetailWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                parameter.name,
+                localisation!.parameter(parameter.name),
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ],
@@ -43,6 +45,7 @@ class DetailWidget extends StatelessWidget {
   }
 
   Future<void> _showPopup(BuildContext context) async {
+      var localisation = AppLocalizations.of(context);
     String recurrence = parameter.recurrence.toString();
     String normal = parameter.normal.toString();
     String min = parameter.min.toString();
@@ -52,7 +55,7 @@ class DetailWidget extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Modify Parameter"),
+          title: Text(localisation!.configure_parameter),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +67,7 @@ class DetailWidget extends StatelessWidget {
                   onChanged: (value) {
                     recurrence = value;
                   },
-                  decoration: InputDecoration(labelText: "Recurrence"),
+                  decoration: InputDecoration(labelText: localisation!.recurrence),
                 ),
                 SizedBox(height: 8.0),
                 TextFormField(
@@ -73,7 +76,7 @@ class DetailWidget extends StatelessWidget {
                   onChanged: (value) {
                     normal = value;
                   },
-                  decoration: InputDecoration(labelText: "Normal"),
+                  decoration: InputDecoration(labelText: localisation!.normal_value),
                 ),
                 SizedBox(height: 8.0),
                 TextFormField(
@@ -82,7 +85,7 @@ class DetailWidget extends StatelessWidget {
                   onChanged: (value) {
                     max = value;
                   },
-                  decoration: InputDecoration(labelText: "Max"),
+                  decoration: InputDecoration(labelText: localisation!.max_value),
                 ),
                 SizedBox(height: 8.0),
                 TextFormField(
@@ -91,7 +94,7 @@ class DetailWidget extends StatelessWidget {
                   onChanged: (value) {
                     min = value;
                   },
-                  decoration: InputDecoration(labelText: "Min"),
+                  decoration: InputDecoration(labelText: localisation!.min_value),
                 ),
               ],
             ),
@@ -101,7 +104,7 @@ class DetailWidget extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text( localisation!.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -122,7 +125,7 @@ class DetailWidget extends StatelessWidget {
 
                 Navigator.of(context).pop();
               },
-              child: Text('Default'),
+              child: Text( localisation!.ddefault),
             ),
             TextButton(
               onPressed: () {
@@ -137,7 +140,7 @@ class DetailWidget extends StatelessWidget {
                 // Close the dialog
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              child: Text( localisation!.ok),
             ),
           ],
         );

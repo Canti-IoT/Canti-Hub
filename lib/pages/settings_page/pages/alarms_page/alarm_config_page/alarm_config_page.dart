@@ -52,7 +52,7 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
             ),
             child: TextField(
               decoration: InputDecoration(
-                labelText: "Alarm Name",
+                labelText: localisation!.alarm_name,
               ),
               controller: _alarmNameController,
               onChanged: (value) {
@@ -96,7 +96,7 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
               },
               icon: Icon(Icons.delete),
               label: Text(
-                "Delete",
+                localisation!.delete,
                 style: TextStyle(fontSize: 16.0),
               ),
             ),
@@ -113,7 +113,7 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
             },
             icon: Icon(Icons.add),
             label: Text(
-              "Add Parameter",
+              localisation!.add_parameter,
               style: TextStyle(fontSize: 16.0),
             ),
           ),
@@ -126,6 +126,8 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
       BuildContext context,
       List<AlarmsParameterTableData> existingParameters,
       List<ParametersTableData> parameters) async {
+    var localisation = AppLocalizations.of(context);
+
     String? selectedItem; // Variable to hold the selected item, now nullable
 
     // List of items containing only those from parameters not present in existingParameters
@@ -140,7 +142,7 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Select an Item'),
+          title: Text(localisation!.select_item),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,7 +160,7 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
                   selectedItem = newValue;
                 },
                 decoration: InputDecoration(
-                  hintText: 'Select an item', // Placeholder text
+                  hintText: localisation!.select_item, // Placeholder text
                 ),
               ),
               SizedBox(height: 16), // Spacer
@@ -170,7 +172,7 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
                       Navigator.of(context)
                           .pop(); // Close the dialog without selecting
                     },
-                    child: Text('Cancel'),
+                    child: Text(localisation!.cancel),
                   ),
                   SizedBox(width: 8), // Spacer
                   TextButton(
@@ -189,7 +191,7 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
 
                       Navigator.of(context).pop();
                     },
-                    child: Text('OK'),
+                    child: Text(localisation!.ok),
                   ),
                 ],
               ),
