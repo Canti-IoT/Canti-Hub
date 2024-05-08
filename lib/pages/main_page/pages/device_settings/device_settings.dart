@@ -27,8 +27,7 @@ class DeviceSettings extends StatelessWidget {
         },
       ),
       body: device != null
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          ? ListView(
               children: [
                 ExpansionTile(
                   initiallyExpanded: false,
