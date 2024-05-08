@@ -55,7 +55,7 @@ class _DeviceTypeWidgetState extends State<DeviceTypeWidget> {
                     return DropdownMenuItem<DeviceType>(
                       value: value,
                       child: Text(
-                        value == DeviceType.bluetooth ? localisation!.bluetooth : localisation!.mqtt,
+                        value == DeviceType.bluetooth ? localisation.bluetooth : localisation.mqtt,
                         style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.normal,

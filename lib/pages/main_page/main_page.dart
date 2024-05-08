@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:canti_hub/database/database.dart';
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
 import 'package:canti_hub/pages/main_page/widgets/parameter_widget.dart';
 import 'package:canti_hub/pages/main_page/widgets/bluetooth_adapter_state_widget.dart';
@@ -117,15 +116,15 @@ class _MainPageState extends State<MainPage> {
                     .map((param) {
                   var parameter = context
                       .watch<DatabaseProvider>()
-                      .getParameterByIndex(param!.parameterId);
+                      .getParameterByIndex(param.parameterId);
                   var data = context
                       .read<DatabaseProvider>()
                       .getData(param.deviceId, param.parameterId);
                   return ParameterWidget(
                     parameterName: parameter!.name,
                     data: data,
-                    desiredValue: parameter!.normal,
-                    unit: parameter!.units,
+                    desiredValue: parameter.normal,
+                    unit: parameter.units,
                   );
                 }).toList(),
               ),

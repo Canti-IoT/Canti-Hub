@@ -51,7 +51,7 @@ class _DeviceNameWidgetState extends State<DeviceNameWidget> {
                 child: TextField(
                   controller: _deviceNameController,
                   decoration: InputDecoration(
-                    hintText: localisation!.enter_device_name,
+                    hintText: localisation.enter_device_name,
                   ),
                   onChanged: (value) {
                     context.read<DeviceProvider>().name = value;

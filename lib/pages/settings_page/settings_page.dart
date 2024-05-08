@@ -29,7 +29,7 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         leftIcon: Icons.arrow_back,
-        title: localisation!.settings,
+        title: localisation.settings,
         onLeftIconPressed: () {
           Navigator.popUntil(context, (route) => route.isFirst);
         },

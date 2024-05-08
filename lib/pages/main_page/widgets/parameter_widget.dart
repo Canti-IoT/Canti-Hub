@@ -75,7 +75,7 @@ class ParameterWidget extends StatelessWidget {
         data != null ? formatValue(data?.value ?? 0.0) : localisation!.no_data;
     var time = data?.createdAt;
     String displayTime = time != null
-        ? "${time!.hour}:${time!.minute < 10 ? '0' : ''}${time!.minute}:${time!.second < 10 ? '0' : ''}${time!.second} ${time!.day}/${time!.month}/${time!.year}"
+        ? "${time.hour}:${time.minute < 10 ? '0' : ''}${time.minute}:${time.second < 10 ? '0' : ''}${time.second} ${time.day}/${time.month}/${time.year}"
         : localisation!.no_data;
     final displayMode = context.watch<SettingsProvider>().displayMode;
 

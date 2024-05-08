@@ -52,7 +52,7 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
             ),
             child: TextField(
               decoration: InputDecoration(
-                labelText: localisation!.alarm_name,
+                labelText: localisation.alarm_name,
               ),
               controller: _alarmNameController,
               onChanged: (value) {
@@ -96,7 +96,7 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
               },
               icon: Icon(Icons.delete),
               label: Text(
-                localisation!.delete,
+                localisation.delete,
                 style: TextStyle(fontSize: 16.0),
               ),
             ),
@@ -113,7 +113,7 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
             },
             icon: Icon(Icons.add),
             label: Text(
-              localisation!.add_parameter,
+              localisation.add_parameter,
               style: TextStyle(fontSize: 16.0),
             ),
           ),
@@ -152,7 +152,7 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
                 items: items.map((String item) {
                   return DropdownMenuItem<String>(
                     value: item,
-                    child: Text(localisation!.parameter(item)),
+                    child: Text(localisation.parameter(item)),
                   );
                 }).toList(),
                 onChanged: (String? newValue) {
@@ -160,7 +160,7 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
                   selectedItem = newValue;
                 },
                 decoration: InputDecoration(
-                  hintText: localisation!.select_item, // Placeholder text
+                  hintText: localisation.select_item, // Placeholder text
                 ),
               ),
               SizedBox(height: 16), // Spacer
@@ -172,7 +172,7 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
                       Navigator.of(context)
                           .pop(); // Close the dialog without selecting
                     },
-                    child: Text(localisation!.cancel),
+                    child: Text(localisation.cancel),
                   ),
                   SizedBox(width: 8), // Spacer
                   TextButton(
@@ -191,7 +191,7 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
 
                       Navigator.of(context).pop();
                     },
-                    child: Text(localisation!.ok),
+                    child: Text(localisation.ok),
                   ),
                 ],
               ),

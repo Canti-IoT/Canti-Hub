@@ -81,7 +81,7 @@ class MqttSettingsPage extends StatelessWidget {
                     // Update serverUrl when input changes
                     serverUrl = value;
                   },
-                  decoration: InputDecoration(labelText: localisation!.server_url),
+                  decoration: InputDecoration(labelText: localisation.server_url),
                 ),
                 SizedBox(height: 8.0),
                 TextFormField(
@@ -91,7 +91,7 @@ class MqttSettingsPage extends StatelessWidget {
                     // Update port when input changes
                     port = value;
                   },
-                  decoration: InputDecoration(labelText: localisation!.port),
+                  decoration: InputDecoration(labelText: localisation.port),
                 ),
                 SizedBox(height: 8.0),
                 TextFormField(
@@ -101,7 +101,7 @@ class MqttSettingsPage extends StatelessWidget {
                     // Update key when input changes
                     apiKey = value;
                   },
-                  decoration: InputDecoration(labelText: localisation!.api_key),
+                  decoration: InputDecoration(labelText: localisation.api_key),
                 ),
                 SizedBox(height: 8.0),
                 TextFormField(
@@ -111,7 +111,7 @@ class MqttSettingsPage extends StatelessWidget {
                     // Update username when input changes
                     username = value;
                   },
-                  decoration: InputDecoration(labelText: localisation!.username),
+                  decoration: InputDecoration(labelText: localisation.username),
                 ),
                 SizedBox(height: 8.0),
                 TextFormField(
@@ -121,7 +121,7 @@ class MqttSettingsPage extends StatelessWidget {
                     // Update password when input changes
                     password = value;
                   },
-                  decoration: InputDecoration(labelText: localisation!.password),
+                  decoration: InputDecoration(labelText: localisation.password),
                 ),
               ],
             ),
@@ -131,7 +131,7 @@ class MqttSettingsPage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(localisation!.cancel),
+              child: Text(localisation.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -159,7 +159,7 @@ class MqttSettingsPage extends StatelessWidget {
                 // Close the dialog
                 Navigator.of(context).pop();
               },
-              child: Text(localisation!.ok),
+              child: Text(localisation.ok),
             ),
           ],
         );

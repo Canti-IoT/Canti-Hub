@@ -67,7 +67,7 @@ class DetailWidget extends StatelessWidget {
                   onChanged: (value) {
                     recurrence = value;
                   },
-                  decoration: InputDecoration(labelText: localisation!.recurrence),
+                  decoration: InputDecoration(labelText: localisation.recurrence),
                 ),
                 SizedBox(height: 8.0),
                 TextFormField(
@@ -76,7 +76,7 @@ class DetailWidget extends StatelessWidget {
                   onChanged: (value) {
                     normal = value;
                   },
-                  decoration: InputDecoration(labelText: localisation!.normal_value),
+                  decoration: InputDecoration(labelText: localisation.normal_value),
                 ),
                 SizedBox(height: 8.0),
                 TextFormField(
@@ -85,7 +85,7 @@ class DetailWidget extends StatelessWidget {
                   onChanged: (value) {
                     max = value;
                   },
-                  decoration: InputDecoration(labelText: localisation!.max_value),
+                  decoration: InputDecoration(labelText: localisation.max_value),
                 ),
                 SizedBox(height: 8.0),
                 TextFormField(
@@ -94,7 +94,7 @@ class DetailWidget extends StatelessWidget {
                   onChanged: (value) {
                     min = value;
                   },
-                  decoration: InputDecoration(labelText: localisation!.min_value),
+                  decoration: InputDecoration(labelText: localisation.min_value),
                 ),
               ],
             ),
@@ -104,7 +104,7 @@ class DetailWidget extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text( localisation!.cancel),
+              child: Text( localisation.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -125,7 +125,7 @@ class DetailWidget extends StatelessWidget {
 
                 Navigator.of(context).pop();
               },
-              child: Text( localisation!.ddefault),
+              child: Text( localisation.ddefault),
             ),
             TextButton(
               onPressed: () {
@@ -140,7 +140,7 @@ class DetailWidget extends StatelessWidget {
                 // Close the dialog
                 Navigator.of(context).pop();
               },
-              child: Text( localisation!.ok),
+              child: Text( localisation.ok),
             ),
           ],
         );

@@ -23,7 +23,7 @@ class BluetoothAdapterStateWidget extends StatelessWidget {
             Icon(Icons.bluetooth),
             Text(
                 '${localisation!.adapter_state}: ${context.watch<BluetoothProvider>().adapterState}'),
-            Text(localisation!.turon_bluetooth_on),
+            Text(localisation.turon_bluetooth_on),
           ],
         ),
       ),

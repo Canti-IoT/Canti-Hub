@@ -86,7 +86,7 @@ class _ParameterWidgetState extends State<ParameterWidget> {
           ),
           const SizedBox(height: 16.0),
           Text(
-            "${localisation!.interval_type}:",
+            "${localisation.interval_type}:",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Row(
@@ -102,7 +102,7 @@ class _ParameterWidgetState extends State<ParameterWidget> {
                   });
                 },
               ),
-              Text(localisation!.disable),
+              Text(localisation.disable),
               Radio(
                 value: 1,
                 groupValue: _configurationValue,
@@ -114,7 +114,7 @@ class _ParameterWidgetState extends State<ParameterWidget> {
                   });
                 },
               ),
-              Text(localisation!.inside),
+              Text(localisation.inside),
               Radio(
                 value: 2,
                 groupValue: _configurationValue,
@@ -126,12 +126,12 @@ class _ParameterWidgetState extends State<ParameterWidget> {
                   });
                 },
               ),
-              Text(localisation!.outside),
+              Text(localisation.outside),
             ],
           ),
           const SizedBox(height: 16.0),
           Text(
-            "${localisation!.interval}:",
+            "${localisation.interval}:",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Row(
@@ -246,7 +246,7 @@ class _ParameterWidgetState extends State<ParameterWidget> {
                   startValue = double.tryParse(value) ?? 0.0;
                 },
                 decoration:
-                    InputDecoration(labelText: localisation!.start_value),
+                    InputDecoration(labelText: localisation.start_value),
               ),
               const SizedBox(height: 8.0),
               TextFormField(
@@ -257,7 +257,7 @@ class _ParameterWidgetState extends State<ParameterWidget> {
                   // Update endValue when input changes
                   endValue = double.tryParse(value) ?? 0.0;
                 },
-                decoration: InputDecoration(labelText: localisation!.end_value),
+                decoration: InputDecoration(labelText: localisation.end_value),
               ),
             ],
           ),
@@ -266,7 +266,7 @@ class _ParameterWidgetState extends State<ParameterWidget> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(localisation!.cancel),
+              child: Text(localisation.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -281,7 +281,7 @@ class _ParameterWidgetState extends State<ParameterWidget> {
 
                 Navigator.of(context).pop();
               },
-              child: Text(localisation!.ok),
+              child: Text(localisation.ok),
             ),
           ],
         );

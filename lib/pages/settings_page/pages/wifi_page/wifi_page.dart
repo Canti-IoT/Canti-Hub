@@ -79,7 +79,7 @@ class WifiSettingsPage extends StatelessWidget {
                   // Update ssid when input changes
                   ssid = value;
                 },
-                decoration: InputDecoration(labelText: localisation!.wifi_ssid),
+                decoration: InputDecoration(labelText: localisation.wifi_ssid),
               ),
               SizedBox(height: 8.0),
               TextFormField(
@@ -88,7 +88,7 @@ class WifiSettingsPage extends StatelessWidget {
                 onChanged: (value) {
                   password = value;
                 },
-                decoration: InputDecoration(labelText: localisation!.password),
+                decoration: InputDecoration(labelText: localisation.password),
               ),
             ],
           ),
@@ -97,7 +97,7 @@ class WifiSettingsPage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(localisation!.cancel),
+              child: Text(localisation.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -112,7 +112,7 @@ class WifiSettingsPage extends StatelessWidget {
 
                 Navigator.of(context).pop();
               },
-              child: Text(localisation!.ok),
+              child: Text(localisation.ok),
             ),
           ],
         );

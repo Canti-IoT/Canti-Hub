@@ -40,19 +40,19 @@ class DeviceSettings extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('${localisation!.device_name}: ${device.name}'),
+                          Text('${localisation.device_name}: ${device.name}'),
                           Text(
-                              '${localisation!.device_type}: ${device.type.toString().split('.').last}'),
+                              '${localisation.device_type}: ${device.type.toString().split('.').last}'),
                           Text(
-                              '${localisation!.device_id}: ${device.remoteId}'),
+                              '${localisation.device_id}: ${device.remoteId}'),
                           Text(
-                              '${localisation!.software_version}: ${device.softwareVersion}'),
+                              '${localisation.software_version}: ${device.softwareVersion}'),
                           Text(
-                              '${localisation!.hardware_version}: ${device.hardwareVersion}'),
+                              '${localisation.hardware_version}: ${device.hardwareVersion}'),
                           Text(
-                              '${localisation!.first_connection}: ${DateFormat('HH:mm:ss dd/MM/yyyy').format(device.firstConnection)}'),
+                              '${localisation.first_connection}: ${DateFormat('HH:mm:ss dd/MM/yyyy').format(device.firstConnection)}'),
                           Text(
-                              '${localisation!.last_online}: ${DateFormat('HH:mm:ss dd/MM/yyyy').format(device.lastOnline)}'),
+                              '${localisation.last_online}: ${DateFormat('HH:mm:ss dd/MM/yyyy').format(device.lastOnline)}'),
                         ],
                       ),
                     ),
@@ -60,7 +60,7 @@ class DeviceSettings extends StatelessWidget {
                 ),
                 ExpansionTile(
                   initiallyExpanded: false,
-                  title: Text(localisation!.device_alarms,
+                  title: Text(localisation.device_alarms,
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   children: List<Widget>.generate(3, (i) {
                     var deviceAlarms =
@@ -80,8 +80,8 @@ class DeviceSettings extends StatelessWidget {
                     return ListTile(
                       leading: Icon(alarm != null ? Icons.delete : Icons.add),
                       title: Text(alarm != null
-                          ? '${localisation!.alarm_slot} ${i + 1}: ${alarmName}'
-                          : '${localisation!.alarm_slot} ${i + 1}'),
+                          ? '${localisation.alarm_slot} ${i + 1}: ${alarmName}'
+                          : '${localisation.alarm_slot} ${i + 1}'),
                       onTap: () {
                         if (alarm != null) {
                           context
@@ -96,7 +96,7 @@ class DeviceSettings extends StatelessWidget {
                 ),
                 ExpansionTile(
                   initiallyExpanded: false,
-                  title: Text(localisation!.apply_parameter_configuration,
+                  title: Text(localisation.apply_parameter_configuration,
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   children: context
                       .watch<DatabaseProvider>()
@@ -158,7 +158,7 @@ class DeviceSettings extends StatelessWidget {
                                   alarmId: alarm.id,
                                   slot: slot));
                           // Implement adding alarm functionality
-                          print(localisation!.selected_alarm);
+                          print(localisation.selected_alarm);
                           print(alarm.toString());
                           Navigator.of(context).pop();
                         },
@@ -168,7 +168,7 @@ class DeviceSettings extends StatelessWidget {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text(localisation!.cancel),
+              child: Text(localisation.cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },

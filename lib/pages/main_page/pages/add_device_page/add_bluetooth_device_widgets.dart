@@ -42,7 +42,7 @@ class _AddBluetoothDeviceWidgetsState extends State<AddBluetoothDeviceWidgets> {
                 .devices
                 .any((element) => element.remoteId == device.remoteId.str))
             .map((device) => DeviceWidget(device: device)),
-        Text(localisation!.scan_devices),
+        Text(localisation.scan_devices),
         ...context
             .watch<BluetoothProvider>()
             .scanResults

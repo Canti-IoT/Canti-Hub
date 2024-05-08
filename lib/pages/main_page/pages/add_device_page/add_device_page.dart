@@ -1,6 +1,5 @@
 import 'package:canti_hub/database/custom_types.dart';
 import 'package:canti_hub/database/database.dart';
-import 'package:canti_hub/database/tables.dart';
 import 'package:canti_hub/pages/common/custom_app_bar.dart';
 import 'package:canti_hub/pages/main_page/pages/add_device_page/add_mqtt_device_widgets.dart';
 import 'package:canti_hub/pages/main_page/pages/add_device_page/widgets/device_name_widget.dart';
@@ -10,7 +9,6 @@ import 'package:canti_hub/providers/database_provider.dart';
 import 'package:canti_hub/providers/device_provider.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'add_bluetooth_device_widgets.dart';
@@ -93,17 +91,14 @@ class AddDevicePage extends StatelessWidget {
                   .read<BluetoothProvider>()
                   .com
                   ?.readIndexCharacteristic();
-              if (id != null) {
-                if (indexes != null) {
-                  indexes.forEach((index) {
-                    context.read<DatabaseProvider>().insertDeviceParameter(
-                        DeviceParameterTableCompanion.insert(
-                            parameterId: index,
-                            deviceId: id,
-                            useUserConfig: Value(false)
-                           ));
-                  });
-                }
+              if (indexes != null) {
+                indexes.forEach((index) {
+                  context.read<DatabaseProvider>().insertDeviceParameter(
+                      DeviceParameterTableCompanion.insert(
+                          parameterId: index,
+                          deviceId: id,
+                          useUserConfig: Value(false)));
+                });
               }
 
               context.read<BluetoothProvider>().disposeDevice();
