@@ -152,7 +152,7 @@ class _AlarmConfigPageState extends State<AlarmConfigPage> {
                 items: items.map((String item) {
                   return DropdownMenuItem<String>(
                     value: item,
-                    child: Text(item),
+                    child: Text(localisation!.parameter(item)),
                   );
                 }).toList(),
                 onChanged: (String? newValue) {
