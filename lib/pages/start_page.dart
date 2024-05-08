@@ -1,5 +1,4 @@
 import 'package:canti_hub/pages/main_page/main_page.dart';
-import 'package:canti_hub/providers/database_provider.dart';
 import 'package:canti_hub/providers/device_provider.dart';
 import 'package:canti_hub/providers/parameters_provider.dart';
 import 'package:canti_hub/providers/settings_provider.dart';
